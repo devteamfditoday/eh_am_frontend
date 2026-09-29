@@ -1,0 +1,52 @@
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+node_modules
+dist
+dist-ssr
+*.local
+
+# ============================================================================
+# BIẾN MÔI TRƯỜNG — CHẶN TẤT CẢ, CHỈ MỞ HAI FILE MẪU
+# ============================================================================
+#
+# ⚠️ VÌ SAO CHẶN THEO MẪU `.env*` CHỨ KHÔNG LIỆT KÊ TỪNG FILE
+#
+# Bản gốc của boilerplate chỉ chặn `.env` và `*.local`. Nghĩa là `.env.staging` hay
+# `.env.backup` sẽ **được commit** — và người tạo nó không biết, vì `git status` không báo gì
+# bất thường.
+#
+# Chặn cả họ `.env*` rồi mở lại đúng hai file mẫu làm mặc định trở thành "không commit", và
+# việc commit một file cấu hình phải là một hành động tường minh.
+#
+# ⚠️ Ở repo này rủi ro thấp hơn backend (Vite chỉ nhúng biến `VITE_`, và không biến nào là bí
+# mật — xem `.env.example`). Nhưng giữ cùng quy ước với backend để không ai phải nhớ hai bộ
+# quy tắc khác nhau khi đi qua lại giữa hai repo.
+.env*
+!.env.example
+!.env.production.example
+
+# Editor directories and files
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json
+.idea
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# Test coverage
+/coverage
+
+# Vitest artifacts (browser screenshots/attachments)
+**/__screenshots__/
+.vitest-attachments/
