@@ -1,4 +1,13 @@
-import { LayoutDashboard, Settings } from 'lucide-react'
+import {
+  Building2,
+  Coins,
+  LayoutDashboard,
+  ListTree,
+  MapPin,
+  MessageSquare,
+  Settings,
+} from 'lucide-react'
+import { Role } from '@/stores/auth-store'
 import { type SidebarData } from '../types'
 
 /**
@@ -32,6 +41,41 @@ export const sidebarData: SidebarData = {
           title: 'nav.dashboard',
           url: '/',
           icon: LayoutDashboard,
+        },
+      ],
+    },
+    {
+      title: 'nav.groupMasterData',
+      items: [
+        {
+          title: 'nav.locations',
+          url: '/master-data/locations',
+          icon: MapPin,
+          roles: [Role.SYSTEM_ADMIN, Role.ASSET_MANAGER],
+        },
+        {
+          title: 'nav.costCenters',
+          url: '/master-data/cost-centers',
+          icon: Coins,
+          roles: [Role.SYSTEM_ADMIN, Role.ASSET_MANAGER],
+        },
+        {
+          title: 'nav.departments',
+          url: '/master-data/departments',
+          icon: Building2,
+          roles: [Role.SYSTEM_ADMIN],
+        },
+        {
+          title: 'nav.assetTypes',
+          url: '/master-data/asset-types',
+          icon: ListTree,
+          roles: [Role.SYSTEM_ADMIN, Role.ASSET_MANAGER],
+        },
+        {
+          title: 'nav.reasonCodes',
+          url: '/master-data/reason-codes',
+          icon: MessageSquare,
+          roles: [Role.SYSTEM_ADMIN],
         },
       ],
     },

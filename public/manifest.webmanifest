@@ -1,0 +1,29 @@
+{
+  "name": "Every Half — Quản lý tài sản & CCDC",
+  "short_name": "EH-AM",
+  "description": "Hệ thống quản lý tài sản và công cụ dụng cụ nội bộ của Every Half.",
+  "id": "/",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#f9f9f6",
+  "theme_color": "#f9f9f6",
+  "lang": "vi",
+  "dir": "ltr",
+  "categories": ["business", "productivity"],
+  "icons": [
+    {
+      "src": "/images/favicon.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/images/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ]
+}

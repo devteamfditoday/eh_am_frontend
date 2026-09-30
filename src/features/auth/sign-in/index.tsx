@@ -1,12 +1,5 @@
 import { useSearch } from '@tanstack/react-router'
 import { useTranslation } from 'react-i18next'
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card'
 import { AuthLayout } from '../auth-layout'
 import { UserAuthForm } from './components/user-auth-form'
 
@@ -22,6 +15,9 @@ import { UserAuthForm } from './components/user-auth-form'
  *
  * ⚠️ Mô tả nói rõ "tài khoản chưa được gán vai trò sẽ chưa vào được" — vì đăng nhập đúng mật khẩu
  * chưa có nghĩa là có quyền. Nói trước thì người dùng không mất thời gian đoán.
+ *
+ * Bố cục hai cột (form + panel thương hiệu) nằm ở `AuthLayout`. Ở đây chỉ còn tiêu đề chào và
+ * biểu mẫu, bỏ khung Card để cột form thoáng như mẫu login của Larksuite.
  */
 export function SignIn() {
   const { redirect } = useSearch({ from: '/(auth)/sign-in' })
@@ -29,17 +25,17 @@ export function SignIn() {
 
   return (
     <AuthLayout>
-      <Card className='max-w-sm gap-4'>
-        <CardHeader>
-          <CardTitle className='text-lg tracking-tight'>
-            {t('auth.signInTitle')}
-          </CardTitle>
-          <CardDescription>{t('auth.signInDescription')}</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <UserAuthForm redirectTo={redirect} />
-        </CardContent>
-      </Card>
+      <div className='space-y-2'>
+        <h1 className='font-bricolage text-2xl font-semibold tracking-tight'>
+          {t('auth.signInTitle')}
+        </h1>
+        <p className='text-sm text-muted-foreground'>
+          {t('auth.signInDescription')}
+        </p>
+      </div>
+      <div className='mt-6'>
+        <UserAuthForm redirectTo={redirect} />
+      </div>
     </AuthLayout>
   )
 }

@@ -1,30 +1,65 @@
+/*
+ * ⚠️ Bộ token màu EH-AM — tông "mực ấm trên giấy kem" theo nhận diện Every Half
+ * (everyhalf.vn: đơn sắc ấm, tối giản, biên tập). Trước đây là tông xám xanh mặc định
+ * của shadcn (hue 264); đã chỉnh về trung tính ấm (hue ~55–90) cho khớp thương hiệu.
+ * Giữ nguyên cấu trúc biến shadcn/Radix để không phá vỡ component có sẵn.
+ * Nguồn ánh xạ: business/product-docs/product-design/00-nhan-dien-thuong-hieu-everyhalf.md
+ * và 10-design-tokens.md.
+ */
 :root {
-  --radius: 0.625rem;
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.129 0.042 264.695);
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.129 0.042 264.695);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.129 0.042 264.695);
-  --primary: oklch(0.208 0.042 265.755);
-  --primary-foreground: oklch(0.984 0.003 247.858);
-  --secondary: oklch(0.968 0.007 247.896);
-  --secondary-foreground: oklch(0.208 0.042 265.755);
-  --muted: oklch(0.968 0.007 247.896);
-  --muted-foreground: oklch(0.554 0.046 257.417);
-  --accent: oklch(0.968 0.007 247.896);
-  --accent-foreground: oklch(0.208 0.042 265.755);
-  --destructive: oklch(0.577 0.245 27.325);
-  --border: oklch(0.929 0.013 255.508);
-  --input: oklch(0.929 0.013 255.508);
-  --ring: oklch(0.704 0.04 256.788);
-  --chart-1: oklch(0.646 0.222 41.116);
-  --chart-2: oklch(0.6 0.118 184.704);
-  --chart-3: oklch(0.398 0.07 227.392);
-  --chart-4: oklch(0.828 0.189 84.429);
-  --chart-5: oklch(0.769 0.188 70.08);
+  --radius: 0.5rem; /* 8px — sắc nét vừa phải, không cứng cho công cụ dùng cả ngày */
 
-  --sidebar: var(--background);
+  /* Nền / mực */
+  --background: oklch(0.985 0.004 85); /* #F9F9F6 giấy kem */
+  --foreground: oklch(0.22 0.008 60); /* #231F20 mực ấm */
+  --card: oklch(1 0 0); /* #FFFFFF bề mặt nổi */
+  --card-foreground: oklch(0.22 0.008 60);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.22 0.008 60);
+
+  /* Hành động chính = mực ấm (trung thành: trang dùng nút đen) */
+  --primary: oklch(0.26 0.008 55);
+  --primary-foreground: oklch(0.985 0.004 85);
+
+  --secondary: oklch(0.955 0.006 85); /* #F0EFEA nền phụ ấm */
+  --secondary-foreground: oklch(0.26 0.008 55);
+  --muted: oklch(0.955 0.006 85);
+  --muted-foreground: oklch(0.5 0.01 65); /* #6B6560 chữ phụ */
+  --accent: oklch(0.94 0.008 80); /* #ECEAE3 nền nhấn hover/chọn */
+  --accent-foreground: oklch(0.26 0.008 55);
+
+  --border: oklch(0.9 0.006 80); /* #E5E3DD viền mảnh ấm */
+  --input: oklch(0.9 0.006 80);
+  --ring: oklch(0.55 0.02 65); /* vòng focus xám ấm */
+
+  /* Trạng thái nghiệp vụ — tông trầm ấm để ngồi hài hoà trên nền kem.
+     Mỗi màu có -foreground (chữ trên nền đậm) và -subtle (nền chip nhạt). */
+  --destructive: oklch(0.52 0.16 27); /* #B23B3B đỏ gạch: mất / huỷ / lỗi */
+  --destructive-foreground: oklch(0.985 0.004 85);
+  --destructive-subtle: oklch(0.95 0.03 27);
+
+  --success: oklch(
+    0.55 0.1 150
+  ); /* #3F7D52 xanh trầm: đang dùng / hoàn tất / khớp */
+  --success-foreground: oklch(0.985 0.004 85);
+  --success-subtle: oklch(0.95 0.03 150);
+
+  --warning: oklch(0.68 0.13 75); /* #B9862F hổ phách: sắp hạn / cần chú ý */
+  --warning-foreground: oklch(0.26 0.02 75);
+  --warning-subtle: oklch(0.95 0.05 85);
+
+  --info: oklch(0.54 0.08 240); /* #3E6E93 lam trầm: đang xử lý / vận chuyển */
+  --info-foreground: oklch(0.985 0.004 85);
+  --info-subtle: oklch(0.95 0.03 240);
+
+  /* Biểu đồ — dải ấm/đất hài hoà với thương hiệu (dùng cho dashboard M11) */
+  --chart-1: oklch(0.55 0.12 55); /* nâu espresso */
+  --chart-2: oklch(0.6 0.09 150); /* xanh trầm */
+  --chart-3: oklch(0.68 0.12 75); /* hổ phách */
+  --chart-4: oklch(0.54 0.08 240); /* lam trầm */
+  --chart-5: oklch(0.62 0.13 30); /* đất đỏ */
+
+  --sidebar: oklch(0.975 0.004 85); /* giấy hơi đậm hơn nền để tách sidebar */
   --sidebar-foreground: var(--foreground);
   --sidebar-primary: var(--primary);
   --sidebar-primary-foreground: var(--primary-foreground);
@@ -35,39 +70,73 @@
 }
 
 .dark {
-  --background: oklch(0.129 0.042 264.695);
-  --foreground: oklch(0.984 0.003 247.858);
-  --card: oklch(0.14 0.04 259.21);
-  --card-foreground: oklch(0.984 0.003 247.858);
-  --popover: oklch(0.208 0.042 265.755);
-  --popover-foreground: oklch(0.984 0.003 247.858);
-  --primary: oklch(0.929 0.013 255.508);
-  --primary-foreground: oklch(0.208 0.042 265.755);
-  --secondary: oklch(0.279 0.041 260.031);
-  --secondary-foreground: oklch(0.984 0.003 247.858);
-  --muted: oklch(0.279 0.041 260.031);
-  --muted-foreground: oklch(0.704 0.04 256.788);
-  --accent: oklch(0.279 0.041 260.031);
-  --accent-foreground: oklch(0.984 0.003 247.858);
-  --destructive: oklch(0.704 0.191 22.216);
+  --background: oklch(0.18 0.006 60); /* mực ấm làm nền tối */
+  --foreground: oklch(0.96 0.004 85);
+  --card: oklch(0.21 0.006 60);
+  --card-foreground: oklch(0.96 0.004 85);
+  --popover: oklch(0.21 0.006 60);
+  --popover-foreground: oklch(0.96 0.004 85);
+
+  --primary: oklch(0.92 0.006 85); /* đảo: nút sáng trên nền tối */
+  --primary-foreground: oklch(0.22 0.008 60);
+
+  --secondary: oklch(0.27 0.006 60);
+  --secondary-foreground: oklch(0.96 0.004 85);
+  --muted: oklch(0.27 0.006 60);
+  --muted-foreground: oklch(0.7 0.008 75);
+  --accent: oklch(0.3 0.006 60);
+  --accent-foreground: oklch(0.96 0.004 85);
+
   --border: oklch(1 0 0 / 10%);
   --input: oklch(1 0 0 / 15%);
-  --ring: oklch(0.551 0.027 264.364);
-  --chart-1: oklch(0.488 0.243 264.376);
-  --chart-2: oklch(0.696 0.17 162.48);
-  --chart-3: oklch(0.769 0.188 70.08);
-  --chart-4: oklch(0.627 0.265 303.9);
-  --chart-5: oklch(0.645 0.246 16.439);
+  --ring: oklch(0.6 0.02 65);
+
+  --destructive: oklch(0.62 0.17 27);
+  --destructive-foreground: oklch(0.96 0.004 85);
+  --destructive-subtle: oklch(0.3 0.06 27);
+
+  --success: oklch(0.62 0.11 150);
+  --success-foreground: oklch(0.14 0.01 150);
+  --success-subtle: oklch(0.3 0.05 150);
+
+  --warning: oklch(0.72 0.13 75);
+  --warning-foreground: oklch(0.18 0.02 75);
+  --warning-subtle: oklch(0.32 0.06 75);
+
+  --info: oklch(0.62 0.09 240);
+  --info-foreground: oklch(0.14 0.01 240);
+  --info-subtle: oklch(0.3 0.05 240);
+
+  --chart-1: oklch(0.62 0.12 55);
+  --chart-2: oklch(0.66 0.09 150);
+  --chart-3: oklch(0.74 0.12 75);
+  --chart-4: oklch(0.62 0.09 240);
+  --chart-5: oklch(0.66 0.13 30);
+
+  --sidebar: oklch(0.16 0.006 60);
+  --sidebar-foreground: var(--foreground);
+  --sidebar-primary: var(--primary);
+  --sidebar-primary-foreground: var(--primary-foreground);
+  --sidebar-accent: var(--accent);
+  --sidebar-accent-foreground: var(--accent-foreground);
+  --sidebar-border: var(--border);
+  --sidebar-ring: var(--ring);
 }
 
 @theme inline {
-  --font-inter: 'Inter', 'sans-serif';
-  --font-manrope: 'Manrope', 'sans-serif';
+  /* Kiểu chữ: Bricolage Grotesque cho hiển thị/tiêu đề (nét thương hiệu),
+     Inter cho thân/UI/số liệu bảng, SUSE Mono cho mã tài sản/QR/serial/toạ độ. */
+  --font-sans: 'Inter', ui-sans-serif, system-ui, sans-serif;
+  --font-inter: 'Inter', ui-sans-serif, sans-serif;
+  --font-manrope: 'Manrope', ui-sans-serif, sans-serif;
+  --font-bricolage: 'Bricolage Grotesque', 'Inter', sans-serif;
+  --font-mono: 'SUSE Mono', ui-monospace, 'SFMono-Regular', 'Menlo', monospace;
 
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) + 4px);
+
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-card: var(--card);
@@ -82,7 +151,20 @@
   --color-muted-foreground: var(--muted-foreground);
   --color-accent: var(--accent);
   --color-accent-foreground: var(--accent-foreground);
+
   --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-destructive-subtle: var(--destructive-subtle);
+  --color-success: var(--success);
+  --color-success-foreground: var(--success-foreground);
+  --color-success-subtle: var(--success-subtle);
+  --color-warning: var(--warning);
+  --color-warning-foreground: var(--warning-foreground);
+  --color-warning-subtle: var(--warning-subtle);
+  --color-info: var(--info);
+  --color-info-foreground: var(--info-foreground);
+  --color-info-subtle: var(--info-subtle);
+
   --color-border: var(--border);
   --color-input: var(--input);
   --color-ring: var(--ring);

@@ -84,6 +84,13 @@ export const ErrorCode = {
   HISTORY_IMMUTABLE: 'HISTORY_IMMUTABLE',
   DATA_ACCESS_ERROR: 'DATA_ACCESS_ERROR',
   AUDIT_WRITE_FAILED: 'AUDIT_WRITE_FAILED',
+  // ⚠️ Khoá lạc quan (UC-MDM-01.EX.4 / UC-MDM-03.EX.4): hai người sửa cùng một bản ghi. Frontend
+  // phân nhánh riêng để mời người dùng tải lại dữ liệu mới nhất, không phải câu lỗi chung.
+  RECORD_VERSION_CONFLICT: 'RECORD_VERSION_CONFLICT',
+  // ⚠️ UC-MDM-07.EX.3: mục lý do hệ thống "Khác" (is_freetext) không sửa/ngừng được.
+  SYSTEM_REASON_PROTECTED: 'SYSTEM_REASON_PROTECTED',
+  // ⚠️ UC-MDM-02/03/08.EX: ngừng một mục danh mục nền khi nó còn được dùng (409).
+  CATALOG_ITEM_IN_USE: 'CATALOG_ITEM_IN_USE',
 
   // -------------------------------------------------------------------------
   // ⚠️ CHỈ CÓ Ở FRONTEND — không phải mã của backend

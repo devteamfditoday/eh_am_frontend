@@ -45,15 +45,35 @@
     -->
     <meta name="robots" content="noindex, nofollow" />
 
-    <!-- font family -->
+    <!--
+      Kiểu chữ EH-AM: Inter (thân/UI/số liệu), Bricolage Grotesque (hiển thị/tiêu đề,
+      nét thương hiệu Every Half), SUSE Mono (mã tài sản/QR/serial/toạ độ). Manrope giữ
+      để tương thích cấu hình cũ. Nạp qua Google Fonts như trước; service worker của PWA
+      sẽ cache lại để chạy offline. Cân nhắc tự host woff2 khi cần siết CSP (xem
+      product-design/20-design-system.md §PWA).
+    -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Manrope:wght@200..800&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,200..800&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Manrope:wght@200..800&family=SUSE+Mono:wght@400..700&display=swap"
       rel="stylesheet"
     />
 
-    <meta name="theme-color" content="#fff" />
+    <!-- PWA: cho phép cài đặt như ứng dụng; theme-color = giấy kem thương hiệu -->
+    <link rel="manifest" href="/manifest.webmanifest" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-title" content="EH-AM" />
+    <meta
+      name="theme-color"
+      content="#f9f9f6"
+      media="(prefers-color-scheme: light)"
+    />
+    <meta
+      name="theme-color"
+      content="#211e1b"
+      media="(prefers-color-scheme: dark)"
+    />
   </head>
 
   <body>

@@ -68,3 +68,65 @@ Before committing: `npm run precommit && npm test`.
 - ESLint enforces `consistent-type-imports` with inline style (`import { x, type Y }`), `no-duplicate-imports`, and prefixing unused vars with `_`.
 - Path alias `@/` → `src/`.
 - Tests sit next to their source as `*.test.ts(x)` and use `vitest-browser-react`.
+
+## Chuẩn UI bắt buộc (rút ra từ manual test — áp cho MỌI trang, tránh lặp lỗi)
+
+Sáu chuẩn dưới đây là bắt buộc cho mọi màn hình mới; đừng dựng trang mà thiếu một trong số đó.
+
+1. **Khung trang:** mỗi trang bọc trong `<Header>…</Header>` (Search + ThemeSwitch + ConfigDrawer + ProfileDropdown) rồi `<Main>…</Main>` (`@/components/layout`). `Main` cho gutter chuẩn (`px-4 py-6`) + max-width — KHÔNG render nội dung trần trong `SidebarInset` (sẽ dính sát sidebar, thiếu thanh top).
+2. **Ngôn ngữ nhất quán + trường bắt buộc:** bản `vi` phải dịch **đủ tiếng Việt**, không trộn Anh-Việt trong một nhãn. Thuật ngữ nghiệp vụ dịch: *location → địa điểm*, *cost center → trung tâm chi phí* (chỉ giữ tiếng Anh cho token kỹ thuật thật sự phổ quát: API, QR, URL, FAST…). `en` giữ đúng cùng bộ khoá. Trường bắt buộc: gắn `<RequiredMark/>` (`@/components/required-mark`, dấu `*` đỏ) sau nhãn.
+3. **Dialog rộng rãi:** dialog form dùng `className='sm:max-w-2xl'` trở lên, `grid gap-4`; đừng để hẹp/chật. Màn rộng thì tận dụng, không tiếc diện tích.
+4. **Trạng thái rỗng/thiếu phụ thuộc kèm hành động:** khi chặn do thiếu dữ liệu phụ thuộc (VD: chưa có trung tâm chi phí đang hoạt động), ngoài câu thông báo phải có **nút đưa tới luồng khắc phục** (VD: "Tạo trung tâm chi phí" → điều hướng sang màn tạo). `EmptyState` luôn có `action`.
+5. **Địa chỉ VN:** dùng `AddressPicker` (`@/components/address-picker`): Tỉnh/Thành → Phường/Xã (dropdown khi có dữ liệu, tạm text) → số nhà/tên đường; gộp thành một chuỗi khớp trường `address`. Dữ liệu 34 tỉnh ở `@/lib/data/vn-provinces.ts` (TẠM — cần nạp dataset phường/xã chính thức, không bịa).
+6. **Gợi ý mã danh mục:** ô mã của danh mục có mã dạng "tiền tố + số" hiện chip gợi ý mã kế tiếp (`suggestNextCodes`, `src/features/master-data/next-code.ts`) — bấm để điền, người dùng vẫn tự gõ được.
+
+7. **Văn phong i18n qua humanizer:** mọi câu chữ hiển thị (bản `vi` và `en` trong `src/lib/i18n/locales/`) — nhất là mô tả, thông báo, câu lỗi, trạng thái rỗng — PHẢI soát bằng skill `humanizer:humanizer` trước khi chốt. Viết ở **góc độ người dùng platform**: rõ, mạch lạc, dễ hiểu, đúng việc họ đang làm; không lên giọng máy/AI, không sáo rỗng. Nhãn ngắn (nút, cột) giữ gọn tự nhiên; câu dài phải đọc như người viết nội dung viết, không phải bản dịch máy.
+
+8. **Con trỏ theo trạng thái + khả năng tiếp cận (a11y) — hay quên, BẮT BUỘC:**
+   - **Con trỏ (cursor) khai theo từng trạng thái:** phần tử bấm được → `cursor-pointer`; disabled → `cursor-not-allowed` (KHÔNG dùng `pointer-events-none` che mất con trỏ); đang tải/pending → gắn `aria-busy` để ra `cursor-wait`; gợi ý/giải thích → `cursor-help`. `Button` chung đã có sẵn các trạng thái này; nút đang chờ mutation phải truyền `aria-busy={isPending}`.
+   - **A11y tối thiểu mọi component tương tác:** input có `<label>` liên kết (hoặc `aria-label`); lỗi field qua `aria-describedby` + `aria-invalid`; icon-only button có `aria-label`/`sr-only`; dialog bẫy focus + đóng bằng `Esc` + trả focus; trạng thái không chỉ dựa vào màu (thêm chấm/chữ như `StatusBadge`); ảnh trang trí `aria-hidden`; vùng chạm ≥ 44px trên mobile; tôn trọng `prefers-reduced-motion`.
+9. **Nút phụ dạng chữ (secondary/link action):** dùng `LinkButton` (`@/components/link-button`) — gạch chân mờ sẵn từ đầu, hover đổi chữ + gạch chân sang `primary`, KHÔNG đổi độ đậm (tránh nhảy layout). Nút chính (Lưu/Thêm) dùng `Button` `size='lg'` cho thoáng, không để nhỏ chật.
+
+10. **Enum/hằng DB → i18n, KHÔNG show mã thô (hay quên):** mọi giá trị enum/hằng từ database (trạng thái `ACTIVE`/`INACTIVE`, loại `STORE`, nhóm lý do `DISPOSAL`, `reason_group`…) PHẢI map sang chữ i18n (`t('...type.STORE')`) rồi mới hiển thị — tuyệt đối không render thẳng chuỗi enum thô cho người dùng. Thêm một giá trị enum ở backend thì thêm ngay khoá i18n tương ứng (vi + en), nếu không cell sẽ hiện đúng chuỗi mã. Lưu ý: **mã do người dùng nhập** (mã location, mã cost center, mã lý do…) KHÔNG phải enum — hiển thị đúng mã đó qua `CodeText`.
+
+Mẫu tham chiếu đã áp đủ các chuẩn: `src/features/master-data/locations/`, `cost-centers/`, `departments/`, `reason-codes/`.
+
+## Tài liệu thiết kế và triển khai (`business/product-docs/`)
+
+| Thư mục | Nội dung |
+| --- | --- |
+| `product-design/` | Nhận diện thương hiệu, design token, design system, common component. Bắt đầu ở `00-nhan-dien-thuong-hieu-everyhalf.md` → `10-design-tokens.md` → `20-design-system.md` → `30-common-components.md`. Token thật ở `src/styles/theme.css`. |
+| `product-implementation/` | Kế hoạch kỹ thuật frontend cho từng UC, mỗi mã UC một thư mục. **Mỗi thư mục BẮT BUỘC có hai file:** `README.md` (mô tả tính năng FE, luồng màn hình, component, API) và `DESIGN-README.md` (mock UI / wireframe — vẽ trước khi code). Mẫu: `UC-MDM-01/`. |
+
+Bộ UC nguồn nằm ở repo backend: `../eh_am_backend/business/product-docs/product-usecase/`.
+
+### Skill bắt buộc khi làm thiết kế giao diện (`product-design/`, Yêu cầu 1)
+
+Làm mới hoặc sửa lớn design token / design system / component thì dùng bộ skill sau. Muốn bỏ hoặc thay thì hỏi Duy trước.
+
+| Bước | Bắt buộc dùng | Để làm gì |
+| --- | --- | --- |
+| 1. Nhận diện thương hiệu | `chrome-devtools` (MCP của plugin `ecc`) + `WebFetch` | Trích màu, font, style thật từ everyhalf.vn; chụp màn hình |
+| 2. Thiết kế | `frontend-design` (Claude design) | Trục chính: token, component, style; tránh mẫu generic |
+| 3. Hệ thống thiết kế | `ui-ux-pro-max:design-system`, `ui-ux-pro-max:ui-styling` | Khung design system, quy ước style |
+| 4. Thẩm mỹ / thương hiệu | `taste-skill` (taste, brandkit) | Giữ gu biên tập, đơn sắc ấm |
+| 5. Kiểm hình ảnh | `chrome-devtools` (screenshot ở cổng 5175) | Soát render thật light/dark/mobile |
+| 6. Soát văn tài liệu | `humanizer` | Văn phong senior, không văn máy |
+
+Không dùng nặng cho công cụ nội bộ dày dữ liệu này: `gsap-skills`, `hyperframes` (motion/animation), `impeccable` asset producer (asset marketing). Giữ chuyển động bằng `tw-animate-css`. Cân nhắc lại nếu có màn hình cần thật. Lý do và chi tiết ghi ở `product-design/00-nhan-dien-thuong-hieu-everyhalf.md` §7.
+
+### Skill bắt buộc khi làm kế hoạch và triển khai UC (`product-implementation/`, Yêu cầu 2)
+
+| Bước | Bắt buộc dùng | Để làm gì |
+| --- | --- | --- |
+| 1. Đọc UC | Đọc file UC ở `../eh_am_backend/business/product-docs/product-usecase/` | Hiểu tính năng, luồng, ngoại lệ |
+| 2. Kế hoạch kỹ thuật FE | `ecc:/ecc:plan "mô tả tính năng"` | Mô tả tính năng FE, luồng màn hình, component, API → `README.md` |
+| 2b. Thiết kế giao diện (BẮT BUỘC trước khi code) | `frontend-design` (+ `ui-ux-pro-max`, `taste-skill`; skill design chưa cài thì báo Duy cài) | Viết `DESIGN-README.md`: wireframe/mock UI dạng ASCII cho từng page / component lớn / dialog / form của UC, kèm token, các trạng thái (tải/rỗng/lỗi/xung đột), responsive & a11y — chốt bố cục trước, dev chỉ dựng theo bản này |
+| 3. Triển khai (dev flow ecc) | `ecc` dev flow: implement → review → verify → remember → improve; `ecc:react-reviewer`, `ecc:typescript-reviewer` | Viết code theo TDD (Vitest browser), review, kiểm chứng |
+| 4. Kiểm hình ảnh | `chrome-devtools` | Chụp màn hình xác nhận trước khi Duy manual test |
+
+Nhịp: xong UC hiện tại (Duy manual test và xác nhận) mới sang UC kế tiếp. Đừng nhồi nhiều skill, tránh over-engineering (dặn dò của Duy).
+
+### Cập nhật skill động (login brand moment)
+
+Màn đăng nhập là "khoảnh khắc thương hiệu" nên **có** dùng `gsap-skills` (GSAP + @gsap/react) — bố cục hai cột kiểu Larksuite + animation (`src/features/auth/brand-panel.tsx`, `auth-layout.tsx`). GSAP chỉ dùng cho brand moment; màn làm việc dày dữ liệu vẫn tiết chế (`tw-animate-css`). Luôn tôn trọng `prefers-reduced-motion`.

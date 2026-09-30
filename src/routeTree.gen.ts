@@ -21,6 +21,11 @@ import { Route as errors503RouteImport } from './routes/(errors)/503'
 import { Route as AuthenticatedIndexRouteImport } from './routes/_authenticated/index'
 import { Route as AuthenticatedSettingsRouteRouteImport } from './routes/_authenticated/settings/route'
 import { Route as AuthenticatedErrorsErrorRouteImport } from './routes/_authenticated/errors/$error'
+import { Route as AuthenticatedMasterDataAssetTypesRouteImport } from './routes/_authenticated/master-data/asset-types'
+import { Route as AuthenticatedMasterDataCostCentersRouteImport } from './routes/_authenticated/master-data/cost-centers'
+import { Route as AuthenticatedMasterDataDepartmentsRouteImport } from './routes/_authenticated/master-data/departments'
+import { Route as AuthenticatedMasterDataLocationsRouteImport } from './routes/_authenticated/master-data/locations'
+import { Route as AuthenticatedMasterDataReasonCodesRouteImport } from './routes/_authenticated/master-data/reason-codes'
 import { Route as AuthenticatedSettingsIndexRouteImport } from './routes/_authenticated/settings/index'
 import { Route as AuthenticatedSettingsAppearanceRouteImport } from './routes/_authenticated/settings/appearance'
 
@@ -85,6 +90,36 @@ const AuthenticatedErrorsErrorRoute =
     path: '/errors/$error',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
+const AuthenticatedMasterDataAssetTypesRoute =
+  AuthenticatedMasterDataAssetTypesRouteImport.update({
+    id: '/master-data/asset-types',
+    path: '/master-data/asset-types',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const AuthenticatedMasterDataCostCentersRoute =
+  AuthenticatedMasterDataCostCentersRouteImport.update({
+    id: '/master-data/cost-centers',
+    path: '/master-data/cost-centers',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const AuthenticatedMasterDataDepartmentsRoute =
+  AuthenticatedMasterDataDepartmentsRouteImport.update({
+    id: '/master-data/departments',
+    path: '/master-data/departments',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const AuthenticatedMasterDataLocationsRoute =
+  AuthenticatedMasterDataLocationsRouteImport.update({
+    id: '/master-data/locations',
+    path: '/master-data/locations',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const AuthenticatedMasterDataReasonCodesRoute =
+  AuthenticatedMasterDataReasonCodesRouteImport.update({
+    id: '/master-data/reason-codes',
+    path: '/master-data/reason-codes',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 const AuthenticatedSettingsIndexRoute =
   AuthenticatedSettingsIndexRouteImport.update({
     id: '/',
@@ -110,6 +145,11 @@ export interface FileRoutesByFullPath {
   '/500': typeof errors500Route
   '/503': typeof errors503Route
   '/errors/$error': typeof AuthenticatedErrorsErrorRoute
+  '/master-data/asset-types': typeof AuthenticatedMasterDataAssetTypesRoute
+  '/master-data/cost-centers': typeof AuthenticatedMasterDataCostCentersRoute
+  '/master-data/departments': typeof AuthenticatedMasterDataDepartmentsRoute
+  '/master-data/locations': typeof AuthenticatedMasterDataLocationsRoute
+  '/master-data/reason-codes': typeof AuthenticatedMasterDataReasonCodesRoute
   '/settings/appearance': typeof AuthenticatedSettingsAppearanceRoute
   '/settings/': typeof AuthenticatedSettingsIndexRoute
 }
@@ -124,6 +164,11 @@ export interface FileRoutesByTo {
   '/503': typeof errors503Route
   '/': typeof AuthenticatedIndexRoute
   '/errors/$error': typeof AuthenticatedErrorsErrorRoute
+  '/master-data/asset-types': typeof AuthenticatedMasterDataAssetTypesRoute
+  '/master-data/cost-centers': typeof AuthenticatedMasterDataCostCentersRoute
+  '/master-data/departments': typeof AuthenticatedMasterDataDepartmentsRoute
+  '/master-data/locations': typeof AuthenticatedMasterDataLocationsRoute
+  '/master-data/reason-codes': typeof AuthenticatedMasterDataReasonCodesRoute
   '/settings/appearance': typeof AuthenticatedSettingsAppearanceRoute
   '/settings': typeof AuthenticatedSettingsIndexRoute
 }
@@ -141,6 +186,11 @@ export interface FileRoutesById {
   '/(errors)/503': typeof errors503Route
   '/_authenticated/': typeof AuthenticatedIndexRoute
   '/_authenticated/errors/$error': typeof AuthenticatedErrorsErrorRoute
+  '/_authenticated/master-data/asset-types': typeof AuthenticatedMasterDataAssetTypesRoute
+  '/_authenticated/master-data/cost-centers': typeof AuthenticatedMasterDataCostCentersRoute
+  '/_authenticated/master-data/departments': typeof AuthenticatedMasterDataDepartmentsRoute
+  '/_authenticated/master-data/locations': typeof AuthenticatedMasterDataLocationsRoute
+  '/_authenticated/master-data/reason-codes': typeof AuthenticatedMasterDataReasonCodesRoute
   '/_authenticated/settings/appearance': typeof AuthenticatedSettingsAppearanceRoute
   '/_authenticated/settings/': typeof AuthenticatedSettingsIndexRoute
 }
@@ -158,6 +208,11 @@ export interface FileRouteTypes {
     | '/500'
     | '/503'
     | '/errors/$error'
+    | '/master-data/asset-types'
+    | '/master-data/cost-centers'
+    | '/master-data/departments'
+    | '/master-data/locations'
+    | '/master-data/reason-codes'
     | '/settings/appearance'
     | '/settings/'
   fileRoutesByTo: FileRoutesByTo
@@ -172,6 +227,11 @@ export interface FileRouteTypes {
     | '/503'
     | '/'
     | '/errors/$error'
+    | '/master-data/asset-types'
+    | '/master-data/cost-centers'
+    | '/master-data/departments'
+    | '/master-data/locations'
+    | '/master-data/reason-codes'
     | '/settings/appearance'
     | '/settings'
   id:
@@ -188,6 +248,11 @@ export interface FileRouteTypes {
     | '/(errors)/503'
     | '/_authenticated/'
     | '/_authenticated/errors/$error'
+    | '/_authenticated/master-data/asset-types'
+    | '/_authenticated/master-data/cost-centers'
+    | '/_authenticated/master-data/departments'
+    | '/_authenticated/master-data/locations'
+    | '/_authenticated/master-data/reason-codes'
     | '/_authenticated/settings/appearance'
     | '/_authenticated/settings/'
   fileRoutesById: FileRoutesById
@@ -290,6 +355,41 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedErrorsErrorRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/master-data/asset-types': {
+      id: '/_authenticated/master-data/asset-types'
+      path: '/master-data/asset-types'
+      fullPath: '/master-data/asset-types'
+      preLoaderRoute: typeof AuthenticatedMasterDataAssetTypesRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/master-data/cost-centers': {
+      id: '/_authenticated/master-data/cost-centers'
+      path: '/master-data/cost-centers'
+      fullPath: '/master-data/cost-centers'
+      preLoaderRoute: typeof AuthenticatedMasterDataCostCentersRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/master-data/departments': {
+      id: '/_authenticated/master-data/departments'
+      path: '/master-data/departments'
+      fullPath: '/master-data/departments'
+      preLoaderRoute: typeof AuthenticatedMasterDataDepartmentsRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/master-data/locations': {
+      id: '/_authenticated/master-data/locations'
+      path: '/master-data/locations'
+      fullPath: '/master-data/locations'
+      preLoaderRoute: typeof AuthenticatedMasterDataLocationsRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/master-data/reason-codes': {
+      id: '/_authenticated/master-data/reason-codes'
+      path: '/master-data/reason-codes'
+      fullPath: '/master-data/reason-codes'
+      preLoaderRoute: typeof AuthenticatedMasterDataReasonCodesRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/settings/': {
       id: '/_authenticated/settings/'
       path: '/'
@@ -327,12 +427,26 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedSettingsRouteRoute: typeof AuthenticatedSettingsRouteRouteWithChildren
   AuthenticatedIndexRoute: typeof AuthenticatedIndexRoute
   AuthenticatedErrorsErrorRoute: typeof AuthenticatedErrorsErrorRoute
+  AuthenticatedMasterDataAssetTypesRoute: typeof AuthenticatedMasterDataAssetTypesRoute
+  AuthenticatedMasterDataCostCentersRoute: typeof AuthenticatedMasterDataCostCentersRoute
+  AuthenticatedMasterDataDepartmentsRoute: typeof AuthenticatedMasterDataDepartmentsRoute
+  AuthenticatedMasterDataLocationsRoute: typeof AuthenticatedMasterDataLocationsRoute
+  AuthenticatedMasterDataReasonCodesRoute: typeof AuthenticatedMasterDataReasonCodesRoute
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedSettingsRouteRoute: AuthenticatedSettingsRouteRouteWithChildren,
   AuthenticatedIndexRoute: AuthenticatedIndexRoute,
   AuthenticatedErrorsErrorRoute: AuthenticatedErrorsErrorRoute,
+  AuthenticatedMasterDataAssetTypesRoute:
+    AuthenticatedMasterDataAssetTypesRoute,
+  AuthenticatedMasterDataCostCentersRoute:
+    AuthenticatedMasterDataCostCentersRoute,
+  AuthenticatedMasterDataDepartmentsRoute:
+    AuthenticatedMasterDataDepartmentsRoute,
+  AuthenticatedMasterDataLocationsRoute: AuthenticatedMasterDataLocationsRoute,
+  AuthenticatedMasterDataReasonCodesRoute:
+    AuthenticatedMasterDataReasonCodesRoute,
 }
 
 const AuthenticatedRouteRouteWithChildren =
