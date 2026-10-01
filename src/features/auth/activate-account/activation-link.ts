@@ -1,6 +1,5 @@
 export type ActivationHashResult =
-  | { ok: true; accessToken: string }
-  | { ok: false }
+  { ok: true; accessToken: string } | { ok: false }
 
 /** Chỉ nhận session sinh từ email mời; signup/recovery thuộc các luồng khác. */
 export function parseActivationHash(hash: string): ActivationHashResult {

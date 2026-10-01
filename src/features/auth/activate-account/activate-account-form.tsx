@@ -3,7 +3,13 @@ import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useMutation } from '@tanstack/react-query'
 import { Link } from '@tanstack/react-router'
-import { CheckCircle2, Clock3, Link2Off, Loader2, UserRound } from 'lucide-react'
+import {
+  CheckCircle2,
+  Clock3,
+  Link2Off,
+  Loader2,
+  UserRound,
+} from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import {
   completeAccountActivation,
@@ -22,9 +28,9 @@ import {
   FormLabel,
   FormMessage,
 } from '@/components/ui/form'
+import { Skeleton } from '@/components/ui/skeleton'
 import { PasswordInput } from '@/components/password-input'
 import { RequiredMark } from '@/components/required-mark'
-import { Skeleton } from '@/components/ui/skeleton'
 import { parseActivationHash } from './activation-link'
 import {
   buildActivationSchema,
@@ -60,9 +66,7 @@ export function ActivateAccountForm() {
     return result
   })
   const [state, setState] = useState<PageState>(() =>
-    activation.ok
-      ? { phase: 'loading' }
-      : { phase: 'failure', kind: 'invalid' }
+    activation.ok ? { phase: 'loading' } : { phase: 'failure', kind: 'invalid' }
   )
 
   const schema = buildActivationSchema({
@@ -82,8 +86,7 @@ export function ActivateAccountForm() {
         if (active) setState({ phase: 'ready', preview })
       })
       .catch((error: unknown) => {
-        if (active)
-          setState({ phase: 'failure', kind: failureKindOf(error) })
+        if (active) setState({ phase: 'failure', kind: failureKindOf(error) })
       })
     return () => {
       active = false
@@ -175,7 +178,10 @@ export function ActivateAccountForm() {
   if (state.phase === 'success') {
     return (
       <div role='status' className='grid gap-4 text-center'>
-        <CheckCircle2 aria-hidden className='mx-auto size-10 text-emerald-600' />
+        <CheckCircle2
+          aria-hidden
+          className='mx-auto size-10 text-emerald-600'
+        />
         <div className='grid gap-1.5'>
           <h1
             ref={statusHeading}
@@ -206,8 +212,10 @@ export function ActivateAccountForm() {
           <UserRound aria-hidden className='size-5 text-muted-foreground' />
         </div>
         <div className='min-w-0'>
-          <p className='truncate text-sm font-medium'>{state.preview.displayName}</p>
-          <p className='text-sm text-muted-foreground [overflow-wrap:anywhere]'>
+          <p className='truncate text-sm font-medium'>
+            {state.preview.displayName}
+          </p>
+          <p className='text-sm [overflow-wrap:anywhere] text-muted-foreground'>
             {state.preview.workEmail}
           </p>
         </div>
@@ -268,7 +276,11 @@ export function ActivateAccountForm() {
             </p>
           ) : null}
 
-          <Button size='lg' className='mt-1 min-h-11' disabled={mutation.isPending}>
+          <Button
+            size='lg'
+            className='mt-1 min-h-11'
+            disabled={mutation.isPending}
+          >
             {mutation.isPending ? (
               <Loader2 aria-hidden className='animate-spin' />
             ) : null}

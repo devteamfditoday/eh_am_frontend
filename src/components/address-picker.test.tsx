@@ -24,12 +24,18 @@ describe('AddressPicker', () => {
     const detail = getByRole('textbox', { name: /số nhà/i })
 
     await expect.element(alert).toHaveTextContent('Hãy chọn đủ tỉnh/thành')
-    await expect.element(getByText('Hãy chọn đủ tỉnh/thành', { exact: false })).toBeVisible()
+    await expect
+      .element(getByText('Hãy chọn đủ tỉnh/thành', { exact: false }))
+      .toBeVisible()
     await expect.element(alert).toHaveClass('sm:col-span-2')
     await expect.element(ward).toHaveAttribute('aria-invalid', 'true')
-    await expect.element(ward).toHaveAttribute('aria-describedby', 'address-group-error')
+    await expect
+      .element(ward)
+      .toHaveAttribute('aria-describedby', 'address-group-error')
     await expect.element(detail).toHaveAttribute('aria-invalid', 'true')
-    await expect.element(detail).toHaveAttribute('aria-describedby', 'address-group-error')
+    await expect
+      .element(detail)
+      .toHaveAttribute('aria-describedby', 'address-group-error')
     expect(document.querySelectorAll('#address-group-error')).toHaveLength(1)
   })
 })

@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react'
-import { useQuery } from '@tanstack/react-query'
-import { Link } from '@tanstack/react-router'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import { Link, useSearch } from '@tanstack/react-router'
 import {
   type PaginationState,
   flexRender,
@@ -10,15 +10,22 @@ import {
 } from '@tanstack/react-table'
 import { Plus, Users } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
+import { toast } from 'sonner'
 import {
   EMPLOYEE_ACCOUNT_STATUSES,
   EMPLOYMENT_TYPES,
+  resendEmployeeInvite,
+  type EmployeeListItem,
   type ListEmployeesParams,
 } from '@/lib/api/employees.api'
 import {
   employeeCreateOptionsQuery,
+  employeeKeys,
   employeesListQueryOptions,
 } from '@/lib/api/employees.queries'
+import { ApiError, ErrorCode } from '@/lib/api/error-code'
+import { handleApiError } from '@/lib/api/handle-api-error'
+import { createIdempotencyKey } from '@/lib/idempotency-key'
 import { useDebouncedValue } from '@/hooks/use-debounced-value'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -40,6 +47,7 @@ import {
   TableRow,
 } from '@/components/ui/table'
 import { ConfigDrawer } from '@/components/config-drawer'
+import { ConfirmDialog } from '@/components/confirm-dialog'
 import { DataTablePagination } from '@/components/data-table'
 import { EmptyState } from '@/components/empty-state'
 import { Header } from '@/components/layout/header'
@@ -71,12 +79,18 @@ const EMPTY_FILTERS: Filters = {
 const paramOf = (value: string) => (value === ALL ? undefined : value)
 
 export function EmployeesListPage() {
-  const { t } = useTranslation()
+  const { t, i18n } = useTranslation()
+  const queryClient = useQueryClient()
+  const [resendTarget, setResendTarget] = useState<{
+    employee: EmployeeListItem
+    commandKey: string
+  } | null>(null)
   const [pagination, setPagination] = useState<PaginationState>({
     pageIndex: 0,
     pageSize: 20,
   })
-  const [search, setSearch] = useState('')
+  const routeSearch = useSearch({ from: '/_authenticated/employees/' })
+  const [search, setSearch] = useState(routeSearch.search ?? '')
   const [filters, setFilters] = useState<Filters>(EMPTY_FILTERS)
   const debouncedSearch = useDebouncedValue(search.trim(), 300)
 
@@ -94,8 +108,52 @@ export function EmployeesListPage() {
   }
   const query = useQuery(employeesListQueryOptions(params))
 
+  const resendMutation = useMutation({
+    mutationFn: () => {
+      if (!resendTarget) throw new Error('Missing resend target')
+      return resendEmployeeInvite(
+        resendTarget.employee.id,
+        resendTarget.commandKey
+      )
+    },
+    onSuccess: (result) => {
+      const sentAt = new Intl.DateTimeFormat(i18n.resolvedLanguage, {
+        dateStyle: 'short',
+        timeStyle: 'short',
+      }).format(new Date(result.sentAt))
+      toast.success(t('employees.list.invite.success', { sentAt }))
+      setResendTarget(null)
+      void queryClient.invalidateQueries({ queryKey: employeeKeys.all })
+    },
+    onError: (error) => {
+      const apiError = handleApiError(error, { silent: true })
+      if (apiError instanceof ApiError) {
+        if (apiError.code === ErrorCode.ACCOUNT_STATE_CONFLICT) {
+          toast.error(t('employees.list.invite.stateConflict'))
+        } else if (apiError.code === ErrorCode.EMAIL_SEND_FAILED) {
+          toast.error(t('employees.list.invite.emailFailed'))
+        } else if (
+          apiError.code === ErrorCode.REQUEST_TIMEOUT ||
+          apiError.code === ErrorCode.NETWORK_ERROR
+        ) {
+          toast.error(t('employees.list.invite.uncertain'))
+        } else {
+          handleApiError(apiError)
+        }
+      }
+      setResendTarget(null)
+      void queryClient.invalidateQueries({ queryKey: employeeKeys.all })
+    },
+  })
+
   const data = useMemo(() => query.data?.items ?? [], [query.data])
-  const columns = useMemo(() => getEmployeeColumns(t), [t])
+  const columns = useMemo(
+    () =>
+      getEmployeeColumns(t, (employee) =>
+        setResendTarget({ employee, commandKey: createIdempotencyKey() })
+      ),
+    [t]
+  )
 
   const table = useReactTable({
     data,
@@ -346,6 +404,25 @@ export function EmployeesListPage() {
           )}
         </div>
       </Main>
+
+      <ConfirmDialog
+        open={resendTarget !== null}
+        onOpenChange={(open) => {
+          if (!open && !resendMutation.isPending) setResendTarget(null)
+        }}
+        title={t('employees.list.invite.confirmTitle')}
+        desc={t('employees.list.invite.confirmDescription', {
+          email: resendTarget?.employee.workEmail ?? '',
+        })}
+        cancelBtnText={t('common.cancel')}
+        confirmText={
+          resendMutation.isPending
+            ? t('employees.list.invite.sending')
+            : t('employees.list.invite.confirm')
+        }
+        isLoading={resendMutation.isPending}
+        handleConfirm={() => resendMutation.mutate()}
+      />
     </>
   )
 }

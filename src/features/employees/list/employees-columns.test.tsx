@@ -1,7 +1,7 @@
 import { type ReactNode } from 'react'
 import { type CellContext } from '@tanstack/react-table'
 import { useTranslation } from 'react-i18next'
-import { describe, expect, it } from 'vitest'
+import { describe, expect, it, vi } from 'vitest'
 import { render } from 'vitest-browser-react'
 import { type EmployeeListItem } from '@/lib/api/employees.api'
 import { getEmployeeColumns } from './employees-columns'
@@ -26,14 +26,21 @@ function base(overrides: Partial<EmployeeListItem> = {}): EmployeeListItem {
 }
 
 /** Render ô của một cột (gọi thẳng `cell`, không dựng cả bảng để tránh dual-React). */
-function Cell({ accessor, emp }: { accessor: string; emp: EmployeeListItem }) {
+function Cell({
+  accessor,
+  emp,
+  onResendInvite,
+}: {
+  accessor: string
+  emp: EmployeeListItem
+  onResendInvite?: (employee: EmployeeListItem) => void
+}) {
   const { t } = useTranslation()
-  const column = getEmployeeColumns(t).find(
+  const column = getEmployeeColumns(t, onResendInvite).find(
     (col) => 'accessorKey' in col && col.accessorKey === accessor
   )
   const renderCell = column?.cell as
-    | ((ctx: CellContext<EmployeeListItem, unknown>) => ReactNode)
-    | undefined
+    ((ctx: CellContext<EmployeeListItem, unknown>) => ReactNode) | undefined
   return (
     <div>
       {renderCell
@@ -58,20 +65,32 @@ describe('employee list columns', () => {
     await expect.element(screen.getByText('01/09/2026')).toBeVisible()
   })
 
-  it('shows the invite status and a disabled resend placeholder for pending employees', async () => {
+  it('offers resend for pending email-invite employees and calls the row action', async () => {
+    const onResendInvite = vi.fn()
+    const employee = base({
+      status: 'PENDING_ACTIVATION',
+      inviteStatus: 'EXPIRED',
+      inviteExpiresAt: '2026-09-10T00:00:00.000Z',
+    })
     const screen = await render(
-      <Cell
-        accessor='status'
-        emp={base({
-          status: 'PENDING_ACTIVATION',
-          inviteStatus: 'EXPIRED',
-          inviteExpiresAt: '2026-09-10T00:00:00.000Z',
-        })}
-      />
+      <Cell accessor='status' emp={employee} onResendInvite={onResendInvite} />
     )
     await expect.element(screen.getByText('Chờ kích hoạt')).toBeVisible()
     expect(screen.container.textContent).toContain('Hết hạn')
     const resend = screen.getByRole('button', { name: /Gửi lại lời mời/ })
-    await expect.element(resend).toBeDisabled()
+    await resend.click()
+    expect(onResendInvite).toHaveBeenCalledWith(employee)
+  })
+
+  it('does not offer resend to a temporary-password account', async () => {
+    const screen = await render(
+      <Cell
+        accessor='status'
+        emp={base({ status: 'PENDING_ACTIVATION', inviteStatus: null })}
+        onResendInvite={vi.fn()}
+      />
+    )
+    await expect.element(screen.getByText('Chờ kích hoạt')).toBeVisible()
+    expect(screen.container.querySelector('button')).toBeNull()
   })
 })

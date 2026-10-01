@@ -131,3 +131,101 @@ export async function createEmployee(
   })
   return response.data
 }
+
+export interface ResentEmployeeInvite {
+  employeeId: string
+  displayName: string
+  email: string
+  inviteId: string
+  sentAt: string
+  expiresAt: string
+}
+
+export async function resendEmployeeInvite(
+  employeeId: string,
+  commandKey: string
+) {
+  const response = await api.post<ResentEmployeeInvite>(
+    `/employees/${employeeId}/resend-invite`,
+    undefined,
+    { headers: { 'Idempotency-Key': commandKey } }
+  )
+  return response.data
+}
+
+// --- UC-IAM-10: phân quyền theo phạm vi ---
+
+export interface RoleAssignment {
+  id: string
+  roleCode: string
+  contextType: string
+  contextId: string
+  location: { id: string; code: string; name: string } | null
+  effectiveFrom: string
+  effectiveTo: string | null
+  grantReason: string | null
+  status: 'UPCOMING' | 'ACTIVE' | 'EXPIRED' | 'REVOKED'
+}
+
+export interface EmployeeAccess {
+  employee: {
+    id: string
+    displayName: string
+    employeeCode: string | null
+    status: string
+  }
+  assignments: RoleAssignment[]
+  options: {
+    roles: Array<{
+      code: string
+      nameVi: string
+      nameEn: string
+      contextType: string
+    }>
+    locations: Array<{ id: string; code: string; name: string }>
+  }
+}
+
+export interface GrantRolePayload {
+  roleCode: string
+  contextIds: string[]
+  effectiveFrom: string
+  effectiveTo?: string
+  reason: string
+}
+
+export async function getEmployeeAccess(employeeId: string) {
+  const { data } = await api.get<EmployeeAccess>(
+    `/employees/${employeeId}/access`
+  )
+  return data
+}
+
+export async function grantRoleAssignments(
+  employeeId: string,
+  payload: GrantRolePayload,
+  commandKey: string
+) {
+  const { data } = await api.post<RoleAssignment[]>(
+    `/employees/${employeeId}/role-assignments`,
+    payload,
+    { headers: { 'Idempotency-Key': commandKey } }
+  )
+  return data
+}
+
+// --- UC-IAM-11: thu hồi vai trò theo phạm vi ---
+
+export async function revokeRoleAssignment(
+  employeeId: string,
+  assignmentId: string,
+  reason: string,
+  commandKey: string
+) {
+  const { data } = await api.post<RoleAssignment>(
+    `/employees/${employeeId}/role-assignments/${assignmentId}/revoke`,
+    { reason },
+    { headers: { 'Idempotency-Key': commandKey } }
+  )
+  return data
+}

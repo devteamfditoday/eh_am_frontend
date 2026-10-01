@@ -186,7 +186,18 @@ export const en: TranslationKeys = {
         SENT: 'Sent',
         EXPIRED: 'Expired',
         resend: 'Resend invite',
-        resendPending: 'Enabled in UC-IAM-07',
+        confirmTitle: 'Resend the activation invite?',
+        confirmDescription:
+          'A new invite will be sent to {{email}}. The previous invite will stop working immediately.',
+        confirm: 'Send invite',
+        sending: 'Sending…',
+        success: 'New invite sent at {{sentAt}}.',
+        stateConflict:
+          'The account status just changed. The list has been refreshed so you can check it again.',
+        emailFailed:
+          'The new invite was saved, but the email could not be sent. You can start a new resend attempt.',
+        uncertain:
+          'The result is uncertain. Check the latest invite in the list before trying again.',
       },
       notProvided: '—',
       emptyTitle: 'No employees yet',
@@ -195,6 +206,110 @@ export const en: TranslationKeys = {
       noMatchDescription: 'Try removing filters or editing the search term.',
       loadErrorTitle: 'Could not load the employee list',
       loadErrorDescription: 'Check your connection and try again.',
+    },
+    access: {
+      backToList: 'Employees',
+      sectionTitle: 'Access',
+      addRole: 'Add role',
+      empty:
+        'No roles assigned yet. This employee cannot see any location data.',
+      loadErrorTitle: 'Could not load access',
+      loadErrorDescription: 'Check your connection and try again.',
+      scopePlatform: 'Platform-wide',
+      columns: {
+        role: 'Role',
+        scope: 'Scope',
+        effective: 'Effective',
+        status: 'Status',
+        reason: 'Reason',
+        actions: 'Actions',
+      },
+      status: {
+        UPCOMING: 'Upcoming',
+        ACTIVE: 'Active',
+        EXPIRED: 'Expired',
+        REVOKED: 'Revoked',
+      },
+      revoke: {
+        button: 'Revoke',
+        title: 'Revoke role',
+        description:
+          'Revoke {{role}} on {{scope}} for {{name}}. The role stops applying from the next action; history is preserved.',
+        reason: 'Revocation reason',
+        reasonPlaceholder: 'e.g. moved to another store',
+        reasonRequired: 'Please enter a reason (2–500 characters).',
+        submit: 'Confirm revocation',
+        success: 'Role revoked.',
+      },
+      dialog: {
+        title: 'Assign role',
+        role: 'Role',
+        rolePlaceholder: 'Select a role',
+        scopePlatform: 'Scope: Platform-wide',
+        locations: 'Locations',
+        locationsHint: 'Select one or more locations this role applies to.',
+        locationStaffHint: 'Location staff belong to a single location.',
+        effectiveFrom: 'Effective from',
+        effectiveTo: 'Effective to',
+        reason: 'Reason for the assignment',
+        reasonPlaceholder: 'e.g. joining store A',
+        submit: 'Assign role',
+        success: 'Role assigned to the employee.',
+        errors: {
+          roleRequired: 'Please select a role.',
+          locationRequired: 'Please select at least one location.',
+          locationSingle:
+            'Location staff can only be assigned to one location.',
+          dateFrom: 'Please select a start date.',
+          dateOrder: 'The end date must be after the start date.',
+          reason: 'The reason must be 2–500 characters.',
+        },
+      },
+    },
+  },
+
+  organizationChart: {
+    title: 'Organization chart',
+    description:
+      'View reporting lines and employee records that still need organization details.',
+    readOnly: 'Read only · does not grant access',
+    search: 'Search by name or employee code',
+    depth: 'Visible levels',
+    depthValue: '{{count}} levels',
+    allDepths: 'All levels',
+    results: '{{count}} results',
+    noResultsHint: 'Try another term. The chart remains unchanged.',
+    treeLabel: 'Reporting tree',
+    expand: "Expand {{name}}'s branch",
+    collapse: "Collapse {{name}}'s branch",
+    directReports: '{{count}} direct reports',
+    peopleCount: '{{count}} employees',
+    expandAll: 'Expand all',
+    canvasHint:
+      'Drag the background to move; use the controls to zoom in or out.',
+    openProfile: 'Find employee profile for {{name}}',
+    location: 'Work location',
+    department: 'Department',
+    issuesTitle: 'Data to complete',
+    issuesDescription:
+      'Active employee records that an administrator should review.',
+    loadErrorTitle: 'Could not load the organization chart',
+    loadErrorDescription:
+      'No partial chart is shown. Check the connection and reload.',
+    emptyTitle: 'No employees on the chart yet',
+    emptyDescription:
+      'Add an employee profile to begin building reporting lines.',
+    addEmployee: 'Add employee',
+    status: {
+      ACTIVE: 'Active',
+      PENDING_ACTIVATION: 'Pending activation',
+      SUSPENDED: 'Suspended',
+    },
+    issue: {
+      MANAGER_MISSING: 'No direct manager assigned',
+      MANAGER_UNAVAILABLE: 'Manager is no longer visible on the chart',
+      WORK_UNIT_MISSING: 'Work unit is incomplete',
+      MANAGER_CYCLE: 'Manager relationship forms a cycle',
     },
   },
 
@@ -268,6 +383,7 @@ export const en: TranslationKeys = {
     reasonCodes: 'Reasons',
     employees: 'Employees',
     addEmployee: 'Add employee',
+    organizationChart: 'Organization chart',
   },
 
   dashboard: {

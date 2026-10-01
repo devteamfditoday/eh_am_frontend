@@ -10,11 +10,7 @@ describe('SupplierFormDialog', () => {
     })
     const { getByLabelText, getByText } = await render(
       <QueryClientProvider client={queryClient}>
-        <SupplierFormDialog
-          open
-          supplier={null}
-          onOpenChange={vi.fn()}
-        />
+        <SupplierFormDialog open supplier={null} onOpenChange={vi.fn()} />
       </QueryClientProvider>
     )
 

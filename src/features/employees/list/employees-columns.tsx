@@ -1,3 +1,4 @@
+import { Link } from '@tanstack/react-router'
 import { type ColumnDef } from '@tanstack/react-table'
 import { type TFunction } from 'i18next'
 import { Mail, Send } from 'lucide-react'
@@ -25,7 +26,10 @@ function formatStartDate(value: string | null): string {
   return `${match[3]}/${match[2]}/${match[1]}`
 }
 
-export function getEmployeeColumns(t: TFunction): ColumnDef<EmployeeListItem>[] {
+export function getEmployeeColumns(
+  t: TFunction,
+  onResendInvite?: (employee: EmployeeListItem) => void
+): ColumnDef<EmployeeListItem>[] {
   const none = t('employees.list.notProvided')
   return [
     {
@@ -33,7 +37,13 @@ export function getEmployeeColumns(t: TFunction): ColumnDef<EmployeeListItem>[] 
       header: t('employees.list.columns.name'),
       cell: ({ row }) => (
         <div className='min-w-44'>
-          <div className='font-medium'>{row.original.displayName}</div>
+          <Link
+            to='/employees/$id'
+            params={{ id: row.original.id }}
+            className='font-medium underline-offset-4 hover:underline focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none'
+          >
+            {row.original.displayName}
+          </Link>
           {row.original.employeeCode ? (
             <div className='font-mono text-xs text-muted-foreground'>
               {row.original.employeeCode}
@@ -92,18 +102,18 @@ export function getEmployeeColumns(t: TFunction): ColumnDef<EmployeeListItem>[] 
                     defaultValue: emp.inviteStatus,
                   })}
                 </span>
-                {/* Nút chỗ đặt cho UC-IAM-07 — hành vi gửi lại làm ở UC sau. */}
-                <Button
-                  type='button'
-                  variant='ghost'
-                  size='sm'
-                  disabled
-                  title={t('employees.list.invite.resendPending')}
-                  className='h-7 px-2 text-xs'
-                >
-                  <Send className='me-1 size-3' aria-hidden='true' />
-                  {t('employees.list.invite.resend')}
-                </Button>
+                {onResendInvite ? (
+                  <Button
+                    type='button'
+                    variant='ghost'
+                    size='sm'
+                    onClick={() => onResendInvite(emp)}
+                    className='min-h-11 px-2 text-xs sm:min-h-7'
+                  >
+                    <Send className='me-1 size-3' aria-hidden='true' />
+                    {t('employees.list.invite.resend')}
+                  </Button>
+                ) : null}
               </div>
             ) : null}
           </div>

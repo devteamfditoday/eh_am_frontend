@@ -1,5 +1,6 @@
 import { queryOptions, keepPreviousData } from '@tanstack/react-query'
 import {
+  getEmployeeAccess,
   getEmployeeCreateOptions,
   listEmployees,
   type ListEmployeesParams,
@@ -8,8 +9,8 @@ import {
 export const employeeKeys = {
   all: ['employees'] as const,
   createOptions: ['employees', 'create-options'] as const,
-  list: (params: ListEmployeesParams) =>
-    ['employees', 'list', params] as const,
+  list: (params: ListEmployeesParams) => ['employees', 'list', params] as const,
+  access: (id: string) => ['employees', 'access', id] as const,
 }
 
 export const employeeCreateOptionsQuery = () =>
@@ -18,6 +19,13 @@ export const employeeCreateOptionsQuery = () =>
     queryFn: getEmployeeCreateOptions,
     staleTime: 60_000,
   })
+
+export function employeeAccessQueryOptions(id: string) {
+  return queryOptions({
+    queryKey: employeeKeys.access(id),
+    queryFn: () => getEmployeeAccess(id),
+  })
+}
 
 export function employeesListQueryOptions(params: ListEmployeesParams = {}) {
   return queryOptions({
