@@ -48,6 +48,14 @@ interface MeResponse {
   email: string | null
   displayName: string
   employeeCode: string | null
+  workEmail: string | null
+  phone: string | null
+  jobTitle: string | null
+  employmentType: string | null
+  primaryLocation: AuthUser['primaryLocation']
+  department: AuthUser['department']
+  manager: AuthUser['manager']
+  roleAssignments: AuthUser['roleAssignments']
   preferredLocale: string | null
   isSuperAdmin: boolean
   platformRoles: string[]
@@ -84,6 +92,16 @@ export async function fetchMe(): Promise<AuthUser> {
     email: data.email,
     displayName: data.displayName,
     employeeCode: data.employeeCode,
+    workEmail: data.workEmail ?? data.email,
+    phone: data.phone ?? null,
+    jobTitle: data.jobTitle ?? null,
+    employmentType: data.employmentType ?? null,
+    primaryLocation: data.primaryLocation ?? null,
+    department: data.department ?? null,
+    manager: data.manager ?? null,
+    roleAssignments: Array.isArray(data.roleAssignments)
+      ? data.roleAssignments
+      : [],
     isSuperAdmin: data.isSuperAdmin,
     platformRoles: Array.isArray(data.platformRoles) ? data.platformRoles : [],
     locationRoles: Array.isArray(data.locationRoles) ? data.locationRoles : [],
@@ -91,6 +109,16 @@ export async function fetchMe(): Promise<AuthUser> {
       ? data.preferredLocale
       : env.defaultLocale,
   }
+}
+
+export async function updatePreferredLocale(
+  preferredLocale: 'vi' | 'en'
+): Promise<{ preferredLocale: 'vi' | 'en' }> {
+  const { data } = await api.patch<{ preferredLocale: 'vi' | 'en' }>(
+    '/auth/me/locale',
+    { preferredLocale }
+  )
+  return data
 }
 
 /**

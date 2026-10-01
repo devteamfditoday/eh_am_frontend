@@ -29,6 +29,7 @@ import { createIdempotencyKey } from '@/lib/idempotency-key'
 import { useDebouncedValue } from '@/hooks/use-debounced-value'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
 import {
   Select,
   SelectContent,
@@ -194,26 +195,35 @@ export function EmployeesListPage() {
     label: string,
     items: { value: string; label: string }[]
   ) {
+    const controlId = `employee-filter-${key}`
     return (
-      <Select
-        value={filters[key]}
-        onValueChange={(value) => updateFilter(key, value)}
-      >
-        <SelectTrigger
-          className='min-h-11 w-full sm:min-h-9 sm:w-44'
-          aria-label={label}
+      <div className='grid w-full gap-1.5 sm:w-44'>
+        <Label htmlFor={controlId} className='text-xs text-muted-foreground'>
+          {label}
+        </Label>
+        <Select
+          value={filters[key]}
+          onValueChange={(value) => updateFilter(key, value)}
         >
-          <SelectValue placeholder={label} />
-        </SelectTrigger>
-        <SelectContent>
-          <SelectItem value={ALL}>{t('employees.list.filters.all')}</SelectItem>
-          {items.map((item) => (
-            <SelectItem key={item.value} value={item.value}>
-              {item.label}
+          <SelectTrigger
+            id={controlId}
+            className='min-h-11 w-full sm:min-h-9'
+            aria-label={label}
+          >
+            <SelectValue placeholder={label} />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value={ALL}>
+              {t('employees.list.filters.all')}
             </SelectItem>
-          ))}
-        </SelectContent>
-      </Select>
+            {items.map((item) => (
+              <SelectItem key={item.value} value={item.value}>
+                {item.label}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+      </div>
     )
   }
 
@@ -257,7 +267,7 @@ export function EmployeesListPage() {
                 {t('employees.list.total', { count: query.data?.total ?? 0 })}
               </span>
             </div>
-            <div className='flex flex-wrap items-center gap-2'>
+            <div className='flex flex-wrap items-end gap-3'>
               {filterSelect(
                 'locationId',
                 t('employees.list.filters.location'),

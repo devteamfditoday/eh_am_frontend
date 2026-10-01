@@ -64,6 +64,57 @@ export const en: TranslationKeys = {
     theme: 'Theme',
   },
 
+  personalProfile: {
+    title: 'My profile',
+    description: 'Review your work details, access and display language.',
+    phone: 'Phone number',
+    jobTitle: 'Job title',
+    workTitle: 'Work information',
+    location: 'Primary location',
+    department: 'Department',
+    manager: 'Direct manager',
+    employmentType: 'Employment type',
+    languageTitle: 'Display language',
+    languageDescription:
+      'The interface and server messages will use your saved language.',
+    saveLanguage: 'Save language',
+    savingLanguage: 'Saving…',
+    languageSaved: 'Display language updated.',
+    rolesTitle: 'Roles and scope',
+    rolesDescription: 'Access that is active now or scheduled to start.',
+    noRolesTitle: 'You have not been assigned a role',
+    noRolesDescription:
+      'Contact a System Administrator to request a role. Until then, you cannot view data for any location.',
+    platformScope: 'Entire system',
+    locationScope: 'By location',
+    noEndDate: 'No end date',
+    superAdmin: 'Super administrator',
+    loadErrorTitle: 'Could not load your profile',
+    loadErrorDescription:
+      'Your information is unavailable right now. Check your connection and try again.',
+    roleStatus: {
+      ACTIVE: 'Active',
+      UPCOMING: 'Upcoming',
+    },
+    employment: {
+      FULL_TIME: 'Full-time',
+      PART_TIME: 'Part-time',
+      CONTRACT: 'Contract',
+      INTERN: 'Internship',
+    },
+    roleCodes: {
+      SYSTEM_ADMIN: 'System Administrator',
+      EXECUTIVE: 'Executive',
+      CHIEF_ACCOUNTANT: 'Chief Accountant',
+      ASSET_ACCOUNTANT: 'Asset Accountant',
+      ASSET_MANAGER: 'Asset Manager',
+      LOCATION_MANAGER: 'Location Manager',
+      LOCATION_STAFF: 'Location Staff',
+      TECHNICIAN: 'Technician',
+      AUDITOR: 'Auditor',
+    },
+  },
+
   env: {
     development: 'DEVELOPMENT',
     staging: 'STAGING',
@@ -241,6 +292,29 @@ export const en: TranslationKeys = {
         submit: 'Confirm revocation',
         success: 'Role revoked.',
       },
+      accountStatus: {
+        lockButton: 'Lock account',
+        unlockButton: 'Unlock account',
+        lockTitle: 'Lock account',
+        unlockTitle: 'Unlock account',
+        lockDescription:
+          '{{name}} will be blocked from the next request and all open sessions will be revoked. Their profile and roles are kept so access can be restored later.',
+        unlockDescription:
+          '{{name}} can sign in again after the account is unlocked. They will need to start a new session.',
+        lockReason: 'Reason for locking',
+        unlockReason: 'Reason for unlocking',
+        reasonPlaceholder: 'Select a reason',
+        reasonRequired: 'Select a reason.',
+        note: 'Note',
+        notePlaceholder: 'Briefly describe the situation',
+        noteRequired: 'Enter at least 2 characters.',
+        lockSubmit: 'Confirm lock',
+        unlockSubmit: 'Confirm unlock',
+        lockSuccess: 'Account locked.',
+        unlockSuccess: 'Account unlocked.',
+        sessionWarning:
+          'The account is locked, but some open sessions could not be revoked. New requests are still blocked; ask operations to investigate.',
+      },
       dialog: {
         title: 'Assign role',
         role: 'Role',
@@ -265,6 +339,59 @@ export const en: TranslationKeys = {
           reason: 'The reason must be 2–500 characters.',
         },
       },
+    },
+    profile: {
+      editButton: 'Edit profile',
+      emailButton: 'Change email',
+      contactTitle: 'Contact',
+      workTitle: 'Work details',
+      emailSyncWarning:
+        'The sign-in email has not finished syncing. If this continues, ask operations to investigate.',
+      edit: {
+        title: 'Edit {{name}}',
+        description:
+          'Update employment details. Roles and access scopes remain unchanged.',
+        noManager: 'No direct manager',
+        roleHint:
+          'Changing the work unit does not change roles. Review Access permissions after saving.',
+        reason: 'Reason for update (optional)',
+        success: 'Employee profile updated.',
+        noChanges: 'There are no profile changes to save.',
+      },
+      email: {
+        title: 'Change work email',
+        description:
+          'This email is also used to sign in. For a pending account, the old link will stop working and a new invitation will be sent.',
+        newEmail: 'New email',
+        reason: 'Reason for change',
+        note: 'Note',
+        submit: 'Confirm email change',
+        success: 'Work email changed.',
+        invalid: 'Enter a valid email address.',
+        reasonRequired: 'Select a reason.',
+        noteRequired: 'Enter at least 2 characters.',
+      },
+    },
+    termination: {
+      button: 'Terminate employment',
+      title: 'Terminate {{name}}',
+      description:
+        'The account will be deactivated, and all roles and sign-in sessions will be closed.',
+      reports: 'Direct reports',
+      roles: 'Open roles',
+      assets: 'Assets',
+      newManager: 'New manager for direct reports',
+      reason: 'Reason for termination',
+      note: 'Note',
+      irreversible:
+        'A deactivated account cannot be reopened from this screen. The profile and history are retained.',
+      submit: 'Confirm termination',
+      success: 'Employment terminated and access closed.',
+      sessionWarning:
+        'The account is deactivated, but some sessions could not be revoked. New requests are blocked; ask operations to investigate.',
+      managerRequired: 'Select a new manager for the direct reports.',
+      reasonRequired: 'Select a reason for termination.',
+      noteRequired: 'Enter at least 2 characters.',
     },
   },
 

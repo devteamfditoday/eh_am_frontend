@@ -183,6 +183,13 @@ export interface EmployeeAccess {
       contextType: string
     }>
     locations: Array<{ id: string; code: string; name: string }>
+    accountStatusReasons: Array<{
+      id: string
+      code: string
+      label: string
+      group: 'ACCOUNT_LOCK' | 'ACCOUNT_UNLOCK'
+      isFreetext: boolean
+    }>
   }
 }
 
@@ -228,4 +235,168 @@ export async function revokeRoleAssignment(
     { headers: { 'Idempotency-Key': commandKey } }
   )
   return data
+}
+
+// --- UC-IAM-12: khóa / mở khóa tài khoản ---
+
+export type AccountStatusAction = 'LOCK' | 'UNLOCK'
+
+export interface ChangedAccountStatus {
+  id: string
+  status: 'ACTIVE' | 'SUSPENDED'
+  sessionRevocation: 'SUCCEEDED' | 'FAILED' | 'NOT_REQUIRED'
+}
+
+export async function changeEmployeeAccountStatus(
+  employeeId: string,
+  payload: {
+    action: AccountStatusAction
+    reasonCodeId: string
+    reasonNote?: string
+  },
+  commandKey: string
+) {
+  const { data } = await api.post<ChangedAccountStatus>(
+    `/employees/${employeeId}/account-status`,
+    payload,
+    { headers: { 'Idempotency-Key': commandKey } }
+  )
+  return data
+}
+
+// --- UC-IAM-08: hồ sơ nhân viên ---
+export interface EmployeeProfileDetail {
+  profile: {
+    id: string
+    displayName: string
+    workEmail: string | null
+    employeeCode: string | null
+    phone: string | null
+    preferredLocale: 'vi' | 'en'
+    primaryLocationId: string | null
+    departmentId: string | null
+    jobTitle: string | null
+    employmentType: string | null
+    startDate: string | null
+    managerId: string | null
+    status: string
+    profileVersion: number
+    authEmailSyncStatus: 'IN_SYNC' | 'PENDING' | 'FAILED'
+    authEmailSyncUpdatedAt: string | null
+  }
+  options: {
+    locations: Array<{ id: string; code: string; name: string; type: string }>
+    departments: Array<{ id: string; code: string; name: string }>
+    managers: Array<{
+      id: string
+      displayName: string
+      employeeCode: string | null
+    }>
+    emailReasons: Array<{
+      id: string
+      code: string
+      label: string
+      isFreetext: boolean
+    }>
+  }
+}
+
+export async function getEmployeeProfile(employeeId: string) {
+  const { data } = await api.get<EmployeeProfileDetail>(
+    `/employees/${employeeId}/profile`
+  )
+  return data
+}
+
+export type UpdateEmployeeProfilePayload = {
+  displayName: string
+  employeeCode: string | null
+  phone: string | null
+  preferredLocale: 'vi' | 'en'
+  primaryLocationId: string
+  departmentId: string | null
+  jobTitle: string | null
+  employmentType: string | null
+  startDate: string | null
+  managerId: string | null
+  reason: string | null
+  profileVersion: number
+}
+
+export async function updateEmployeeProfile(
+  employeeId: string,
+  payload: UpdateEmployeeProfilePayload,
+  commandKey: string
+) {
+  const { data } = await api.patch<{
+    id: string
+    profileVersion: number
+    changed: boolean
+  }>(`/employees/${employeeId}/profile`, payload, {
+    headers: { 'Idempotency-Key': commandKey },
+  })
+  return data
+}
+
+export async function changeEmployeeEmail(
+  employeeId: string,
+  payload: {
+    email: string
+    reasonCodeId: string
+    reasonNote?: string
+    profileVersion: number
+  },
+  commandKey: string
+) {
+  const { data } = await api.post<{
+    id: string
+    workEmail: string
+    profileVersion: number
+    authEmailSyncStatus: string
+  }>(`/employees/${employeeId}/change-email`, payload, {
+    headers: { 'Idempotency-Key': commandKey },
+  })
+  return data
+}
+
+// --- UC-IAM-13: cho nhân viên nghỉ việc ---
+export interface EmployeeTerminationPreview {
+  employee: EmployeeProfileDetail['profile']
+  directReports: Array<{
+    id: string
+    displayName: string
+    employeeCode: string | null
+  }>
+  openRoles: RoleAssignment[]
+  assets: Array<{ id: string; code: string; name: string; locationId: string }>
+  options: {
+    managers: EmployeeProfileDetail['options']['managers']
+    reasons: EmployeeProfileDetail['options']['emailReasons']
+  }
+}
+
+export async function getEmployeeTerminationPreview(employeeId: string) {
+  const { data } = await api.get<EmployeeTerminationPreview>(
+    `/employees/${employeeId}/termination-preview`
+  )
+  return data
+}
+
+export async function terminateEmployee(
+  employeeId: string,
+  payload: {
+    profileVersion: number
+    newManagerId?: string
+    reasonCodeId: string
+    reasonNote?: string
+    assetTransfers: unknown[]
+  },
+  commandKey: string
+) {
+  const { data } = await api.post(
+    `/employees/${employeeId}/terminate`,
+    payload,
+    { headers: { 'Idempotency-Key': commandKey } }
+  )
+  return data as { sessionRevocation: 'SUCCEEDED' | 'FAILED' | 'NOT_REQUIRED' }
 }

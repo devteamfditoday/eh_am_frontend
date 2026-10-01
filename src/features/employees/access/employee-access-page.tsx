@@ -1,11 +1,25 @@
 import { useMemo, useState } from 'react'
 import { useQuery } from '@tanstack/react-query'
 import { Link } from '@tanstack/react-router'
-import { ArrowLeft, Plus, ShieldCheck } from 'lucide-react'
+import {
+  ArrowLeft,
+  LockKeyhole,
+  LockKeyholeOpen,
+  Mail,
+  Pencil,
+  Plus,
+  ShieldCheck,
+  UserMinus,
+} from 'lucide-react'
 import { useTranslation } from 'react-i18next'
+import { useAuthStore } from '@/stores/auth-store'
 import { type RoleAssignment } from '@/lib/api/employees.api'
-import { employeeAccessQueryOptions } from '@/lib/api/employees.queries'
+import {
+  employeeAccessQueryOptions,
+  employeeProfileQueryOptions,
+} from '@/lib/api/employees.queries'
 import { Button } from '@/components/ui/button'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Skeleton } from '@/components/ui/skeleton'
 import {
   Table,
@@ -23,6 +37,11 @@ import { Main } from '@/components/layout/main'
 import { ProfileDropdown } from '@/components/profile-dropdown'
 import { StatusBadge, type StatusTone } from '@/components/status-badge'
 import { ThemeSwitch } from '@/components/theme-switch'
+import { ChangeEmployeeEmailDialog } from '../profile/change-employee-email-dialog'
+import { EditEmployeeProfileDialog } from '../profile/edit-employee-profile-dialog'
+import { TerminateEmployeeDialog } from '../profile/terminate-employee-dialog'
+import { AccountStatusDialog } from './account-status-dialog'
+import { canChangeAccountStatus } from './account-status-schema'
 import { GrantRoleDialog } from './grant-role-dialog'
 import { RevokeRoleDialog, type RevokeTarget } from './revoke-role-dialog'
 
@@ -60,8 +79,16 @@ function formatDate(value: string | null): string {
 export function EmployeeAccessPage({ employeeId }: { employeeId: string }) {
   const { t } = useTranslation()
   const query = useQuery(employeeAccessQueryOptions(employeeId))
+  const profileQuery = useQuery(employeeProfileQueryOptions(employeeId))
   const [dialogOpen, setDialogOpen] = useState(false)
   const [revokeTarget, setRevokeTarget] = useState<RevokeTarget | null>(null)
+  const [accountAction, setAccountAction] = useState<'LOCK' | 'UNLOCK' | null>(
+    null
+  )
+  const actorId = useAuthStore((state) => state.user?.id)
+  const [editOpen, setEditOpen] = useState(false)
+  const [emailOpen, setEmailOpen] = useState(false)
+  const [terminateOpen, setTerminateOpen] = useState(false)
 
   const roleName = useMemo(() => {
     const map = new Map(
@@ -92,12 +119,15 @@ export function EmployeeAccessPage({ employeeId }: { employeeId: string }) {
 
       <Main>
         <div className='space-y-6'>
-          {query.isPending ? (
+          {query.isPending || profileQuery.isPending ? (
             <div className='space-y-3' role='status' aria-busy='true'>
               <Skeleton className='h-8 w-64' />
               <Skeleton className='h-40 w-full' />
             </div>
-          ) : query.isError || !query.data ? (
+          ) : query.isError ||
+            !query.data ||
+            profileQuery.isError ||
+            !profileQuery.data ? (
             <EmptyState
               variant='error'
               icon={ShieldCheck}
@@ -111,7 +141,7 @@ export function EmployeeAccessPage({ employeeId }: { employeeId: string }) {
             />
           ) : (
             <>
-              <div className='flex flex-wrap items-center gap-3'>
+              <div className='flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center'>
                 <div>
                   <h1 className='text-xl font-semibold'>
                     {query.data.employee.displayName}
@@ -129,6 +159,174 @@ export function EmployeeAccessPage({ employeeId }: { employeeId: string }) {
                 >
                   {t(`employees.list.status.${query.data.employee.status}`)}
                 </StatusBadge>
+                <Button
+                  variant='outline'
+                  size='lg'
+                  className='min-h-11 w-full sm:w-auto'
+                  onClick={() => setEditOpen(true)}
+                >
+                  <Pencil aria-hidden='true' />
+                  {t('employees.profile.editButton')}
+                </Button>
+                {employeeId !== actorId &&
+                (query.data.employee.status === 'ACTIVE' ||
+                  query.data.employee.status === 'SUSPENDED') ? (
+                  <Button
+                    variant='destructive'
+                    size='lg'
+                    className='min-h-11 w-full sm:w-auto'
+                    onClick={() => setTerminateOpen(true)}
+                  >
+                    <UserMinus aria-hidden='true' />
+                    {t('employees.termination.button')}
+                  </Button>
+                ) : null}
+                <Button
+                  variant='outline'
+                  size='lg'
+                  className='min-h-11 w-full sm:w-auto'
+                  onClick={() => setEmailOpen(true)}
+                >
+                  <Mail aria-hidden='true' />
+                  {t('employees.profile.emailButton')}
+                </Button>
+                {canChangeAccountStatus(
+                  query.data.employee.status,
+                  employeeId,
+                  actorId
+                ) ? (
+                  <Button
+                    variant={
+                      query.data.employee.status === 'ACTIVE'
+                        ? 'outline'
+                        : 'default'
+                    }
+                    size='lg'
+                    className='min-h-11 w-full sm:w-auto'
+                    onClick={() =>
+                      setAccountAction(
+                        query.data.employee.status === 'ACTIVE'
+                          ? 'LOCK'
+                          : 'UNLOCK'
+                      )
+                    }
+                  >
+                    {query.data.employee.status === 'ACTIVE' ? (
+                      <LockKeyhole aria-hidden='true' />
+                    ) : (
+                      <LockKeyholeOpen aria-hidden='true' />
+                    )}
+                    {t(
+                      `employees.access.accountStatus.${
+                        query.data.employee.status === 'ACTIVE'
+                          ? 'lockButton'
+                          : 'unlockButton'
+                      }`
+                    )}
+                  </Button>
+                ) : null}
+              </div>
+
+              {profileQuery.data.profile.authEmailSyncStatus !== 'IN_SYNC' ? (
+                <p
+                  role='status'
+                  className='rounded-md border border-amber-500/30 bg-amber-500/10 p-3 text-sm'
+                >
+                  {t('employees.profile.emailSyncWarning')}
+                </p>
+              ) : null}
+
+              <div className='grid gap-4 lg:grid-cols-2'>
+                <Card>
+                  <CardHeader>
+                    <CardTitle className='text-base'>
+                      {t('employees.profile.contactTitle')}
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <dl className='grid gap-3 text-sm'>
+                      <div>
+                        <dt className='text-muted-foreground'>
+                          {t('employees.create.form.email')}
+                        </dt>
+                        <dd className='font-medium'>
+                          {profileQuery.data.profile.workEmail ?? '—'}
+                        </dd>
+                      </div>
+                      <div>
+                        <dt className='text-muted-foreground'>
+                          {t('employees.create.form.phone')}
+                        </dt>
+                        <dd className='font-medium'>
+                          {profileQuery.data.profile.phone ?? '—'}
+                        </dd>
+                      </div>
+                      <div>
+                        <dt className='text-muted-foreground'>
+                          {t('employees.create.form.language')}
+                        </dt>
+                        <dd className='font-medium'>
+                          {profileQuery.data.profile.preferredLocale === 'vi'
+                            ? 'Tiếng Việt'
+                            : 'English'}
+                        </dd>
+                      </div>
+                    </dl>
+                  </CardContent>
+                </Card>
+                <Card>
+                  <CardHeader>
+                    <CardTitle className='text-base'>
+                      {t('employees.profile.workTitle')}
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <dl className='grid gap-3 text-sm sm:grid-cols-2'>
+                      <div>
+                        <dt className='text-muted-foreground'>
+                          {t('employees.create.form.location')}
+                        </dt>
+                        <dd className='font-medium'>
+                          {profileQuery.data.options.locations.find(
+                            (item) =>
+                              item.id ===
+                              profileQuery.data.profile.primaryLocationId
+                          )?.name ?? '—'}
+                        </dd>
+                      </div>
+                      <div>
+                        <dt className='text-muted-foreground'>
+                          {t('employees.create.form.department')}
+                        </dt>
+                        <dd className='font-medium'>
+                          {profileQuery.data.options.departments.find(
+                            (item) =>
+                              item.id === profileQuery.data.profile.departmentId
+                          )?.name ?? '—'}
+                        </dd>
+                      </div>
+                      <div>
+                        <dt className='text-muted-foreground'>
+                          {t('employees.create.form.jobTitle')}
+                        </dt>
+                        <dd className='font-medium'>
+                          {profileQuery.data.profile.jobTitle ?? '—'}
+                        </dd>
+                      </div>
+                      <div>
+                        <dt className='text-muted-foreground'>
+                          {t('employees.create.form.manager')}
+                        </dt>
+                        <dd className='font-medium'>
+                          {profileQuery.data.options.managers.find(
+                            (item) =>
+                              item.id === profileQuery.data.profile.managerId
+                          )?.displayName ?? '—'}
+                        </dd>
+                      </div>
+                    </dl>
+                  </CardContent>
+                </Card>
               </div>
 
               <div className='space-y-3'>
@@ -249,6 +447,32 @@ export function EmployeeAccessPage({ employeeId }: { employeeId: string }) {
                 onOpenChange={(open) => {
                   if (!open) setRevokeTarget(null)
                 }}
+              />
+
+              <AccountStatusDialog
+                employeeId={employeeId}
+                employeeName={query.data.employee.displayName}
+                action={accountAction}
+                reasons={query.data.options.accountStatusReasons}
+                onOpenChange={(open) => {
+                  if (!open) setAccountAction(null)
+                }}
+              />
+              <EditEmployeeProfileDialog
+                open={editOpen}
+                onOpenChange={setEditOpen}
+                data={profileQuery.data}
+              />
+              <ChangeEmployeeEmailDialog
+                open={emailOpen}
+                onOpenChange={setEmailOpen}
+                data={profileQuery.data}
+              />
+              <TerminateEmployeeDialog
+                open={terminateOpen}
+                onOpenChange={setTerminateOpen}
+                employeeId={employeeId}
+                employeeName={query.data.employee.displayName}
               />
             </>
           )}

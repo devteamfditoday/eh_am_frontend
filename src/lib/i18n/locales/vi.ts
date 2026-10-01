@@ -71,6 +71,58 @@ export const vi = {
     theme: 'Chủ đề',
   },
 
+  personalProfile: {
+    title: 'Hồ sơ cá nhân',
+    description:
+      'Kiểm tra thông tin công việc, quyền truy cập và ngôn ngữ bạn đang dùng.',
+    phone: 'Số điện thoại',
+    jobTitle: 'Chức danh',
+    workTitle: 'Thông tin công việc',
+    location: 'Địa điểm chính',
+    department: 'Phòng ban',
+    manager: 'Cấp trên trực tiếp',
+    employmentType: 'Loại hình làm việc',
+    languageTitle: 'Ngôn ngữ hiển thị',
+    languageDescription:
+      'Giao diện và thông báo từ máy chủ sẽ dùng ngôn ngữ đã lưu.',
+    saveLanguage: 'Lưu ngôn ngữ',
+    savingLanguage: 'Đang lưu…',
+    languageSaved: 'Đã đổi ngôn ngữ hiển thị.',
+    rolesTitle: 'Vai trò và phạm vi',
+    rolesDescription: 'Các quyền đang có hoặc sắp có hiệu lực trên hệ thống.',
+    noRolesTitle: 'Bạn chưa được gán vai trò',
+    noRolesDescription:
+      'Hãy liên hệ Quản trị hệ thống để được gán vai trò. Khi chưa có vai trò, bạn chưa thể xem dữ liệu của địa điểm nào.',
+    platformScope: 'Toàn hệ thống',
+    locationScope: 'Theo địa điểm',
+    noEndDate: 'Không giới hạn',
+    superAdmin: 'Quản trị tối cao',
+    loadErrorTitle: 'Không tải được hồ sơ',
+    loadErrorDescription:
+      'Chưa thể tải thông tin của bạn. Kiểm tra kết nối rồi thử lại.',
+    roleStatus: {
+      ACTIVE: 'Đang hiệu lực',
+      UPCOMING: 'Sắp hiệu lực',
+    },
+    employment: {
+      FULL_TIME: 'Toàn thời gian',
+      PART_TIME: 'Bán thời gian',
+      CONTRACT: 'Hợp đồng',
+      INTERN: 'Thực tập',
+    },
+    roleCodes: {
+      SYSTEM_ADMIN: 'Quản trị hệ thống',
+      EXECUTIVE: 'Ban điều hành',
+      CHIEF_ACCOUNTANT: 'Kế toán trưởng',
+      ASSET_ACCOUNTANT: 'Kế toán tài sản',
+      ASSET_MANAGER: 'Quản lý tài sản',
+      LOCATION_MANAGER: 'Quản lý địa điểm',
+      LOCATION_STAFF: 'Nhân viên địa điểm',
+      TECHNICIAN: 'Kỹ thuật viên',
+      AUDITOR: 'Kiểm soát viên',
+    },
+  },
+
   env: {
     // ⚠️ Dải cảnh báo môi trường. Xem `EnvironmentBanner` về lý do nó tồn tại.
     development: 'MÔI TRƯỜNG PHÁT TRIỂN',
@@ -250,6 +302,29 @@ export const vi = {
         submit: 'Xác nhận thu hồi',
         success: 'Đã thu hồi vai trò.',
       },
+      accountStatus: {
+        lockButton: 'Khóa tài khoản',
+        unlockButton: 'Mở khóa tài khoản',
+        lockTitle: 'Khóa tài khoản',
+        unlockTitle: 'Mở khóa tài khoản',
+        lockDescription:
+          '{{name}} sẽ bị chặn từ yêu cầu kế tiếp và các phiên đang mở sẽ được thu hồi. Hồ sơ và vai trò vẫn được giữ nguyên để có thể mở lại sau.',
+        unlockDescription:
+          '{{name}} có thể đăng nhập lại sau khi mở khóa. Người dùng cần bắt đầu một phiên đăng nhập mới.',
+        lockReason: 'Lý do khóa',
+        unlockReason: 'Lý do mở khóa',
+        reasonPlaceholder: 'Chọn lý do',
+        reasonRequired: 'Vui lòng chọn lý do.',
+        note: 'Ghi chú',
+        notePlaceholder: 'Mô tả ngắn tình huống cần xử lý',
+        noteRequired: 'Vui lòng nhập ít nhất 2 ký tự.',
+        lockSubmit: 'Xác nhận khóa',
+        unlockSubmit: 'Xác nhận mở khóa',
+        lockSuccess: 'Đã khóa tài khoản.',
+        unlockSuccess: 'Đã mở khóa tài khoản.',
+        sessionWarning:
+          'Tài khoản đã bị khóa, nhưng chưa thu hồi hết phiên đang mở. Mọi yêu cầu mới vẫn bị chặn; vui lòng báo bộ phận vận hành kiểm tra.',
+      },
       dialog: {
         title: 'Gán vai trò',
         role: 'Vai trò',
@@ -273,6 +348,59 @@ export const vi = {
           reason: 'Lý do cần 2–500 ký tự.',
         },
       },
+    },
+    profile: {
+      editButton: 'Sửa hồ sơ',
+      emailButton: 'Đổi email',
+      contactTitle: 'Liên hệ',
+      workTitle: 'Công việc',
+      emailSyncWarning:
+        'Email đăng nhập chưa đồng bộ xong. Nếu trạng thái này kéo dài, hãy báo bộ phận vận hành kiểm tra.',
+      edit: {
+        title: 'Sửa hồ sơ {{name}}',
+        description:
+          'Cập nhật thông tin nhân sự. Vai trò và phạm vi truy cập được giữ nguyên.',
+        noManager: 'Không có cấp trên trực tiếp',
+        roleHint:
+          'Đổi đơn vị công tác không tự đổi vai trò. Hãy kiểm tra lại phần Quyền truy cập sau khi lưu.',
+        reason: 'Lý do cập nhật (không bắt buộc)',
+        success: 'Đã cập nhật hồ sơ nhân viên.',
+        noChanges: 'Hồ sơ không có thay đổi để lưu.',
+      },
+      email: {
+        title: 'Đổi email công việc',
+        description:
+          'Email này cũng dùng để đăng nhập. Với tài khoản chờ kích hoạt, liên kết cũ sẽ hết hiệu lực và thư mới được gửi lại.',
+        newEmail: 'Email mới',
+        reason: 'Lý do đổi email',
+        note: 'Ghi chú',
+        submit: 'Xác nhận đổi email',
+        success: 'Đã đổi email công việc.',
+        invalid: 'Vui lòng nhập email hợp lệ.',
+        reasonRequired: 'Vui lòng chọn lý do.',
+        noteRequired: 'Vui lòng nhập ít nhất 2 ký tự.',
+      },
+    },
+    termination: {
+      button: 'Cho nghỉ việc',
+      title: 'Cho {{name}} nghỉ việc',
+      description:
+        'Tài khoản sẽ ngừng hoạt động, mọi vai trò và phiên đăng nhập sẽ bị đóng.',
+      reports: 'Cấp dưới',
+      roles: 'Vai trò mở',
+      assets: 'Tài sản',
+      newManager: 'Cấp trên mới cho cấp dưới',
+      reason: 'Lý do nghỉ việc',
+      note: 'Ghi chú',
+      irreversible:
+        'Tài khoản Đã ngừng không thể mở lại từ màn hình này. Hồ sơ và lịch sử vẫn được giữ.',
+      submit: 'Xác nhận cho nghỉ việc',
+      success: 'Đã cho nhân viên nghỉ việc và đóng quyền truy cập.',
+      sessionWarning:
+        'Tài khoản đã ngừng nhưng chưa thu hồi hết phiên. Mọi yêu cầu mới vẫn bị chặn; hãy báo bộ phận vận hành kiểm tra.',
+      managerRequired: 'Vui lòng chọn cấp trên mới cho các cấp dưới.',
+      reasonRequired: 'Vui lòng chọn lý do nghỉ việc.',
+      noteRequired: 'Vui lòng nhập ít nhất 2 ký tự.',
     },
   },
 

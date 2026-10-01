@@ -1,5 +1,5 @@
 import { Link } from '@tanstack/react-router'
-import { LogOut, Settings } from 'lucide-react'
+import { LogOut, Settings, UserRound } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { useAuthStore } from '@/stores/auth-store'
 import { getDisplayNameInitials } from '@/lib/utils'
@@ -36,7 +36,11 @@ export function ProfileDropdown() {
     <>
       <DropdownMenu modal={false}>
         <DropdownMenuTrigger asChild>
-          <Button variant='ghost' className='relative h-8 w-8 rounded-full'>
+          <Button
+            variant='ghost'
+            className='relative h-8 w-8 rounded-full'
+            aria-label={t('common.profile')}
+          >
             <Avatar className='h-8 w-8'>
               <AvatarFallback>{initials}</AvatarFallback>
             </Avatar>
@@ -53,6 +57,12 @@ export function ProfileDropdown() {
           </DropdownMenuLabel>
           <DropdownMenuSeparator />
           <DropdownMenuGroup>
+            <DropdownMenuItem asChild>
+              <Link to='/profile'>
+                <UserRound />
+                {t('common.profile')}
+              </Link>
+            </DropdownMenuItem>
             <DropdownMenuItem asChild>
               <Link to='/settings'>
                 <Settings />

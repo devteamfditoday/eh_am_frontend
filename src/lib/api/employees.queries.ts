@@ -2,6 +2,8 @@ import { queryOptions, keepPreviousData } from '@tanstack/react-query'
 import {
   getEmployeeAccess,
   getEmployeeCreateOptions,
+  getEmployeeProfile,
+  getEmployeeTerminationPreview,
   listEmployees,
   type ListEmployeesParams,
 } from './employees.api'
@@ -11,6 +13,23 @@ export const employeeKeys = {
   createOptions: ['employees', 'create-options'] as const,
   list: (params: ListEmployeesParams) => ['employees', 'list', params] as const,
   access: (id: string) => ['employees', 'access', id] as const,
+  profile: (id: string) => ['employees', 'profile', id] as const,
+  termination: (id: string) => ['employees', 'termination', id] as const,
+}
+
+export function employeeProfileQueryOptions(id: string) {
+  return queryOptions({
+    queryKey: employeeKeys.profile(id),
+    queryFn: () => getEmployeeProfile(id),
+  })
+}
+
+export function employeeTerminationQueryOptions(id: string) {
+  return queryOptions({
+    queryKey: employeeKeys.termination(id),
+    queryFn: () => getEmployeeTerminationPreview(id),
+    enabled: false,
+  })
 }
 
 export const employeeCreateOptionsQuery = () =>

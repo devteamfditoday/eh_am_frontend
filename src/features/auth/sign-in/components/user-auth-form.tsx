@@ -82,11 +82,9 @@ export function UserAuthForm({
 
     onSuccess: ({ user }) => {
       if (!canAccessApp(user)) {
-        // ⚠️ Dọn phiên: token hợp lệ nhưng chưa dùng được gì. Giữ lại nghĩa là mỗi lần tải trang
-        // họ lại bị route guard đẩy sang 403, và họ không hiểu vì sao mình "đang đăng nhập".
-        useAuthStore.getState().clear()
-        queryClient.clear()
-        form.setError('root', { message: t('auth.noRole') })
+        // UC-IAM-14: tài khoản chưa có vai trò vẫn được vào đúng trang hồ sơ để thấy hướng dẫn
+        // liên hệ Quản trị hệ thống; các màn nghiệp vụ khác tiếp tục bị route guard chặn.
+        void navigate({ to: '/profile', replace: true })
         return
       }
 

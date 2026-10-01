@@ -56,12 +56,37 @@ export interface LocationRole {
   roleCode: Role | string
 }
 
+export interface ProfileReference {
+  id: string
+  code?: string | null
+  employeeCode?: string | null
+  name?: string
+  displayName?: string
+}
+
+export interface PersonalRoleAssignment {
+  roleCode: Role | string
+  contextType: 'PLATFORM' | 'LOCATION' | string
+  contextId: string
+  location: { id: string; code: string; name: string } | null
+  effectiveFrom: string
+  effectiveTo: string | null
+}
+
 /** Hình dạng `GET /v1/auth/me` sau khi chuẩn hoá. */
 export interface AuthUser {
   id: string
   email: string | null
   displayName: string
   employeeCode: string | null
+  workEmail: string | null
+  phone: string | null
+  jobTitle: string | null
+  employmentType: string | null
+  primaryLocation: ProfileReference | null
+  department: ProfileReference | null
+  manager: ProfileReference | null
+  roleAssignments: PersonalRoleAssignment[]
   /**
    * ⚠️ `app_metadata.role === 'admin'` ở backend — quản trị tối cao (break-glass), vai trò DUY
    * NHẤT đọc từ JWT chứ không từ `context_role_assignments`.

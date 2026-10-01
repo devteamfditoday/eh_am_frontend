@@ -49,7 +49,9 @@ export const Route = createFileRoute('/_authenticated')({
     try {
       const user = await context.queryClient.ensureQueryData(meQueryOptions())
 
-      if (!canAccessApp(user)) {
+      // Hồ sơ cá nhân là lối vào duy nhất cho tài khoản chưa có vai trò: người dùng vẫn cần xem
+      // trạng thái của mình, biết vì sao chưa thấy dữ liệu và có thể đổi ngôn ngữ.
+      if (!canAccessApp(user) && location.pathname !== '/profile') {
         throw redirect({ to: '/403' })
       }
 
