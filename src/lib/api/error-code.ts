@@ -105,6 +105,11 @@ export const ErrorCode = {
   // ⚠️ UC-MDM-02/03/08.EX: ngừng một mục danh mục nền khi nó còn được dùng (409).
   CATALOG_ITEM_IN_USE: 'CATALOG_ITEM_IN_USE',
 
+  // ⚠️ Tài sản M03 (UC-AST-01): loại bắt buộc serial, và người chịu trách nhiệm không có vai trò
+  // trên địa điểm — frontend phân nhánh để hiện lỗi cạnh đúng trường.
+  ASSET_SERIAL_REQUIRED: 'ASSET_SERIAL_REQUIRED',
+  RESPONSIBLE_NOT_ON_LOCATION: 'RESPONSIBLE_NOT_ON_LOCATION',
+
   // -------------------------------------------------------------------------
   // ⚠️ CHỈ CÓ Ở FRONTEND — không phải mã của backend
   // -------------------------------------------------------------------------

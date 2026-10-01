@@ -7,6 +7,7 @@ import {
   MessageSquare,
   Network,
   Handshake,
+  Package,
   Settings,
   Wrench,
   UserPlus,
@@ -93,6 +94,17 @@ export const sidebarData: SidebarData = {
           url: '/master-data/reason-codes',
           icon: MessageSquare,
           roles: [Role.SYSTEM_ADMIN],
+        },
+      ],
+    },
+    {
+      title: 'nav.groupAssets',
+      items: [
+        {
+          title: 'nav.assets',
+          url: '/assets',
+          icon: Package,
+          roles: [Role.ASSET_MANAGER],
         },
       ],
     },
