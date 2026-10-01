@@ -1,5 +1,6 @@
 import {
   Building2,
+  ClipboardCheck,
   Coins,
   LayoutDashboard,
   ListTree,
@@ -104,6 +105,16 @@ export const sidebarData: SidebarData = {
           title: 'nav.assets',
           url: '/assets',
           icon: Package,
+          roles: [
+            Role.ASSET_MANAGER,
+            Role.ASSET_ACCOUNTANT,
+            Role.LOCATION_MANAGER,
+          ],
+        },
+        {
+          title: 'nav.cancellationQueue',
+          url: '/asset-cancellations',
+          icon: ClipboardCheck,
           roles: [Role.ASSET_MANAGER],
         },
       ],

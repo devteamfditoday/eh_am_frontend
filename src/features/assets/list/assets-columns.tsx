@@ -1,9 +1,10 @@
+import { Link } from '@tanstack/react-router'
 import { type ColumnDef } from '@tanstack/react-table'
 import { type TFunction } from 'i18next'
 import { type AssetListItem } from '@/lib/api/assets.api'
 import { StatusBadge, type StatusTone } from '@/components/status-badge'
 
-const lifecycleTone = (status: string): StatusTone => {
+export const lifecycleTone = (status: string): StatusTone => {
   switch (status) {
     case 'IN_USE':
       return 'success'
@@ -21,7 +22,7 @@ const lifecycleTone = (status: string): StatusTone => {
   }
 }
 
-const conditionTone = (condition: string): StatusTone => {
+export const conditionTone = (condition: string): StatusTone => {
   switch (condition) {
     case 'GOOD':
       return 'success'
@@ -41,9 +42,13 @@ export function getAssetColumns(t: TFunction): ColumnDef<AssetListItem>[] {
       accessorKey: 'assetCode',
       header: t('assets.list.columns.assetCode'),
       cell: ({ row }) => (
-        <span className='font-mono text-sm whitespace-nowrap'>
+        <Link
+          to='/assets/$id'
+          params={{ id: row.original.id }}
+          className='font-mono text-sm whitespace-nowrap underline decoration-muted-foreground/40 underline-offset-4 hover:decoration-foreground focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none'
+        >
           {row.original.assetCode}
-        </span>
+        </Link>
       ),
     },
     {
@@ -51,7 +56,13 @@ export function getAssetColumns(t: TFunction): ColumnDef<AssetListItem>[] {
       header: t('assets.list.columns.name'),
       cell: ({ row }) => (
         <div className='min-w-44'>
-          <div className='font-medium'>{row.original.name}</div>
+          <Link
+            to='/assets/$id'
+            params={{ id: row.original.id }}
+            className='rounded-sm font-medium hover:underline focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none'
+          >
+            {row.original.name}
+          </Link>
           {row.original.serial ? (
             <div className='font-mono text-xs text-muted-foreground'>
               {row.original.serial}

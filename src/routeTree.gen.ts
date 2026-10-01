@@ -23,7 +23,9 @@ import { Route as AuthenticatedIndexRouteImport } from './routes/_authenticated/
 import { Route as AuthenticatedOrganizationChartRouteImport } from './routes/_authenticated/organization-chart'
 import { Route as AuthenticatedProfileRouteImport } from './routes/_authenticated/profile'
 import { Route as AuthenticatedSettingsRouteRouteImport } from './routes/_authenticated/settings/route'
+import { Route as AuthenticatedAssetCancellationsIndexRouteImport } from './routes/_authenticated/asset-cancellations/index'
 import { Route as AuthenticatedAssetsIndexRouteImport } from './routes/_authenticated/assets/index'
+import { Route as AuthenticatedAssetsIdRouteImport } from './routes/_authenticated/assets/$id'
 import { Route as AuthenticatedEmployeesIndexRouteImport } from './routes/_authenticated/employees/index'
 import { Route as AuthenticatedEmployeesIdRouteImport } from './routes/_authenticated/employees/$id'
 import { Route as AuthenticatedEmployeesNewRouteImport } from './routes/_authenticated/employees/new'
@@ -109,12 +111,23 @@ const AuthenticatedSettingsRouteRoute =
     path: '/settings',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
+const AuthenticatedAssetCancellationsIndexRoute =
+  AuthenticatedAssetCancellationsIndexRouteImport.update({
+    id: '/asset-cancellations/',
+    path: '/asset-cancellations/',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 const AuthenticatedAssetsIndexRoute =
   AuthenticatedAssetsIndexRouteImport.update({
     id: '/assets/',
     path: '/assets/',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
+const AuthenticatedAssetsIdRoute = AuthenticatedAssetsIdRouteImport.update({
+  id: '/assets/$id',
+  path: '/assets/$id',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 const AuthenticatedEmployeesIndexRoute =
   AuthenticatedEmployeesIndexRouteImport.update({
     id: '/employees/',
@@ -208,6 +221,7 @@ export interface FileRoutesByFullPath {
   '/503': typeof errors503Route
   '/organization-chart': typeof AuthenticatedOrganizationChartRoute
   '/profile': typeof AuthenticatedProfileRoute
+  '/assets/$id': typeof AuthenticatedAssetsIdRoute
   '/employees/$id': typeof AuthenticatedEmployeesIdRoute
   '/employees/new': typeof AuthenticatedEmployeesNewRoute
   '/errors/$error': typeof AuthenticatedErrorsErrorRoute
@@ -219,6 +233,7 @@ export interface FileRoutesByFullPath {
   '/master-data/repair-vendors': typeof AuthenticatedMasterDataRepairVendorsRoute
   '/master-data/suppliers': typeof AuthenticatedMasterDataSuppliersRoute
   '/settings/appearance': typeof AuthenticatedSettingsAppearanceRoute
+  '/asset-cancellations/': typeof AuthenticatedAssetCancellationsIndexRoute
   '/assets/': typeof AuthenticatedAssetsIndexRoute
   '/employees/': typeof AuthenticatedEmployeesIndexRoute
   '/settings/': typeof AuthenticatedSettingsIndexRoute
@@ -236,6 +251,7 @@ export interface FileRoutesByTo {
   '/organization-chart': typeof AuthenticatedOrganizationChartRoute
   '/profile': typeof AuthenticatedProfileRoute
   '/': typeof AuthenticatedIndexRoute
+  '/assets/$id': typeof AuthenticatedAssetsIdRoute
   '/employees/$id': typeof AuthenticatedEmployeesIdRoute
   '/employees/new': typeof AuthenticatedEmployeesNewRoute
   '/errors/$error': typeof AuthenticatedErrorsErrorRoute
@@ -247,6 +263,7 @@ export interface FileRoutesByTo {
   '/master-data/repair-vendors': typeof AuthenticatedMasterDataRepairVendorsRoute
   '/master-data/suppliers': typeof AuthenticatedMasterDataSuppliersRoute
   '/settings/appearance': typeof AuthenticatedSettingsAppearanceRoute
+  '/asset-cancellations': typeof AuthenticatedAssetCancellationsIndexRoute
   '/assets': typeof AuthenticatedAssetsIndexRoute
   '/employees': typeof AuthenticatedEmployeesIndexRoute
   '/settings': typeof AuthenticatedSettingsIndexRoute
@@ -267,6 +284,7 @@ export interface FileRoutesById {
   '/_authenticated/organization-chart': typeof AuthenticatedOrganizationChartRoute
   '/_authenticated/profile': typeof AuthenticatedProfileRoute
   '/_authenticated/': typeof AuthenticatedIndexRoute
+  '/_authenticated/assets/$id': typeof AuthenticatedAssetsIdRoute
   '/_authenticated/employees/$id': typeof AuthenticatedEmployeesIdRoute
   '/_authenticated/employees/new': typeof AuthenticatedEmployeesNewRoute
   '/_authenticated/errors/$error': typeof AuthenticatedErrorsErrorRoute
@@ -278,6 +296,7 @@ export interface FileRoutesById {
   '/_authenticated/master-data/repair-vendors': typeof AuthenticatedMasterDataRepairVendorsRoute
   '/_authenticated/master-data/suppliers': typeof AuthenticatedMasterDataSuppliersRoute
   '/_authenticated/settings/appearance': typeof AuthenticatedSettingsAppearanceRoute
+  '/_authenticated/asset-cancellations/': typeof AuthenticatedAssetCancellationsIndexRoute
   '/_authenticated/assets/': typeof AuthenticatedAssetsIndexRoute
   '/_authenticated/employees/': typeof AuthenticatedEmployeesIndexRoute
   '/_authenticated/settings/': typeof AuthenticatedSettingsIndexRoute
@@ -298,6 +317,7 @@ export interface FileRouteTypes {
     | '/503'
     | '/organization-chart'
     | '/profile'
+    | '/assets/$id'
     | '/employees/$id'
     | '/employees/new'
     | '/errors/$error'
@@ -309,6 +329,7 @@ export interface FileRouteTypes {
     | '/master-data/repair-vendors'
     | '/master-data/suppliers'
     | '/settings/appearance'
+    | '/asset-cancellations/'
     | '/assets/'
     | '/employees/'
     | '/settings/'
@@ -326,6 +347,7 @@ export interface FileRouteTypes {
     | '/organization-chart'
     | '/profile'
     | '/'
+    | '/assets/$id'
     | '/employees/$id'
     | '/employees/new'
     | '/errors/$error'
@@ -337,6 +359,7 @@ export interface FileRouteTypes {
     | '/master-data/repair-vendors'
     | '/master-data/suppliers'
     | '/settings/appearance'
+    | '/asset-cancellations'
     | '/assets'
     | '/employees'
     | '/settings'
@@ -356,6 +379,7 @@ export interface FileRouteTypes {
     | '/_authenticated/organization-chart'
     | '/_authenticated/profile'
     | '/_authenticated/'
+    | '/_authenticated/assets/$id'
     | '/_authenticated/employees/$id'
     | '/_authenticated/employees/new'
     | '/_authenticated/errors/$error'
@@ -367,6 +391,7 @@ export interface FileRouteTypes {
     | '/_authenticated/master-data/repair-vendors'
     | '/_authenticated/master-data/suppliers'
     | '/_authenticated/settings/appearance'
+    | '/_authenticated/asset-cancellations/'
     | '/_authenticated/assets/'
     | '/_authenticated/employees/'
     | '/_authenticated/settings/'
@@ -485,11 +510,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedSettingsRouteRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/asset-cancellations/': {
+      id: '/_authenticated/asset-cancellations/'
+      path: '/asset-cancellations'
+      fullPath: '/asset-cancellations/'
+      preLoaderRoute: typeof AuthenticatedAssetCancellationsIndexRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/assets/': {
       id: '/_authenticated/assets/'
       path: '/assets'
       fullPath: '/assets/'
       preLoaderRoute: typeof AuthenticatedAssetsIndexRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/assets/$id': {
+      id: '/_authenticated/assets/$id'
+      path: '/assets/$id'
+      fullPath: '/assets/$id'
+      preLoaderRoute: typeof AuthenticatedAssetsIdRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
     '/_authenticated/employees/': {
@@ -607,6 +646,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedOrganizationChartRoute: typeof AuthenticatedOrganizationChartRoute
   AuthenticatedProfileRoute: typeof AuthenticatedProfileRoute
   AuthenticatedIndexRoute: typeof AuthenticatedIndexRoute
+  AuthenticatedAssetsIdRoute: typeof AuthenticatedAssetsIdRoute
   AuthenticatedEmployeesIdRoute: typeof AuthenticatedEmployeesIdRoute
   AuthenticatedEmployeesNewRoute: typeof AuthenticatedEmployeesNewRoute
   AuthenticatedErrorsErrorRoute: typeof AuthenticatedErrorsErrorRoute
@@ -617,6 +657,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedMasterDataReasonCodesRoute: typeof AuthenticatedMasterDataReasonCodesRoute
   AuthenticatedMasterDataRepairVendorsRoute: typeof AuthenticatedMasterDataRepairVendorsRoute
   AuthenticatedMasterDataSuppliersRoute: typeof AuthenticatedMasterDataSuppliersRoute
+  AuthenticatedAssetCancellationsIndexRoute: typeof AuthenticatedAssetCancellationsIndexRoute
   AuthenticatedAssetsIndexRoute: typeof AuthenticatedAssetsIndexRoute
   AuthenticatedEmployeesIndexRoute: typeof AuthenticatedEmployeesIndexRoute
 }
@@ -626,6 +667,7 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedOrganizationChartRoute: AuthenticatedOrganizationChartRoute,
   AuthenticatedProfileRoute: AuthenticatedProfileRoute,
   AuthenticatedIndexRoute: AuthenticatedIndexRoute,
+  AuthenticatedAssetsIdRoute: AuthenticatedAssetsIdRoute,
   AuthenticatedEmployeesIdRoute: AuthenticatedEmployeesIdRoute,
   AuthenticatedEmployeesNewRoute: AuthenticatedEmployeesNewRoute,
   AuthenticatedErrorsErrorRoute: AuthenticatedErrorsErrorRoute,
@@ -641,6 +683,8 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedMasterDataRepairVendorsRoute:
     AuthenticatedMasterDataRepairVendorsRoute,
   AuthenticatedMasterDataSuppliersRoute: AuthenticatedMasterDataSuppliersRoute,
+  AuthenticatedAssetCancellationsIndexRoute:
+    AuthenticatedAssetCancellationsIndexRoute,
   AuthenticatedAssetsIndexRoute: AuthenticatedAssetsIndexRoute,
   AuthenticatedEmployeesIndexRoute: AuthenticatedEmployeesIndexRoute,
 }

@@ -86,6 +86,9 @@ function TerminateBody({
   const [managerId, setManagerId] = useState('')
   const [reasonId, setReasonId] = useState('')
   const [note, setNote] = useState('')
+  const [assetAssignments, setAssetAssignments] = useState<
+    Record<string, string>
+  >({})
   const [error, setError] = useState<string | null>(null)
   const reason = useMemo(
     () => data.options.reasons.find((item) => item.id === reasonId),
@@ -100,7 +103,10 @@ function TerminateBody({
           newManagerId: managerId || undefined,
           reasonCodeId: reasonId,
           reasonNote: note.trim() || undefined,
-          assetTransfers: [],
+          assetTransfers: data.assets.map((asset) => ({
+            assetId: asset.id,
+            newResponsibleUserId: assetAssignments[asset.id],
+          })),
         },
         commandKey
       ),
@@ -123,6 +129,8 @@ function TerminateBody({
     if (!reasonId) return setError(t('employees.termination.reasonRequired'))
     if (reason?.isFreetext && note.trim().length < 2)
       return setError(t('employees.termination.noteRequired'))
+    if (data.assets.some((asset) => !assetAssignments[asset.id]))
+      return setError(t('employees.termination.assetHandoverRequired'))
     setError(null)
     mutation.mutate()
   }
@@ -164,6 +172,50 @@ function TerminateBody({
                 label: `${m.employeeCode ? `${m.employeeCode} · ` : ''}${m.displayName}`,
               }))}
             />
+          </div>
+        ) : null}
+        {data.assets.length > 0 ? (
+          <div className='grid gap-3 rounded-lg border bg-muted/30 p-4'>
+            <div>
+              <h3 className='font-medium'>
+                {t('employees.termination.assetHandoverTitle')}
+              </h3>
+              <p className='text-sm text-muted-foreground'>
+                {t('employees.termination.assetHandoverDescription')}
+              </p>
+            </div>
+            {data.assets.map((asset) => (
+              <div key={asset.id} className='grid items-start gap-2'>
+                <Label>
+                  {asset.code} · {asset.name} · {asset.locationName}
+                  <RequiredMark />
+                </Label>
+                <SelectDropdown
+                  isControlled
+                  defaultValue={assetAssignments[asset.id]}
+                  onValueChange={(value) =>
+                    setAssetAssignments((current) => ({
+                      ...current,
+                      [asset.id]: value,
+                    }))
+                  }
+                  placeholder={t(
+                    'employees.termination.assetHandoverPlaceholder'
+                  )}
+                  items={asset.candidates.map((person) => ({
+                    value: person.id,
+                    label: person.employeeCode
+                      ? `${person.displayName} (${person.employeeCode})`
+                      : person.displayName,
+                  }))}
+                />
+                {asset.candidates.length === 0 ? (
+                  <p className='text-sm text-destructive'>
+                    {t('employees.termination.noAssetCandidate')}
+                  </p>
+                ) : null}
+              </div>
+            ))}
           </div>
         ) : null}
         <div className='grid gap-2'>

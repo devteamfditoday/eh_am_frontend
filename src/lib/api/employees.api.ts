@@ -368,7 +368,20 @@ export interface EmployeeTerminationPreview {
     employeeCode: string | null
   }>
   openRoles: RoleAssignment[]
-  assets: Array<{ id: string; code: string; name: string; locationId: string }>
+  assets: Array<{
+    id: string
+    code: string
+    name: string
+    locationId: string
+    locationCode: string
+    locationName: string
+    candidates: Array<{
+      id: string
+      displayName: string
+      employeeCode: string | null
+      locationIds: string[]
+    }>
+  }>
   options: {
     managers: EmployeeProfileDetail['options']['managers']
     reasons: EmployeeProfileDetail['options']['emailReasons']
@@ -389,7 +402,10 @@ export async function terminateEmployee(
     newManagerId?: string
     reasonCodeId: string
     reasonNote?: string
-    assetTransfers: unknown[]
+    assetTransfers: Array<{
+      assetId: string
+      newResponsibleUserId: string
+    }>
   },
   commandKey: string
 ) {
