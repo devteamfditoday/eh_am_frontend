@@ -30,6 +30,21 @@ export const en: TranslationKeys = {
     of: 'of',
     rowsPerPage: 'Rows per page',
     page: 'Page',
+    firstPage: 'Go to first page',
+    previousPage: 'Go to previous page',
+    nextPage: 'Go to next page',
+    lastPage: 'Go to last page',
+    goToPage: 'Go to page {{page}}',
+    view: 'View',
+    toggleColumns: 'Toggle columns',
+    selectedCount: '{{count}} selected',
+    noResults: 'No results found.',
+    clearFilters: 'Clear filters',
+    ascending: 'Ascending',
+    descending: 'Descending',
+    hideColumn: 'Hide column',
+    selectPlaceholder: 'Select a value',
+    selectDate: 'Pick a date',
     actions: 'Actions',
     details: 'Details',
     copy: 'Copy',
@@ -53,6 +68,89 @@ export const en: TranslationKeys = {
     development: 'DEVELOPMENT',
     staging: 'STAGING',
     production: 'PRODUCTION — every action takes effect immediately',
+  },
+
+  employees: {
+    create: {
+      title: 'Add employee',
+      description:
+        'Enter the details in four steps. Nothing is saved until you select Create account.',
+      stepperLabel: 'Employee creation steps',
+      submit: 'Create account',
+      steps: {
+        workUnit: 'Work unit',
+        workUnitHint: 'Location and department',
+        personal: 'Personal details',
+        personalHint: 'Name and contact details',
+        job: 'Job details',
+        jobHint: 'Optional information',
+        account: 'Account and role',
+        accountHint: 'Activation and initial access',
+      },
+      form: {
+        location: 'Primary work location',
+        department: 'Department',
+        departmentHidden:
+          'A department is only used when the primary location is an office.',
+        displayName: 'Full name',
+        email: 'Work email',
+        phone: 'Phone number',
+        language: 'Display language',
+        employeeCode: 'Employee code',
+        jobTitle: 'Job title',
+        employmentType: 'Employment type',
+        startDate: 'Start date',
+        manager: 'Direct manager',
+        activation: 'Activation method',
+        temporaryPassword: 'Temporary password',
+        role: 'Initial role',
+        effectiveFrom: 'Effective from',
+        effectiveTo: 'Effective until',
+        reason: 'Assignment reason',
+        reasonNote: 'Additional reason',
+      },
+      employment: {
+        FULL_TIME: 'Full-time',
+        PART_TIME: 'Part-time',
+        CONTRACT: 'Contract',
+        INTERN: 'Internship',
+      },
+      activation: {
+        EMAIL_INVITE: 'Send an email invitation',
+        TEMPORARY_PASSWORD: 'Use a temporary password',
+      },
+      noRoleNotice:
+        'No role assigned: this employee cannot view data for any location yet.',
+      summary: {
+        title: 'Quick summary',
+        status: 'Status',
+        pending: 'Pending activation',
+        invitation: 'Activation',
+        temporaryPassword: 'Temporary password',
+        emailSent: 'Invitation email sent',
+        emailNotSent: 'Invitation email not sent',
+        notSelected: 'Not selected',
+        notEntered: 'Not entered',
+        noRole: 'No role assigned',
+      },
+      success: {
+        title: 'Employee profile created',
+        description: '{{name}} is pending activation.',
+        addAnother: 'Add another employee',
+        temporaryPasswordTitle: 'This temporary password is shown only once',
+        temporaryPasswordHint:
+          'Copy it and send it directly to the employee. The system will not show it again.',
+      },
+      errors: {
+        departmentRequired:
+          'Select a department for an employee working at an office.',
+        loadOptions:
+          'Could not load the form data. Check your connection and try again.',
+        noLocationsTitle: 'No active locations',
+        noLocations:
+          'Create or reactivate an internal location before adding an employee.',
+      },
+    },
   },
 
   auth: {
@@ -84,6 +182,23 @@ export const en: TranslationKeys = {
     resetLinkInvalid:
       'This password reset link is invalid or has expired. Please request a new one.',
     requestNewLink: 'Request a new link',
+    activationTitle: 'Activate your account',
+    activationDescription: 'Set a password to start using EH-AM.',
+    activationChecking: 'Checking your activation link…',
+    activationIdentityLabel: 'Invited account',
+    activationSubmit: 'Activate account',
+    activationSuccessTitle: 'Your account is ready',
+    activationSuccessDescription:
+      'Your password has been set. Sign in to get started.',
+    activationInvalidTitle: 'This link cannot be used',
+    activationInvalidDescription:
+      'This activation link is invalid. Please reopen the latest email sent to you.',
+    activationExpiredTitle: 'This link has expired',
+    activationExpiredDescription:
+      'Please ask your system administrator to resend the invitation.',
+    activationUsedTitle: 'This link is no longer valid',
+    activationUsedDescription:
+      'If your account is already active, sign in. Otherwise, use the latest invitation email.',
     signingOut: 'Signing out…',
     signOutConfirmTitle: 'Sign out?',
     signOutConfirmDescription:
@@ -96,13 +211,17 @@ export const en: TranslationKeys = {
   nav: {
     groupGeneral: 'General',
     groupMasterData: 'Master data',
+    groupPeople: 'People & access',
     groupSystem: 'System',
     dashboard: 'Overview',
     locations: 'Locations',
     costCenters: 'Cost centers',
+    suppliers: 'Suppliers',
+    repairVendors: 'Repair vendors',
     departments: 'Departments',
     assetTypes: 'Asset types',
     reasonCodes: 'Reasons',
+    addEmployee: 'Add employee',
   },
 
   dashboard: {
@@ -153,7 +272,8 @@ export const en: TranslationKeys = {
       reasonLabel: 'Reason for deactivating',
       reasonPlaceholder: 'Choose a reason',
       reasonRequired: 'Choose a reason before deactivating.',
-      reasonInvalid: 'That reason is no longer available. Please choose another.',
+      reasonInvalid:
+        'That reason is no longer available. Please choose another.',
       noteLabel: 'Additional note',
       notePlaceholder: 'Spell out the reason when you choose “Other”.',
       noteRequired: 'Add a note when you choose “Other”.',
@@ -215,6 +335,8 @@ export const en: TranslationKeys = {
         createCostCenterCta: 'Create a cost center',
       },
       errors: {
+        addressRequired:
+          'Select a province/city and ward/commune, then enter the street address.',
         duplicateCode:
           'Code already in use (including retired locations — it cannot be reused).',
         versionConflict:
@@ -260,6 +382,111 @@ export const en: TranslationKeys = {
           'Code already in use (including retired cost centers — it cannot be reused).',
         versionConflict:
           'Someone just changed this cost center. Reload the latest data and re-enter your changes.',
+      },
+    },
+    suppliers: {
+      title: 'Suppliers',
+      description:
+        'Legal and contact details used for asset receipt, warranty, and reconciliation.',
+      addButton: 'Add supplier',
+      searchPlaceholder: 'Search name, tax ID, or contact…',
+      noMatch: 'No suppliers match the search or filter.',
+      emptyTitle: 'No suppliers yet',
+      emptyDescription:
+        'Add a supplier so it can be selected when recording received assets.',
+      emptyAction: 'Add the first supplier',
+      loadErrorTitle: 'Could not load suppliers',
+      loadErrorDescription: 'Check your connection, then reload the list.',
+      reload: 'Reload',
+      saved: 'Supplier {{name}} saved.',
+      notProvided: 'Not provided',
+      deactivateDescription:
+        'This vendor and its external location will both become inactive. Complete any return transfers and open documents first.',
+      columns: {
+        name: 'Supplier',
+        taxId: 'Tax ID',
+        contact: 'Contact',
+        status: 'Status',
+      },
+      status: {
+        ACTIVE: 'Active',
+        INACTIVE: 'Inactive',
+      },
+      createTitle: 'Add supplier',
+      createDescription:
+        'Enter the supplier name. Legal and contact details can be added later.',
+      editTitle: 'Edit supplier',
+      editDescription:
+        'Update the details used for purchasing, warranty, and reconciliation.',
+      form: {
+        name: 'Supplier name',
+        namePlaceholder: 'Example: An Phat Equipment Co., Ltd.',
+        taxId: 'Tax ID',
+        taxIdPlaceholder: '10 digits or 10 digits-3 digits',
+        taxIdHint: 'For example: 0312345678 or 0312345678-001.',
+        contactName: 'Contact person',
+        contactNamePlaceholder: 'Contact name',
+        contactPhone: 'Phone',
+        contactEmail: 'Email',
+      },
+      errors: {
+        versionConflict:
+          'Someone just changed this supplier. Reload the latest data and re-enter your changes.',
+      },
+    },
+    repairVendors: {
+      title: 'Repair vendors',
+      description:
+        'Partners that receive assets for repair or warranty service, each linked to an external location.',
+      addButton: 'Add repair vendor',
+      searchPlaceholder: 'Search name or contact details…',
+      emptyTitle: 'No repair vendors yet',
+      emptyDescription:
+        'Add a partner to make it available as a destination for repair transfers.',
+      emptyAction: 'Add the first repair vendor',
+      loadErrorTitle: 'Could not load repair vendors',
+      loadErrorDescription:
+        'Check the connection, then try loading the list again.',
+      saved: 'Saved repair vendor {{name}}.',
+      reload: 'Reload',
+      notProvided: 'Not provided',
+      columns: {
+        name: 'Vendor',
+        services: 'Services',
+        location: 'Destination location',
+        contact: 'Contact',
+        status: 'Status',
+      },
+      service: {
+        REPAIR: 'Repair',
+        WARRANTY: 'Warranty',
+      },
+      status: {
+        ACTIVE: 'Active',
+        INACTIVE: 'Inactive',
+      },
+      createTitle: 'Add repair vendor',
+      createDescription:
+        'Choose the external location that will receive assets sent to this vendor.',
+      editTitle: 'Edit repair vendor',
+      editDescription:
+        'The destination location stays fixed so transfer history remains consistent.',
+      form: {
+        name: 'Vendor name',
+        services: 'Service types',
+        location: 'External location',
+        locationPlaceholder: 'Select an unassigned location',
+        noLocations: 'No unassigned external locations are available.',
+        openLocations: 'Open Locations',
+        contactName: 'Contact person',
+        contactPhone: 'Phone number',
+        contactEmail: 'Email',
+      },
+      errors: {
+        locationUnavailable:
+          'This location was just assigned or is no longer active. Choose another location.',
+        versionConflict:
+          'Someone just changed this record. Reload the latest data and try again.',
       },
     },
     departments: {

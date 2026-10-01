@@ -1,4 +1,5 @@
 import { useMemo, useState } from 'react'
+import { useQuery } from '@tanstack/react-query'
 import {
   flexRender,
   getCoreRowModel,
@@ -9,12 +10,12 @@ import {
   getSortedRowModel,
   useReactTable,
 } from '@tanstack/react-table'
-import { useQuery } from '@tanstack/react-query'
 import { Building2, Plus } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
-import { departmentsQueryOptions } from '@/lib/api/master-data.queries'
 import { type DepartmentDto } from '@/lib/api/master-data.api'
+import { departmentsQueryOptions } from '@/lib/api/master-data.queries'
 import { Button } from '@/components/ui/button'
+import { Skeleton } from '@/components/ui/skeleton'
 import {
   Table,
   TableBody,
@@ -24,18 +25,17 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table'
-import { Skeleton } from '@/components/ui/skeleton'
-import { PageHeader } from '@/components/page-header'
-import { EmptyState } from '@/components/empty-state'
+import { ConfigDrawer } from '@/components/config-drawer'
 import { DataTablePagination, DataTableToolbar } from '@/components/data-table'
+import { EmptyState } from '@/components/empty-state'
 import { Header } from '@/components/layout/header'
 import { Main } from '@/components/layout/main'
-import { ConfigDrawer } from '@/components/config-drawer'
+import { PageHeader } from '@/components/page-header'
 import { ProfileDropdown } from '@/components/profile-dropdown'
 import { Search } from '@/components/search'
 import { ThemeSwitch } from '@/components/theme-switch'
-import { getDepartmentColumns } from './departments-columns'
 import { DepartmentFormDialog } from './department-form-dialog'
+import { getDepartmentColumns } from './departments-columns'
 
 export function DepartmentsPage() {
   const { t } = useTranslation()

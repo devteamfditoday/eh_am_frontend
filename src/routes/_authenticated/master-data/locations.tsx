@@ -10,9 +10,10 @@ import { LocationsPage } from '@/features/master-data/locations/locations-page'
  * dữ liệu ngay khi vào.
  */
 export const Route = createFileRoute('/_authenticated/master-data/locations')({
-  loader: ({ context }) =>
-    context.queryClient.ensureQueryData(
-      locationsQueryOptions({ pageSize: 100 })
-    ),
+  loader: ({ context }) => {
+    void context.queryClient.prefetchQuery(
+      locationsQueryOptions({ page: 1, pageSize: 10 })
+    )
+  },
   component: LocationsPage,
 })

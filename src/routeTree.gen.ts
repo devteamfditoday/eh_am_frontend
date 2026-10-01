@@ -10,6 +10,7 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
+import { Route as authActivateAccountRouteImport } from './routes/(auth)/activate-account'
 import { Route as authForgotPasswordRouteImport } from './routes/(auth)/forgot-password'
 import { Route as authResetPasswordRouteImport } from './routes/(auth)/reset-password'
 import { Route as authSignInRouteImport } from './routes/(auth)/sign-in'
@@ -20,17 +21,25 @@ import { Route as errors500RouteImport } from './routes/(errors)/500'
 import { Route as errors503RouteImport } from './routes/(errors)/503'
 import { Route as AuthenticatedIndexRouteImport } from './routes/_authenticated/index'
 import { Route as AuthenticatedSettingsRouteRouteImport } from './routes/_authenticated/settings/route'
+import { Route as AuthenticatedEmployeesNewRouteImport } from './routes/_authenticated/employees/new'
 import { Route as AuthenticatedErrorsErrorRouteImport } from './routes/_authenticated/errors/$error'
 import { Route as AuthenticatedMasterDataAssetTypesRouteImport } from './routes/_authenticated/master-data/asset-types'
 import { Route as AuthenticatedMasterDataCostCentersRouteImport } from './routes/_authenticated/master-data/cost-centers'
 import { Route as AuthenticatedMasterDataDepartmentsRouteImport } from './routes/_authenticated/master-data/departments'
 import { Route as AuthenticatedMasterDataLocationsRouteImport } from './routes/_authenticated/master-data/locations'
 import { Route as AuthenticatedMasterDataReasonCodesRouteImport } from './routes/_authenticated/master-data/reason-codes'
+import { Route as AuthenticatedMasterDataRepairVendorsRouteImport } from './routes/_authenticated/master-data/repair-vendors'
+import { Route as AuthenticatedMasterDataSuppliersRouteImport } from './routes/_authenticated/master-data/suppliers'
 import { Route as AuthenticatedSettingsIndexRouteImport } from './routes/_authenticated/settings/index'
 import { Route as AuthenticatedSettingsAppearanceRouteImport } from './routes/_authenticated/settings/appearance'
 
 const AuthenticatedRouteRoute = AuthenticatedRouteRouteImport.update({
   id: '/_authenticated',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const authActivateAccountRoute = authActivateAccountRouteImport.update({
+  id: '/(auth)/activate-account',
+  path: '/activate-account',
   getParentRoute: () => rootRouteImport,
 } as any)
 const authForgotPasswordRoute = authForgotPasswordRouteImport.update({
@@ -84,6 +93,12 @@ const AuthenticatedSettingsRouteRoute =
     path: '/settings',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
+const AuthenticatedEmployeesNewRoute =
+  AuthenticatedEmployeesNewRouteImport.update({
+    id: '/employees/new',
+    path: '/employees/new',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 const AuthenticatedErrorsErrorRoute =
   AuthenticatedErrorsErrorRouteImport.update({
     id: '/errors/$error',
@@ -120,6 +135,18 @@ const AuthenticatedMasterDataReasonCodesRoute =
     path: '/master-data/reason-codes',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
+const AuthenticatedMasterDataRepairVendorsRoute =
+  AuthenticatedMasterDataRepairVendorsRouteImport.update({
+    id: '/master-data/repair-vendors',
+    path: '/master-data/repair-vendors',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const AuthenticatedMasterDataSuppliersRoute =
+  AuthenticatedMasterDataSuppliersRouteImport.update({
+    id: '/master-data/suppliers',
+    path: '/master-data/suppliers',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 const AuthenticatedSettingsIndexRoute =
   AuthenticatedSettingsIndexRouteImport.update({
     id: '/',
@@ -136,6 +163,7 @@ const AuthenticatedSettingsAppearanceRoute =
 export interface FileRoutesByFullPath {
   '/': typeof AuthenticatedIndexRoute
   '/settings': typeof AuthenticatedSettingsRouteRouteWithChildren
+  '/activate-account': typeof authActivateAccountRoute
   '/forgot-password': typeof authForgotPasswordRoute
   '/reset-password': typeof authResetPasswordRoute
   '/sign-in': typeof authSignInRoute
@@ -144,16 +172,20 @@ export interface FileRoutesByFullPath {
   '/404': typeof errors404Route
   '/500': typeof errors500Route
   '/503': typeof errors503Route
+  '/employees/new': typeof AuthenticatedEmployeesNewRoute
   '/errors/$error': typeof AuthenticatedErrorsErrorRoute
   '/master-data/asset-types': typeof AuthenticatedMasterDataAssetTypesRoute
   '/master-data/cost-centers': typeof AuthenticatedMasterDataCostCentersRoute
   '/master-data/departments': typeof AuthenticatedMasterDataDepartmentsRoute
   '/master-data/locations': typeof AuthenticatedMasterDataLocationsRoute
   '/master-data/reason-codes': typeof AuthenticatedMasterDataReasonCodesRoute
+  '/master-data/repair-vendors': typeof AuthenticatedMasterDataRepairVendorsRoute
+  '/master-data/suppliers': typeof AuthenticatedMasterDataSuppliersRoute
   '/settings/appearance': typeof AuthenticatedSettingsAppearanceRoute
   '/settings/': typeof AuthenticatedSettingsIndexRoute
 }
 export interface FileRoutesByTo {
+  '/activate-account': typeof authActivateAccountRoute
   '/forgot-password': typeof authForgotPasswordRoute
   '/reset-password': typeof authResetPasswordRoute
   '/sign-in': typeof authSignInRoute
@@ -163,12 +195,15 @@ export interface FileRoutesByTo {
   '/500': typeof errors500Route
   '/503': typeof errors503Route
   '/': typeof AuthenticatedIndexRoute
+  '/employees/new': typeof AuthenticatedEmployeesNewRoute
   '/errors/$error': typeof AuthenticatedErrorsErrorRoute
   '/master-data/asset-types': typeof AuthenticatedMasterDataAssetTypesRoute
   '/master-data/cost-centers': typeof AuthenticatedMasterDataCostCentersRoute
   '/master-data/departments': typeof AuthenticatedMasterDataDepartmentsRoute
   '/master-data/locations': typeof AuthenticatedMasterDataLocationsRoute
   '/master-data/reason-codes': typeof AuthenticatedMasterDataReasonCodesRoute
+  '/master-data/repair-vendors': typeof AuthenticatedMasterDataRepairVendorsRoute
+  '/master-data/suppliers': typeof AuthenticatedMasterDataSuppliersRoute
   '/settings/appearance': typeof AuthenticatedSettingsAppearanceRoute
   '/settings': typeof AuthenticatedSettingsIndexRoute
 }
@@ -176,6 +211,7 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
   '/_authenticated/settings': typeof AuthenticatedSettingsRouteRouteWithChildren
+  '/(auth)/activate-account': typeof authActivateAccountRoute
   '/(auth)/forgot-password': typeof authForgotPasswordRoute
   '/(auth)/reset-password': typeof authResetPasswordRoute
   '/(auth)/sign-in': typeof authSignInRoute
@@ -185,12 +221,15 @@ export interface FileRoutesById {
   '/(errors)/500': typeof errors500Route
   '/(errors)/503': typeof errors503Route
   '/_authenticated/': typeof AuthenticatedIndexRoute
+  '/_authenticated/employees/new': typeof AuthenticatedEmployeesNewRoute
   '/_authenticated/errors/$error': typeof AuthenticatedErrorsErrorRoute
   '/_authenticated/master-data/asset-types': typeof AuthenticatedMasterDataAssetTypesRoute
   '/_authenticated/master-data/cost-centers': typeof AuthenticatedMasterDataCostCentersRoute
   '/_authenticated/master-data/departments': typeof AuthenticatedMasterDataDepartmentsRoute
   '/_authenticated/master-data/locations': typeof AuthenticatedMasterDataLocationsRoute
   '/_authenticated/master-data/reason-codes': typeof AuthenticatedMasterDataReasonCodesRoute
+  '/_authenticated/master-data/repair-vendors': typeof AuthenticatedMasterDataRepairVendorsRoute
+  '/_authenticated/master-data/suppliers': typeof AuthenticatedMasterDataSuppliersRoute
   '/_authenticated/settings/appearance': typeof AuthenticatedSettingsAppearanceRoute
   '/_authenticated/settings/': typeof AuthenticatedSettingsIndexRoute
 }
@@ -199,6 +238,7 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/settings'
+    | '/activate-account'
     | '/forgot-password'
     | '/reset-password'
     | '/sign-in'
@@ -207,16 +247,20 @@ export interface FileRouteTypes {
     | '/404'
     | '/500'
     | '/503'
+    | '/employees/new'
     | '/errors/$error'
     | '/master-data/asset-types'
     | '/master-data/cost-centers'
     | '/master-data/departments'
     | '/master-data/locations'
     | '/master-data/reason-codes'
+    | '/master-data/repair-vendors'
+    | '/master-data/suppliers'
     | '/settings/appearance'
     | '/settings/'
   fileRoutesByTo: FileRoutesByTo
   to:
+    | '/activate-account'
     | '/forgot-password'
     | '/reset-password'
     | '/sign-in'
@@ -226,18 +270,22 @@ export interface FileRouteTypes {
     | '/500'
     | '/503'
     | '/'
+    | '/employees/new'
     | '/errors/$error'
     | '/master-data/asset-types'
     | '/master-data/cost-centers'
     | '/master-data/departments'
     | '/master-data/locations'
     | '/master-data/reason-codes'
+    | '/master-data/repair-vendors'
+    | '/master-data/suppliers'
     | '/settings/appearance'
     | '/settings'
   id:
     | '__root__'
     | '/_authenticated'
     | '/_authenticated/settings'
+    | '/(auth)/activate-account'
     | '/(auth)/forgot-password'
     | '/(auth)/reset-password'
     | '/(auth)/sign-in'
@@ -247,18 +295,22 @@ export interface FileRouteTypes {
     | '/(errors)/500'
     | '/(errors)/503'
     | '/_authenticated/'
+    | '/_authenticated/employees/new'
     | '/_authenticated/errors/$error'
     | '/_authenticated/master-data/asset-types'
     | '/_authenticated/master-data/cost-centers'
     | '/_authenticated/master-data/departments'
     | '/_authenticated/master-data/locations'
     | '/_authenticated/master-data/reason-codes'
+    | '/_authenticated/master-data/repair-vendors'
+    | '/_authenticated/master-data/suppliers'
     | '/_authenticated/settings/appearance'
     | '/_authenticated/settings/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
+  authActivateAccountRoute: typeof authActivateAccountRoute
   authForgotPasswordRoute: typeof authForgotPasswordRoute
   authResetPasswordRoute: typeof authResetPasswordRoute
   authSignInRoute: typeof authSignInRoute
@@ -276,6 +328,13 @@ declare module '@tanstack/react-router' {
       path: ''
       fullPath: '/'
       preLoaderRoute: typeof AuthenticatedRouteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/(auth)/activate-account': {
+      id: '/(auth)/activate-account'
+      path: '/activate-account'
+      fullPath: '/activate-account'
+      preLoaderRoute: typeof authActivateAccountRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/(auth)/forgot-password': {
@@ -348,6 +407,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedSettingsRouteRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/employees/new': {
+      id: '/_authenticated/employees/new'
+      path: '/employees/new'
+      fullPath: '/employees/new'
+      preLoaderRoute: typeof AuthenticatedEmployeesNewRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/errors/$error': {
       id: '/_authenticated/errors/$error'
       path: '/errors/$error'
@@ -390,6 +456,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedMasterDataReasonCodesRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/master-data/repair-vendors': {
+      id: '/_authenticated/master-data/repair-vendors'
+      path: '/master-data/repair-vendors'
+      fullPath: '/master-data/repair-vendors'
+      preLoaderRoute: typeof AuthenticatedMasterDataRepairVendorsRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/master-data/suppliers': {
+      id: '/_authenticated/master-data/suppliers'
+      path: '/master-data/suppliers'
+      fullPath: '/master-data/suppliers'
+      preLoaderRoute: typeof AuthenticatedMasterDataSuppliersRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/settings/': {
       id: '/_authenticated/settings/'
       path: '/'
@@ -426,17 +506,21 @@ const AuthenticatedSettingsRouteRouteWithChildren =
 interface AuthenticatedRouteRouteChildren {
   AuthenticatedSettingsRouteRoute: typeof AuthenticatedSettingsRouteRouteWithChildren
   AuthenticatedIndexRoute: typeof AuthenticatedIndexRoute
+  AuthenticatedEmployeesNewRoute: typeof AuthenticatedEmployeesNewRoute
   AuthenticatedErrorsErrorRoute: typeof AuthenticatedErrorsErrorRoute
   AuthenticatedMasterDataAssetTypesRoute: typeof AuthenticatedMasterDataAssetTypesRoute
   AuthenticatedMasterDataCostCentersRoute: typeof AuthenticatedMasterDataCostCentersRoute
   AuthenticatedMasterDataDepartmentsRoute: typeof AuthenticatedMasterDataDepartmentsRoute
   AuthenticatedMasterDataLocationsRoute: typeof AuthenticatedMasterDataLocationsRoute
   AuthenticatedMasterDataReasonCodesRoute: typeof AuthenticatedMasterDataReasonCodesRoute
+  AuthenticatedMasterDataRepairVendorsRoute: typeof AuthenticatedMasterDataRepairVendorsRoute
+  AuthenticatedMasterDataSuppliersRoute: typeof AuthenticatedMasterDataSuppliersRoute
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedSettingsRouteRoute: AuthenticatedSettingsRouteRouteWithChildren,
   AuthenticatedIndexRoute: AuthenticatedIndexRoute,
+  AuthenticatedEmployeesNewRoute: AuthenticatedEmployeesNewRoute,
   AuthenticatedErrorsErrorRoute: AuthenticatedErrorsErrorRoute,
   AuthenticatedMasterDataAssetTypesRoute:
     AuthenticatedMasterDataAssetTypesRoute,
@@ -447,6 +531,9 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedMasterDataLocationsRoute: AuthenticatedMasterDataLocationsRoute,
   AuthenticatedMasterDataReasonCodesRoute:
     AuthenticatedMasterDataReasonCodesRoute,
+  AuthenticatedMasterDataRepairVendorsRoute:
+    AuthenticatedMasterDataRepairVendorsRoute,
+  AuthenticatedMasterDataSuppliersRoute: AuthenticatedMasterDataSuppliersRoute,
 }
 
 const AuthenticatedRouteRouteWithChildren =
@@ -454,6 +541,7 @@ const AuthenticatedRouteRouteWithChildren =
 
 const rootRouteChildren: RootRouteChildren = {
   AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
+  authActivateAccountRoute: authActivateAccountRoute,
   authForgotPasswordRoute: authForgotPasswordRoute,
   authResetPasswordRoute: authResetPasswordRoute,
   authSignInRoute: authSignInRoute,

@@ -5,7 +5,10 @@ import {
   ListTree,
   MapPin,
   MessageSquare,
+  Handshake,
   Settings,
+  Wrench,
+  UserPlus,
 } from 'lucide-react'
 import { Role } from '@/stores/auth-store'
 import { type SidebarData } from '../types'
@@ -72,9 +75,32 @@ export const sidebarData: SidebarData = {
           roles: [Role.SYSTEM_ADMIN, Role.ASSET_MANAGER],
         },
         {
+          title: 'nav.suppliers',
+          url: '/master-data/suppliers',
+          icon: Handshake,
+          roles: [Role.SYSTEM_ADMIN, Role.ASSET_MANAGER],
+        },
+        {
+          title: 'nav.repairVendors',
+          url: '/master-data/repair-vendors',
+          icon: Wrench,
+          roles: [Role.SYSTEM_ADMIN, Role.ASSET_MANAGER],
+        },
+        {
           title: 'nav.reasonCodes',
           url: '/master-data/reason-codes',
           icon: MessageSquare,
+          roles: [Role.SYSTEM_ADMIN],
+        },
+      ],
+    },
+    {
+      title: 'nav.groupPeople',
+      items: [
+        {
+          title: 'nav.addEmployee',
+          url: '/employees/new',
+          icon: UserPlus,
           roles: [Role.SYSTEM_ADMIN],
         },
       ],

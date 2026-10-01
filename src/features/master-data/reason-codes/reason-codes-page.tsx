@@ -51,7 +51,9 @@ export function ReasonCodesPage() {
   const [dialogOpen, setDialogOpen] = useState(false)
   const [editing, setEditing] = useState<ReasonCodeDto | null>(null)
   const [deactivateOpen, setDeactivateOpen] = useState(false)
-  const [deactivating, setDeactivating] = useState<DeactivateTarget | null>(null)
+  const [deactivating, setDeactivating] = useState<DeactivateTarget | null>(
+    null
+  )
 
   const data = useMemo(() => query.data?.items ?? [], [query.data])
 

@@ -153,6 +153,33 @@ export async function resetPassword(
   return data
 }
 
+export interface ActivationPreview {
+  displayName: string
+  workEmail: string
+  expiresAt: string
+}
+
+export async function previewAccountActivation(
+  accessToken: string
+): Promise<ActivationPreview> {
+  const { data } = await api.post<ActivationPreview>(
+    '/auth/activation/preview',
+    { accessToken }
+  )
+  return data
+}
+
+export async function completeAccountActivation(
+  accessToken: string,
+  newPassword: string
+): Promise<{ activated: true }> {
+  const { data } = await api.post<{ activated: true }>(
+    '/auth/activation/complete',
+    { accessToken, newPassword }
+  )
+  return data
+}
+
 export interface ChangePasswordInput {
   currentPassword: string
   newPassword: string

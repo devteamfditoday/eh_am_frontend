@@ -5,11 +5,17 @@ import {
   listDepartments,
   listLocations,
   listReasonCodes,
+  listSuppliers,
+  listRepairVendors,
+  listAvailableRepairLocations,
   type ListAssetTypesParams,
   type ListCostCentersParams,
   type ListDepartmentsParams,
   type ListParams,
+  type ListLocationsParams,
   type ListReasonCodesParams,
+  type ListSuppliersParams,
+  type ListRepairVendorsParams,
 } from './master-data.api'
 
 /**
@@ -30,9 +36,20 @@ export const masterDataKeys = {
     [...masterDataKeys.all, 'reason-codes', params] as const,
   assetTypes: (params: ListAssetTypesParams = {}) =>
     [...masterDataKeys.all, 'asset-types', params] as const,
+  suppliers: (params: ListSuppliersParams = {}) =>
+    [...masterDataKeys.all, 'suppliers', params] as const,
+  repairVendors: (params: ListRepairVendorsParams = {}) =>
+    [...masterDataKeys.all, 'repair-vendors', params] as const,
+  availableRepairLocations: (repairVendorId?: string) =>
+    [
+      ...masterDataKeys.all,
+      'repair-vendors',
+      'available-locations',
+      repairVendorId,
+    ] as const,
 }
 
-export function locationsQueryOptions(params: ListParams = {}) {
+export function locationsQueryOptions(params: ListLocationsParams = {}) {
   return queryOptions({
     queryKey: masterDataKeys.locations(params),
     queryFn: () => listLocations(params),
@@ -68,6 +85,32 @@ export function assetTypesQueryOptions(params: ListAssetTypesParams = {}) {
   return queryOptions({
     queryKey: masterDataKeys.assetTypes(params),
     queryFn: () => listAssetTypes(params),
+    staleTime: 30_000,
+  })
+}
+
+export function suppliersQueryOptions(params: ListSuppliersParams = {}) {
+  return queryOptions({
+    queryKey: masterDataKeys.suppliers(params),
+    queryFn: () => listSuppliers(params),
+    staleTime: 30_000,
+  })
+}
+
+export function repairVendorsQueryOptions(
+  params: ListRepairVendorsParams = {}
+) {
+  return queryOptions({
+    queryKey: masterDataKeys.repairVendors(params),
+    queryFn: () => listRepairVendors(params),
+    staleTime: 30_000,
+  })
+}
+
+export function availableRepairLocationsQueryOptions(repairVendorId?: string) {
+  return queryOptions({
+    queryKey: masterDataKeys.availableRepairLocations(repairVendorId),
+    queryFn: () => listAvailableRepairLocations(repairVendorId),
     staleTime: 30_000,
   })
 }

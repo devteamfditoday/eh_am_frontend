@@ -38,9 +38,14 @@ import { create } from 'zustand'
  */
 export const Role = {
   SYSTEM_ADMIN: 'SYSTEM_ADMIN',
+  EXECUTIVE: 'EXECUTIVE',
+  CHIEF_ACCOUNTANT: 'CHIEF_ACCOUNTANT',
+  ASSET_ACCOUNTANT: 'ASSET_ACCOUNTANT',
   ASSET_MANAGER: 'ASSET_MANAGER',
   LOCATION_MANAGER: 'LOCATION_MANAGER',
   LOCATION_STAFF: 'LOCATION_STAFF',
+  TECHNICIAN: 'TECHNICIAN',
+  AUDITOR: 'AUDITOR',
 } as const
 
 export type Role = (typeof Role)[keyof typeof Role]

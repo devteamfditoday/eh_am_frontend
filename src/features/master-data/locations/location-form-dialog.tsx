@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { useForm } from 'react-hook-form'
+import { useForm, useWatch } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { useNavigate } from '@tanstack/react-router'
@@ -18,6 +18,7 @@ import {
   costCentersQueryOptions,
   masterDataKeys,
 } from '@/lib/api/master-data.queries'
+import { createIdempotencyKey } from '@/lib/idempotency-key'
 import { Button } from '@/components/ui/button'
 import {
   Dialog,
@@ -70,7 +71,7 @@ export function LocationFormDialog({
 }: LocationFormDialogProps) {
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className='sm:max-w-2xl'>
+      <DialogContent className='max-h-[calc(100dvh-2rem)] overflow-y-auto sm:max-w-2xl'>
         {open ? (
           <LocationFormBody
             key={location?.id ?? 'new'}
@@ -90,7 +91,10 @@ function emptyValues(location: LocationDto | null): CreateLocationValues {
       code: '',
       name: '',
       type: 'STORE',
-      address: '',
+      provinceCode: '',
+      provinceName: '',
+      wardName: '',
+      addressDetail: '',
       defaultCostCenterId: '',
     }
   }
@@ -98,7 +102,10 @@ function emptyValues(location: LocationDto | null): CreateLocationValues {
     code: location.code,
     name: location.name,
     type: location.type as CreateLocationValues['type'],
-    address: location.address ?? '',
+    provinceCode: location.provinceCode ?? '',
+    provinceName: location.provinceName ?? '',
+    wardName: location.wardName ?? '',
+    addressDetail: location.addressDetail ?? location.address ?? '',
     defaultCostCenterId: location.defaultCostCenterId ?? '',
   }
 }
@@ -117,6 +124,7 @@ function LocationFormBody({
   const queryClient = useQueryClient()
   const isEdit = !!location
   const [conflict, setConflict] = useState(false)
+  const [commandKey] = useState(createIdempotencyKey)
 
   const suggestions = isEdit ? [] : suggestNextCodes(existingCodes)
 
@@ -134,25 +142,41 @@ function LocationFormBody({
     resolver: zodResolver(createLocationSchema),
     defaultValues: emptyValues(location),
   })
+  const [provinceCode, provinceName, wardName, addressDetail] = useWatch({
+    control: form.control,
+    name: ['provinceCode', 'provinceName', 'wardName', 'addressDetail'],
+  })
 
   const mutation = useMutation({
     mutationFn: (values: CreateLocationValues) => {
-      const address = values.address?.trim() ? values.address.trim() : undefined
       if (isEdit && location) {
-        return updateLocation(location.id, {
-          name: values.name,
-          address,
-          defaultCostCenterId: values.defaultCostCenterId,
-          version: location.version,
-        })
+        return updateLocation(
+          location.id,
+          {
+            name: values.name,
+            provinceCode: values.provinceCode,
+            provinceName: values.provinceName,
+            wardName: values.wardName,
+            addressDetail: values.addressDetail,
+            defaultCostCenterId: values.defaultCostCenterId,
+            version: location.version,
+          },
+          commandKey
+        )
       }
-      return createLocation({
-        code: values.code,
-        name: values.name,
-        type: values.type,
-        address,
-        defaultCostCenterId: values.defaultCostCenterId,
-      })
+      return createLocation(
+        {
+          code: values.code,
+          name: values.name,
+          type: values.type,
+          provinceCode: values.provinceCode,
+          provinceName: values.provinceName,
+          wardName: values.wardName,
+          addressDetail: values.addressDetail,
+          defaultCostCenterId: values.defaultCostCenterId,
+        },
+        commandKey
+      )
     },
     onSuccess: (saved) => {
       toast.success(t('masterData.locations.saved', { code: saved.code }))
@@ -328,20 +352,51 @@ function LocationFormBody({
             )}
           />
 
-          <FormField
-            control={form.control}
-            name='address'
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>{t('masterData.locations.form.address')}</FormLabel>
-                <AddressPicker
-                  value={field.value ?? ''}
-                  onChange={field.onChange}
-                />
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+          <FormItem>
+            <FormLabel>
+              {t('masterData.locations.form.address')}
+              <RequiredMark />
+            </FormLabel>
+            <AddressPicker
+              required
+              value={{
+                provinceCode,
+                provinceName,
+                wardName,
+                addressDetail,
+              }}
+              invalid={{
+                provinceCode: !!form.formState.errors.provinceCode,
+                wardName: !!form.formState.errors.wardName,
+                addressDetail: !!form.formState.errors.addressDetail,
+              }}
+              groupError={
+                form.formState.errors.provinceCode ||
+                form.formState.errors.wardName ||
+                form.formState.errors.addressDetail
+                  ? t('masterData.locations.errors.addressRequired')
+                  : undefined
+              }
+              onChange={(address) => {
+                form.setValue('provinceCode', address.provinceCode, {
+                  shouldDirty: true,
+                  shouldValidate: true,
+                })
+                form.setValue('provinceName', address.provinceName, {
+                  shouldDirty: true,
+                  shouldValidate: true,
+                })
+                form.setValue('wardName', address.wardName, {
+                  shouldDirty: true,
+                  shouldValidate: true,
+                })
+                form.setValue('addressDetail', address.addressDetail, {
+                  shouldDirty: true,
+                  shouldValidate: true,
+                })
+              }}
+            />
+          </FormItem>
 
           <FormField
             control={form.control}

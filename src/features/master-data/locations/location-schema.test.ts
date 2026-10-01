@@ -5,7 +5,10 @@ const validCreate = {
   code: 'Q1',
   name: 'Cửa hàng Quận 1',
   type: 'STORE' as const,
-  address: '123 Nguyễn Huệ',
+  provinceCode: '79',
+  provinceName: 'Thành phố Hồ Chí Minh',
+  wardName: 'Phường Bến Nghé',
+  addressDetail: '123 Nguyễn Huệ',
   defaultCostCenterId: '00000000-0000-4000-8000-000000000001',
 }
 
@@ -14,10 +17,17 @@ describe('createLocationSchema', () => {
     expect(createLocationSchema.safeParse(validCreate).success).toBe(true)
   })
 
-  it('cho phép địa chỉ rỗng (tuỳ chọn)', () => {
+  it('từ chối khi chưa chọn tỉnh/thành', () => {
     expect(
-      createLocationSchema.safeParse({ ...validCreate, address: '' }).success
-    ).toBe(true)
+      createLocationSchema.safeParse({ ...validCreate, provinceCode: '' })
+        .success
+    ).toBe(false)
+  })
+
+  it('từ chối khi đổi tỉnh nhưng chưa chọn lại phường/xã', () => {
+    expect(
+      createLocationSchema.safeParse({ ...validCreate, wardName: '' }).success
+    ).toBe(false)
   })
 
   it('từ chối mã quá ngắn', () => {
@@ -62,7 +72,10 @@ describe('updateLocationSchema', () => {
   it('không yêu cầu mã và loại (chỉ đọc khi sửa)', () => {
     const result = updateLocationSchema.safeParse({
       name: 'Tên mới',
-      address: '',
+      provinceCode: '79',
+      provinceName: 'Thành phố Hồ Chí Minh',
+      wardName: 'Phường Bến Nghé',
+      addressDetail: '123 Nguyễn Huệ',
       defaultCostCenterId: '00000000-0000-4000-8000-000000000001',
     })
     expect(result.success).toBe(true)

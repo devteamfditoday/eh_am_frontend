@@ -37,6 +37,21 @@ export const vi = {
     of: 'trên',
     rowsPerPage: 'Số dòng mỗi trang',
     page: 'Trang',
+    firstPage: 'Về trang đầu',
+    previousPage: 'Về trang trước',
+    nextPage: 'Sang trang sau',
+    lastPage: 'Đến trang cuối',
+    goToPage: 'Đến trang {{page}}',
+    view: 'Hiển thị',
+    toggleColumns: 'Chọn cột hiển thị',
+    selectedCount: 'Đã chọn {{count}}',
+    noResults: 'Không có kết quả.',
+    clearFilters: 'Xoá bộ lọc',
+    ascending: 'Tăng dần',
+    descending: 'Giảm dần',
+    hideColumn: 'Ẩn cột',
+    selectPlaceholder: 'Chọn một giá trị',
+    selectDate: 'Chọn ngày',
     actions: 'Hành động',
     details: 'Chi tiết',
     copy: 'Sao chép',
@@ -61,6 +76,89 @@ export const vi = {
     development: 'MÔI TRƯỜNG PHÁT TRIỂN',
     staging: 'MÔI TRƯỜNG THỬ NGHIỆM',
     production: 'MÔI TRƯỜNG THẬT — mọi thao tác có hiệu lực ngay',
+  },
+
+  employees: {
+    create: {
+      title: 'Thêm nhân viên',
+      description:
+        'Nhập thông tin theo 4 bước. Dữ liệu chỉ được lưu khi bạn bấm Tạo tài khoản.',
+      stepperLabel: 'Các bước thêm nhân viên',
+      submit: 'Tạo tài khoản',
+      steps: {
+        workUnit: 'Đơn vị công tác',
+        workUnitHint: 'Địa điểm và phòng ban',
+        personal: 'Thông tin cá nhân',
+        personalHint: 'Tên và thông tin liên hệ',
+        job: 'Chi tiết công việc',
+        jobHint: 'Thông tin không bắt buộc',
+        account: 'Tài khoản và vai trò',
+        accountHint: 'Cách kích hoạt và quyền ban đầu',
+      },
+      form: {
+        location: 'Địa điểm làm việc chính',
+        department: 'Phòng ban',
+        departmentHidden:
+          'Phòng ban chỉ áp dụng khi địa điểm chính là văn phòng.',
+        displayName: 'Họ và tên',
+        email: 'Email công việc',
+        phone: 'Số điện thoại',
+        language: 'Ngôn ngữ hiển thị',
+        employeeCode: 'Mã nhân viên',
+        jobTitle: 'Chức danh',
+        employmentType: 'Loại hình làm việc',
+        startDate: 'Ngày vào làm',
+        manager: 'Cấp trên trực tiếp',
+        activation: 'Cách kích hoạt',
+        temporaryPassword: 'Mật khẩu tạm',
+        role: 'Vai trò ban đầu',
+        effectiveFrom: 'Hiệu lực từ',
+        effectiveTo: 'Hiệu lực đến',
+        reason: 'Lý do gán vai trò',
+        reasonNote: 'Ghi thêm lý do',
+      },
+      employment: {
+        FULL_TIME: 'Toàn thời gian',
+        PART_TIME: 'Bán thời gian',
+        CONTRACT: 'Hợp đồng',
+        INTERN: 'Thực tập',
+      },
+      activation: {
+        EMAIL_INVITE: 'Gửi lời mời qua email',
+        TEMPORARY_PASSWORD: 'Dùng mật khẩu tạm',
+      },
+      noRoleNotice:
+        'Chưa gán vai trò: nhân viên chưa xem được dữ liệu của địa điểm nào.',
+      summary: {
+        title: 'Tóm tắt nhanh',
+        status: 'Trạng thái',
+        pending: 'Chờ kích hoạt',
+        invitation: 'Kích hoạt',
+        temporaryPassword: 'Mật khẩu tạm',
+        emailSent: 'Đã gửi email mời',
+        emailNotSent: 'Chưa gửi được email mời',
+        notSelected: 'Chưa chọn',
+        notEntered: 'Chưa nhập',
+        noRole: 'Chưa gán vai trò',
+      },
+      success: {
+        title: 'Đã tạo hồ sơ nhân viên',
+        description: '{{name}} đang ở trạng thái Chờ kích hoạt.',
+        addAnother: 'Thêm nhân viên khác',
+        temporaryPasswordTitle: 'Mật khẩu tạm chỉ hiển thị lần này',
+        temporaryPasswordHint:
+          'Hãy sao chép và chuyển trực tiếp cho nhân viên. Hệ thống sẽ không hiển thị lại mật khẩu này.',
+      },
+      errors: {
+        departmentRequired:
+          'Vui lòng chọn phòng ban cho nhân viên làm việc tại văn phòng.',
+        loadOptions:
+          'Không tải được dữ liệu cho biểu mẫu. Kiểm tra kết nối rồi thử lại.',
+        noLocationsTitle: 'Chưa có địa điểm hoạt động',
+        noLocations:
+          'Hãy tạo hoặc kích hoạt một địa điểm nội bộ trước khi thêm nhân viên.',
+      },
+    },
   },
 
   auth: {
@@ -93,6 +191,23 @@ export const vi = {
     resetLinkInvalid:
       'Liên kết đặt lại mật khẩu không hợp lệ hoặc đã hết hạn. Vui lòng yêu cầu một liên kết mới.',
     requestNewLink: 'Yêu cầu liên kết mới',
+    activationTitle: 'Kích hoạt tài khoản',
+    activationDescription: 'Đặt mật khẩu để bắt đầu sử dụng EH-AM.',
+    activationChecking: 'Đang kiểm tra liên kết kích hoạt…',
+    activationIdentityLabel: 'Tài khoản được mời',
+    activationSubmit: 'Kích hoạt tài khoản',
+    activationSuccessTitle: 'Tài khoản đã sẵn sàng',
+    activationSuccessDescription:
+      'Bạn đã đặt mật khẩu thành công. Hãy đăng nhập để bắt đầu.',
+    activationInvalidTitle: 'Liên kết không dùng được',
+    activationInvalidDescription:
+      'Liên kết kích hoạt không hợp lệ. Hãy mở lại email mới nhất được gửi cho bạn.',
+    activationExpiredTitle: 'Liên kết đã hết hạn',
+    activationExpiredDescription:
+      'Vui lòng liên hệ quản trị hệ thống để được gửi lại lời mời.',
+    activationUsedTitle: 'Liên kết không còn hiệu lực',
+    activationUsedDescription:
+      'Nếu bạn đã kích hoạt tài khoản, hãy đăng nhập. Nếu chưa, hãy dùng email mời mới nhất.',
     signingOut: 'Đang đăng xuất…',
     signOutConfirmTitle: 'Đăng xuất?',
     signOutConfirmDescription:
@@ -105,13 +220,17 @@ export const vi = {
   nav: {
     groupGeneral: 'Chung',
     groupMasterData: 'Danh mục nền',
+    groupPeople: 'Nhân sự & phân quyền',
     groupSystem: 'Hệ thống',
     dashboard: 'Tổng quan',
     locations: 'Địa điểm',
     costCenters: 'Trung tâm chi phí',
+    suppliers: 'Nhà cung cấp',
+    repairVendors: 'Đơn vị sửa chữa',
     departments: 'Phòng ban',
     assetTypes: 'Loại tài sản',
     reasonCodes: 'Lý do',
+    addEmployee: 'Thêm nhân viên',
   },
 
   dashboard: {
@@ -222,6 +341,8 @@ export const vi = {
         createCostCenterCta: 'Tạo trung tâm chi phí',
       },
       errors: {
+        addressRequired:
+          'Hãy chọn đủ tỉnh/thành, phường/xã và nhập số nhà, tên đường.',
         duplicateCode:
           'Mã đã dùng (kể cả địa điểm đã ngừng cũng không dùng lại).',
         versionConflict:
@@ -267,6 +388,110 @@ export const vi = {
           'Mã đã dùng (kể cả trung tâm chi phí đã ngừng cũng không dùng lại).',
         versionConflict:
           'Có người vừa sửa trung tâm chi phí này. Hãy tải lại dữ liệu mới nhất rồi nhập lại thay đổi của bạn.',
+      },
+    },
+    suppliers: {
+      title: 'Danh mục nhà cung cấp',
+      description:
+        'Thông tin pháp lý và đầu mối liên hệ dùng khi tiếp nhận, bảo hành và đối soát tài sản.',
+      addButton: 'Thêm nhà cung cấp',
+      searchPlaceholder: 'Tìm tên, mã số thuế hoặc liên hệ…',
+      noMatch: 'Không có nhà cung cấp khớp từ khoá hoặc bộ lọc.',
+      emptyTitle: 'Chưa có nhà cung cấp nào',
+      emptyDescription:
+        'Thêm nhà cung cấp để chọn nhanh khi lập hồ sơ tiếp nhận tài sản.',
+      emptyAction: 'Thêm nhà cung cấp đầu tiên',
+      loadErrorTitle: 'Không tải được danh sách nhà cung cấp',
+      loadErrorDescription: 'Kiểm tra kết nối rồi thử tải lại danh sách.',
+      reload: 'Tải lại',
+      saved: 'Đã lưu nhà cung cấp {{name}}.',
+      notProvided: 'Chưa cung cấp',
+      deactivateDescription:
+        'Đơn vị và địa điểm bên ngoài này sẽ cùng ngừng hoạt động. Hãy hoàn tất việc nhận tài sản về và các phiếu đang mở trước.',
+      columns: {
+        name: 'Nhà cung cấp',
+        taxId: 'Mã số thuế',
+        contact: 'Đầu mối liên hệ',
+        status: 'Trạng thái',
+      },
+      status: {
+        ACTIVE: 'Đang hoạt động',
+        INACTIVE: 'Ngừng hoạt động',
+      },
+      createTitle: 'Thêm nhà cung cấp',
+      createDescription:
+        'Nhập tên nhà cung cấp. Thông tin pháp lý và liên hệ có thể bổ sung sau.',
+      editTitle: 'Sửa nhà cung cấp',
+      editDescription:
+        'Cập nhật thông tin dùng khi mua sắm, bảo hành và đối soát.',
+      form: {
+        name: 'Tên nhà cung cấp',
+        namePlaceholder: 'VD: Công ty TNHH Thiết bị An Phát',
+        taxId: 'Mã số thuế',
+        taxIdPlaceholder: '10 chữ số hoặc 10 chữ số-3 chữ số',
+        taxIdHint: 'Ví dụ: 0312345678 hoặc 0312345678-001.',
+        contactName: 'Người liên hệ',
+        contactNamePlaceholder: 'Họ và tên đầu mối',
+        contactPhone: 'Số điện thoại',
+        contactEmail: 'Email',
+      },
+      errors: {
+        versionConflict:
+          'Có người vừa sửa nhà cung cấp này. Hãy tải lại dữ liệu mới nhất rồi nhập lại thay đổi của bạn.',
+      },
+    },
+    repairVendors: {
+      title: 'Danh mục đơn vị sửa chữa',
+      description:
+        'Đối tác nhận tài sản để sửa chữa hoặc bảo hành, gắn với một địa điểm bên ngoài.',
+      addButton: 'Thêm đơn vị sửa chữa',
+      searchPlaceholder: 'Tìm tên hoặc thông tin liên hệ…',
+      emptyTitle: 'Chưa có đơn vị sửa chữa nào',
+      emptyDescription:
+        'Thêm đối tác để có điểm đến khi gửi tài sản đi sửa hoặc bảo hành.',
+      emptyAction: 'Thêm đơn vị sửa chữa đầu tiên',
+      loadErrorTitle: 'Không tải được danh sách đơn vị sửa chữa',
+      loadErrorDescription: 'Kiểm tra kết nối rồi thử tải lại danh sách.',
+      saved: 'Đã lưu đơn vị sửa chữa {{name}}.',
+      reload: 'Tải lại',
+      notProvided: 'Chưa cung cấp',
+      columns: {
+        name: 'Đơn vị',
+        services: 'Dịch vụ',
+        location: 'Địa điểm đích',
+        contact: 'Đầu mối liên hệ',
+        status: 'Trạng thái',
+      },
+      service: {
+        REPAIR: 'Sửa chữa',
+        WARRANTY: 'Bảo hành',
+      },
+      status: {
+        ACTIVE: 'Đang hoạt động',
+        INACTIVE: 'Ngừng hoạt động',
+      },
+      createTitle: 'Thêm đơn vị sửa chữa',
+      createDescription:
+        'Chọn địa điểm bên ngoài sẽ dùng làm điểm gửi tài sản.',
+      editTitle: 'Sửa đơn vị sửa chữa',
+      editDescription:
+        'Địa điểm đích được giữ nguyên để lịch sử điều chuyển luôn nhất quán.',
+      form: {
+        name: 'Tên đơn vị',
+        services: 'Loại dịch vụ',
+        location: 'Địa điểm bên ngoài',
+        locationPlaceholder: 'Chọn địa điểm chưa gắn đơn vị',
+        noLocations: 'Chưa có địa điểm bên ngoài còn trống.',
+        openLocations: 'Mở Danh mục địa điểm',
+        contactName: 'Người liên hệ',
+        contactPhone: 'Số điện thoại',
+        contactEmail: 'Email',
+      },
+      errors: {
+        locationUnavailable:
+          'Địa điểm này vừa được sử dụng hoặc không còn hoạt động. Hãy chọn địa điểm khác.',
+        versionConflict:
+          'Dữ liệu vừa được người khác thay đổi. Hãy tải lại rồi thực hiện lại thao tác.',
       },
     },
     departments: {
@@ -358,8 +583,7 @@ export const vi = {
         fastGroupCode: 'Mã nhóm FAST',
       },
       errors: {
-        duplicateCode:
-          'Mã đã dùng (kể cả mục đã ngừng cũng không dùng lại).',
+        duplicateCode: 'Mã đã dùng (kể cả mục đã ngừng cũng không dùng lại).',
         versionConflict:
           'Có người vừa sửa mục này. Hãy tải lại dữ liệu mới nhất rồi nhập lại thay đổi của bạn.',
       },
@@ -410,7 +634,7 @@ export const vi = {
         FINANCE_ADJUST: 'Điều chỉnh tài chính',
         USE_STATUS_CHANGE: 'Đưa vào / ngừng sử dụng',
         CATALOG_DEACTIVATE: 'Ngừng mục danh mục',
-        LOCATION_CLOSE: 'Đóng location',
+        LOCATION_CLOSE: 'Đóng địa điểm',
         CONFIG_CHANGE: 'Đổi cấu hình',
         ACCEPTANCE_FAIL: 'Nghiệm thu không đạt',
       },

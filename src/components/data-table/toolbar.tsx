@@ -1,5 +1,6 @@
 import { Cross2Icon } from '@radix-ui/react-icons'
 import { type Table } from '@tanstack/react-table'
+import { useTranslation } from 'react-i18next'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { DataTableFacetedFilter } from './faceted-filter'
@@ -18,6 +19,7 @@ type DataTableToolbarProps<TData> = {
       icon?: React.ComponentType<{ className?: string }>
     }[]
   }[]
+  columnLabels?: Record<string, string>
 }
 
 export function DataTableToolbar<TData>({
@@ -25,7 +27,9 @@ export function DataTableToolbar<TData>({
   searchPlaceholder = 'Filter...',
   searchKey,
   filters = [],
+  columnLabels,
 }: DataTableToolbarProps<TData>) {
+  const { t } = useTranslation()
   const isFiltered =
     table.getState().columnFilters.length > 0 || table.getState().globalFilter
 
@@ -34,6 +38,7 @@ export function DataTableToolbar<TData>({
       <div className='flex flex-1 flex-col-reverse items-start gap-y-2 sm:flex-row sm:items-center sm:space-x-2'>
         {searchKey ? (
           <Input
+            aria-label={searchPlaceholder}
             placeholder={searchPlaceholder}
             value={
               (table.getColumn(searchKey)?.getFilterValue() as string) ?? ''
@@ -41,14 +46,15 @@ export function DataTableToolbar<TData>({
             onChange={(event) =>
               table.getColumn(searchKey)?.setFilterValue(event.target.value)
             }
-            className='h-8 w-37.5 lg:w-62.5'
+            className='h-11 w-45 sm:h-8 sm:w-37.5 lg:w-62.5'
           />
         ) : (
           <Input
+            aria-label={searchPlaceholder}
             placeholder={searchPlaceholder}
             value={table.getState().globalFilter ?? ''}
             onChange={(event) => table.setGlobalFilter(event.target.value)}
-            className='h-8 w-37.5 lg:w-62.5'
+            className='h-11 w-45 sm:h-8 sm:w-37.5 lg:w-62.5'
           />
         )}
         <div className='flex gap-x-2'>
@@ -72,14 +78,14 @@ export function DataTableToolbar<TData>({
               table.resetColumnFilters()
               table.setGlobalFilter('')
             }}
-            className='h-8 px-2 lg:px-3'
+            className='min-h-11 px-2 sm:min-h-8 lg:px-3'
           >
-            Reset
+            {t('common.reset')}
             <Cross2Icon className='ms-2 h-4 w-4' />
           </Button>
         )}
       </div>
-      <DataTableViewOptions table={table} />
+      <DataTableViewOptions table={table} columnLabels={columnLabels} />
     </div>
   )
 }

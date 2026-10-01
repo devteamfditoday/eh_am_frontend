@@ -44,7 +44,8 @@ describe('createAssetTypeSchema', () => {
 
   it('từ chối thời gian không phải số nguyên dương', () => {
     expect(
-      createAssetTypeSchema.safeParse({ ...base, usefulLifeMonths: '0' }).success
+      createAssetTypeSchema.safeParse({ ...base, usefulLifeMonths: '0' })
+        .success
     ).toBe(false)
     expect(
       createAssetTypeSchema.safeParse({ ...base, usefulLifeMonths: 'abc' })

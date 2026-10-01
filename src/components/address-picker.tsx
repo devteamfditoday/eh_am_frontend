@@ -1,4 +1,3 @@
-import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { VN_PROVINCES, wardsByProvince } from '@/lib/data/vn-provinces'
 import { Input } from '@/components/ui/input'
@@ -11,134 +10,211 @@ import {
   SelectValue,
 } from '@/components/ui/select'
 
-type AddressPickerProps = {
-  /** Địa chỉ đã gộp thành một chuỗi (khớp trường `address` của backend). */
-  value: string
-  onChange: (value: string) => void
-  disabled?: boolean
+export type AddressValue = {
+  provinceCode: string
+  provinceName: string
+  wardName: string
+  addressDetail: string
 }
 
-/**
- * Chọn địa chỉ theo đơn vị hành chính VN: Tỉnh/Thành + Phường/Xã (hàng ngang) rồi số nhà,
- * tên đường (hàng dưới). Gộp thành MỘT chuỗi (`onChange`) để khớp trường `address` của backend.
- *
- * ⚠️ Khi sửa (địa chỉ cũ dạng chuỗi tự do), không tách ngược được nên đổ nguyên vào ô số nhà/tên
- * đường; người dùng chọn lại tỉnh/phường nếu muốn chuẩn hoá.
- */
+type AddressPickerProps = {
+  value: AddressValue
+  onChange: (value: AddressValue) => void
+  invalid?: Partial<Record<keyof AddressValue, boolean>>
+  errors?: Partial<Record<keyof AddressValue, string>>
+  groupError?: string
+  disabled?: boolean
+  required?: boolean
+}
+
+/** Bộ chọn địa chỉ controlled; từng phần được lưu độc lập thay vì phân tích ngược chuỗi. */
 export function AddressPicker({
   value,
   onChange,
+  invalid = {},
+  errors = {},
+  groupError,
   disabled,
+  required = false,
 }: AddressPickerProps) {
   const { t } = useTranslation()
-  const [provinceCode, setProvinceCode] = useState('')
-  const [ward, setWard] = useState('')
-  const [detail, setDetail] = useState(() => value ?? '')
-
-  function compose(next: {
-    provinceCode?: string
-    ward?: string
-    detail?: string
-  }) {
-    const pCode = next.provinceCode ?? provinceCode
-    const w = next.ward ?? ward
-    const d = next.detail ?? detail
-    const provinceName = VN_PROVINCES.find((p) => p.code === pCode)?.name ?? ''
-    onChange(
-      [d, w, provinceName]
-        .map((s) => s.trim())
-        .filter(Boolean)
-        .join(', ')
-    )
-  }
-
-  const wards = provinceCode ? (wardsByProvince[provinceCode] ?? []) : []
+  const wards = value.provinceCode
+    ? (wardsByProvince[value.provinceCode] ?? [])
+    : []
   const hasWardData = wards.length > 0
+  const describedBy = (fieldErrorId: string, hasFieldError: boolean) =>
+    [
+      hasFieldError ? fieldErrorId : null,
+      groupError ? 'address-group-error' : null,
+    ]
+      .filter(Boolean)
+      .join(' ') || undefined
 
   return (
     <div className='grid gap-3'>
       <div className='grid gap-3 sm:grid-cols-2'>
         <div className='grid gap-1.5'>
-          <Label className='text-xs text-muted-foreground'>
+          <Label
+            htmlFor='address-province'
+            className='text-xs text-muted-foreground'
+          >
             {t('common.address.provinceLabel')}
           </Label>
           <Select
-            value={provinceCode}
+            value={value.provinceCode}
             disabled={disabled}
-            onValueChange={(v) => {
-              setProvinceCode(v)
-              setWard('')
-              compose({ provinceCode: v, ward: '' })
+            onValueChange={(provinceCode) => {
+              const provinceName =
+                VN_PROVINCES.find((province) => province.code === provinceCode)
+                  ?.name ?? ''
+              onChange({
+                ...value,
+                provinceCode,
+                provinceName,
+                wardName: '',
+              })
             }}
           >
-            <SelectTrigger className='w-full'>
+            <SelectTrigger
+              id='address-province'
+              className='min-h-11 w-full'
+              aria-required={required}
+              aria-invalid={!!invalid.provinceCode || !!errors.provinceCode}
+              aria-describedby={describedBy(
+                'address-province-error',
+                !!errors.provinceCode
+              )}
+            >
               <SelectValue
                 placeholder={t('common.address.provincePlaceholder')}
               />
             </SelectTrigger>
             <SelectContent>
-              {VN_PROVINCES.map((p) => (
-                <SelectItem key={p.code} value={p.code}>
-                  {p.name}
+              {VN_PROVINCES.map((province) => (
+                <SelectItem key={province.code} value={province.code}>
+                  {province.name}
                 </SelectItem>
               ))}
             </SelectContent>
           </Select>
+          {errors.provinceCode ? (
+            <p
+              id='address-province-error'
+              className='text-sm text-destructive'
+              role='alert'
+            >
+              {errors.provinceCode}
+            </p>
+          ) : null}
         </div>
 
         <div className='grid gap-1.5'>
-          <Label className='text-xs text-muted-foreground'>
+          <Label
+            htmlFor='address-ward'
+            className='text-xs text-muted-foreground'
+          >
             {t('common.address.wardLabel')}
           </Label>
           {hasWardData ? (
             <Select
-              value={ward}
-              disabled={disabled || !provinceCode}
-              onValueChange={(v) => {
-                setWard(v)
-                compose({ ward: v })
-              }}
+              value={value.wardName}
+              disabled={disabled || !value.provinceCode}
+              onValueChange={(wardName) => onChange({ ...value, wardName })}
             >
-              <SelectTrigger className='w-full'>
+              <SelectTrigger
+                id='address-ward'
+                className='min-h-11 w-full'
+                aria-required={required}
+                aria-invalid={!!invalid.wardName || !!errors.wardName}
+                aria-describedby={describedBy(
+                  'address-ward-error',
+                  !!errors.wardName
+                )}
+              >
                 <SelectValue
                   placeholder={t('common.address.wardPlaceholder')}
                 />
               </SelectTrigger>
               <SelectContent>
-                {wards.map((w) => (
-                  <SelectItem key={w} value={w}>
-                    {w}
+                {wards.map((ward) => (
+                  <SelectItem key={ward} value={ward}>
+                    {ward}
                   </SelectItem>
                 ))}
               </SelectContent>
             </Select>
           ) : (
             <Input
-              disabled={disabled || !provinceCode}
+              id='address-ward'
+              disabled={disabled || !value.provinceCode}
+              required={required}
+              aria-invalid={!!invalid.wardName || !!errors.wardName}
+              aria-describedby={describedBy(
+                'address-ward-error',
+                !!errors.wardName
+              )}
+              className='h-11'
               placeholder={t('common.address.wardPlaceholder')}
-              value={ward}
-              onChange={(e) => {
-                setWard(e.target.value)
-                compose({ ward: e.target.value })
-              }}
+              value={value.wardName}
+              onChange={(event) =>
+                onChange({ ...value, wardName: event.target.value })
+              }
             />
           )}
+          {errors.wardName ? (
+            <p
+              id='address-ward-error'
+              className='text-sm text-destructive'
+              role='alert'
+            >
+              {errors.wardName}
+            </p>
+          ) : null}
         </div>
+
+        {groupError ? (
+          <p
+            id='address-group-error'
+            className='text-sm text-destructive sm:col-span-2'
+            role='alert'
+          >
+            {groupError}
+          </p>
+        ) : null}
       </div>
 
       <div className='grid gap-1.5'>
-        <Label className='text-xs text-muted-foreground'>
+        <Label
+          htmlFor='address-detail'
+          className='text-xs text-muted-foreground'
+        >
           {t('common.address.detailLabel')}
         </Label>
         <Input
+          id='address-detail'
           disabled={disabled}
+          required={required}
+          aria-invalid={!!invalid.addressDetail || !!errors.addressDetail}
+          aria-describedby={describedBy(
+            'address-detail-error',
+            !!errors.addressDetail
+          )}
+          className='h-11'
           placeholder={t('common.address.detailPlaceholder')}
-          value={detail}
-          onChange={(e) => {
-            setDetail(e.target.value)
-            compose({ detail: e.target.value })
-          }}
+          value={value.addressDetail}
+          onChange={(event) =>
+            onChange({ ...value, addressDetail: event.target.value })
+          }
         />
+        {errors.addressDetail ? (
+          <p
+            id='address-detail-error'
+            className='text-sm text-destructive'
+            role='alert'
+          >
+            {errors.addressDetail}
+          </p>
+        ) : null}
       </div>
     </div>
   )

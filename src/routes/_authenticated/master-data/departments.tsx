@@ -8,12 +8,12 @@ import { DepartmentsPage } from '@/features/master-data/departments/departments-
  * ⚠️ Guard đăng nhập + vai trò ở `_authenticated/route.tsx` (cha). Quyền thật do backend kiểm
  * (chỉ SYSTEM_ADMIN). GĐ này tạo/sửa tên; gán trưởng phòng + ngừng chờ UC-IAM-15 / UC-MDM-07.
  */
-export const Route = createFileRoute(
-  '/_authenticated/master-data/departments'
-)({
-  loader: ({ context }) =>
-    context.queryClient.ensureQueryData(
-      departmentsQueryOptions({ pageSize: 100 })
-    ),
-  component: DepartmentsPage,
-})
+export const Route = createFileRoute('/_authenticated/master-data/departments')(
+  {
+    loader: ({ context }) =>
+      context.queryClient.ensureQueryData(
+        departmentsQueryOptions({ pageSize: 100 })
+      ),
+    component: DepartmentsPage,
+  }
+)

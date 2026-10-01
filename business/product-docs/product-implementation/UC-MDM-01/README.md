@@ -65,3 +65,11 @@ Màn quản trị **Danh mục location** cho Quản trị hệ thống và Qu�
 ## 7. Kiểm chứng trước khi báo xong
 
 `npx tsc --noEmit` (hoặc `npm run typecheck`) · `npm run lint` · `npm test` · `npm run build`. Manual test (cổng Yêu cầu 3): xem danh sách, thêm đủ 5 loại, sửa, thử trùng mã, thử sửa đồng thời hai tab. Không commit (chờ Duy).
+
+## 8. Kế hoạch sửa lỗi manual test (2026-10-01)
+
+- Thay `address: string` trong form bằng bốn giá trị độc lập: mã tỉnh, tên tỉnh, tên phường/xã, địa chỉ chi tiết. `AddressPicker` trở thành controlled component và không tự ghép chuỗi.
+- Zod bắt buộc cả tỉnh/thành và phường/xã; thiếu một lựa chọn thì `handleSubmit` chặn mutation, vì vậy không gọi API.
+- Khi sửa, khởi tạo đúng dữ liệu có cấu trúc API trả về. Dữ liệu cũ chưa có cấu trúc hiển thị địa chỉ chi tiết cũ và yêu cầu chọn đủ tỉnh/phường trước khi lưu lại.
+- Cột cost center dùng `defaultCostCenterCode`; hover/focus hiện tooltip `defaultCostCenterName`.
+- Kiểm chứng bằng schema/component test, full test, build và manual flow tạo/sửa.

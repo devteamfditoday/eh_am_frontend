@@ -1,3 +1,4 @@
+import { createIdempotencyKey } from '../idempotency-key'
 import { api } from './client'
 
 /**
@@ -36,7 +37,13 @@ export interface LocationDto {
   name: string
   type: string
   address: string | null
+  provinceCode: string | null
+  provinceName: string | null
+  wardName: string | null
+  addressDetail: string | null
   defaultCostCenterId: string | null
+  defaultCostCenterCode: string | null
+  defaultCostCenterName: string | null
   status: string
   version: number
   createdAt: string | null
@@ -51,6 +58,45 @@ export interface CostCenterDto {
   version: number
   createdAt: string | null
   updatedAt: string | null
+}
+
+export interface SupplierDto {
+  id: string
+  name: string
+  taxId: string | null
+  contactName: string | null
+  contactPhone: string | null
+  contactEmail: string | null
+  status: string
+  version: number
+  createdAt: string | null
+  updatedAt: string | null
+}
+
+export const REPAIR_VENDOR_SERVICE_TYPES = ['REPAIR', 'WARRANTY'] as const
+export type RepairVendorServiceType =
+  (typeof REPAIR_VENDOR_SERVICE_TYPES)[number]
+
+export interface RepairVendorDto {
+  id: string
+  name: string
+  contactName: string | null
+  contactPhone: string | null
+  contactEmail: string | null
+  serviceTypes: RepairVendorServiceType[]
+  externalLocationId: string
+  externalLocationCode: string | null
+  externalLocationName: string | null
+  status: string
+  version: number
+  createdAt: string | null
+  updatedAt: string | null
+}
+
+export interface AvailableRepairLocationDto {
+  id: string
+  code: string
+  name: string
 }
 
 export interface DepartmentDto {
@@ -69,6 +115,25 @@ export interface ListParams {
   pageSize?: number
 }
 
+export interface ListRepairVendorsParams extends ListParams {
+  status?: string
+  query?: string
+}
+
+export type CreateRepairVendorInput = {
+  name: string
+  serviceTypes: RepairVendorServiceType[]
+  externalLocationId: string
+  contactName?: string
+  contactPhone?: string
+  contactEmail?: string
+}
+
+export type UpdateRepairVendorInput = Omit<
+  CreateRepairVendorInput,
+  'externalLocationId'
+> & { version: number }
+
 /**
  * Ngừng một mục danh mục nền (UC-MDM-03/07.AC.2). Lý do bắt buộc chọn từ nhóm CATALOG_DEACTIVATE;
  * `note` chỉ cần khi lý do là mục "Khác" (backend kiểm). `version` cho khoá lạc quan.
@@ -83,20 +148,32 @@ export interface CreateLocationInput {
   code: string
   name: string
   type: string
-  address?: string
+  provinceCode: string
+  provinceName: string
+  wardName: string
+  addressDetail: string
   defaultCostCenterId: string
 }
 
 export interface UpdateLocationInput {
   name: string
-  address?: string
+  provinceCode: string
+  provinceName: string
+  wardName: string
+  addressDetail: string
   defaultCostCenterId: string
   /** Phiên bản đang xem — khoá lạc quan (UC-MDM-01.EX.4). */
   version: number
 }
 
+export interface ListLocationsParams extends ListParams {
+  status?: string
+  types?: string
+  query?: string
+}
+
 export async function listLocations(
-  params: ListParams = {}
+  params: ListLocationsParams = {}
 ): Promise<Paginated<LocationDto>> {
   const { data } = await api.get<Paginated<LocationDto>>(
     '/master-data/locations',
@@ -106,19 +183,28 @@ export async function listLocations(
 }
 
 export async function createLocation(
-  input: CreateLocationInput
+  input: CreateLocationInput,
+  commandKey: string
 ): Promise<LocationDto> {
-  const { data } = await api.post<LocationDto>('/master-data/locations', input)
+  const { data } = await api.post<LocationDto>(
+    '/master-data/locations',
+    input,
+    {
+      headers: idempotencyHeaders(commandKey),
+    }
+  )
   return data
 }
 
 export async function updateLocation(
   id: string,
-  input: UpdateLocationInput
+  input: UpdateLocationInput,
+  commandKey: string
 ): Promise<LocationDto> {
   const { data } = await api.patch<LocationDto>(
     `/master-data/locations/${id}`,
-    input
+    input,
+    { headers: idempotencyHeaders(commandKey) }
   )
   return data
 }
@@ -177,6 +263,131 @@ export async function deactivateCostCenter(
   const { data } = await api.post<CostCenterDto>(
     `/master-data/cost-centers/${id}/deactivate`,
     input
+  )
+  return data
+}
+
+export interface ListSuppliersParams extends ListParams {
+  status?: string
+  query?: string
+}
+
+export type CreateSupplierInput = {
+  name: string
+  taxId?: string
+  contactName?: string
+  contactPhone?: string
+  contactEmail?: string
+}
+
+export type UpdateSupplierInput = CreateSupplierInput & { version: number }
+
+const idempotencyHeaders = (commandKey: string) => ({
+  'Idempotency-Key': commandKey,
+})
+
+export async function listSuppliers(
+  params: ListSuppliersParams = {}
+): Promise<Paginated<SupplierDto>> {
+  const { data } = await api.get<Paginated<SupplierDto>>(
+    '/master-data/suppliers',
+    { params }
+  )
+  return data
+}
+
+export async function createSupplier(
+  input: CreateSupplierInput,
+  commandKey: string
+): Promise<SupplierDto> {
+  const { data } = await api.post<SupplierDto>(
+    '/master-data/suppliers',
+    input,
+    { headers: idempotencyHeaders(commandKey) }
+  )
+  return data
+}
+
+export async function updateSupplier(
+  id: string,
+  input: UpdateSupplierInput,
+  commandKey: string
+): Promise<SupplierDto> {
+  const { data } = await api.patch<SupplierDto>(
+    `/master-data/suppliers/${id}`,
+    input,
+    { headers: idempotencyHeaders(commandKey) }
+  )
+  return data
+}
+
+export async function deactivateSupplier(
+  id: string,
+  input: DeactivateInput,
+  commandKey?: string
+): Promise<SupplierDto> {
+  const { data } = await api.post<SupplierDto>(
+    `/master-data/suppliers/${id}/deactivate`,
+    input,
+    { headers: idempotencyHeaders(commandKey ?? createIdempotencyKey()) }
+  )
+  return data
+}
+
+export async function listRepairVendors(
+  params: ListRepairVendorsParams = {}
+): Promise<Paginated<RepairVendorDto>> {
+  const { data } = await api.get<Paginated<RepairVendorDto>>(
+    '/master-data/repair-vendors',
+    { params }
+  )
+  return data
+}
+
+export async function listAvailableRepairLocations(
+  repairVendorId?: string
+): Promise<AvailableRepairLocationDto[]> {
+  const { data } = await api.get<AvailableRepairLocationDto[]>(
+    '/master-data/repair-vendors/available-locations',
+    { params: repairVendorId ? { repairVendorId } : undefined }
+  )
+  return data
+}
+
+export async function createRepairVendor(
+  input: CreateRepairVendorInput,
+  commandKey: string
+): Promise<RepairVendorDto> {
+  const { data } = await api.post<RepairVendorDto>(
+    '/master-data/repair-vendors',
+    input,
+    { headers: idempotencyHeaders(commandKey) }
+  )
+  return data
+}
+
+export async function updateRepairVendor(
+  id: string,
+  input: UpdateRepairVendorInput,
+  commandKey: string
+): Promise<RepairVendorDto> {
+  const { data } = await api.patch<RepairVendorDto>(
+    `/master-data/repair-vendors/${id}`,
+    input,
+    { headers: idempotencyHeaders(commandKey) }
+  )
+  return data
+}
+
+export async function deactivateRepairVendor(
+  id: string,
+  input: DeactivateInput,
+  commandKey?: string
+): Promise<RepairVendorDto> {
+  const { data } = await api.post<RepairVendorDto>(
+    `/master-data/repair-vendors/${id}/deactivate`,
+    input,
+    { headers: idempotencyHeaders(commandKey ?? createIdempotencyKey()) }
   )
   return data
 }

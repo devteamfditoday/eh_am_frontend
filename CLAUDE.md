@@ -89,7 +89,11 @@ Sáu chuẩn dưới đây là bắt buộc cho mọi màn hình mới; đừng 
 
 10. **Enum/hằng DB → i18n, KHÔNG show mã thô (hay quên):** mọi giá trị enum/hằng từ database (trạng thái `ACTIVE`/`INACTIVE`, loại `STORE`, nhóm lý do `DISPOSAL`, `reason_group`…) PHẢI map sang chữ i18n (`t('...type.STORE')`) rồi mới hiển thị — tuyệt đối không render thẳng chuỗi enum thô cho người dùng. Thêm một giá trị enum ở backend thì thêm ngay khoá i18n tương ứng (vi + en), nếu không cell sẽ hiện đúng chuỗi mã. Lưu ý: **mã do người dùng nhập** (mã location, mã cost center, mã lý do…) KHÔNG phải enum — hiển thị đúng mã đó qua `CodeText`.
 
-Mẫu tham chiếu đã áp đủ các chuẩn: `src/features/master-data/locations/`, `cost-centers/`, `departments/`, `reason-codes/`.
+11. **Ngày/giờ → `DateField`/`DateTimeField` (BẮT BUỘC, hay quên):** mọi ô chọn ngày hoặc ngày-giờ PHẢI dùng `DateField`/`DateTimeField` (`@/components/date-picker`). TUYỆT ĐỐI không dùng `<input type="date|datetime-local|time">`: popup native phụ thuộc trình duyệt/OS, không theo design system/dark mode, hay tràn khỏi Dialog, mỗi máy một kiểu. Mọi chỗ dùng date picker phải CÙNG một style (lấy từ component chung này). Giá trị là chuỗi `YYYY-MM-DD` / `YYYY-MM-DDTHH:mm`, không dùng `Date` (tránh lệch một ngày ở múi giờ âm). Đây là lỗi lặp đi lặp lại ở FDI Today nên chốt thành chuẩn.
+
+12. **Hàng field không nhảy khi hiện lỗi + xoá lỗi theo bước (hay quên):** lưới field nhiều cột dùng `items-start` để khi một ô hiện `FormMessage` (lỗi validation) thì ô cùng hàng KHÔNG bị đẩy lệch theo. Với form nhiều bước (wizard), lỗi tổng (`root`) phải được xoá khi chuyển bước — `form.clearErrors('root')` trong effect theo `step` — để lỗi của bước này không dính sang bước khác.
+
+Mẫu tham chiếu đã áp đủ các chuẩn: `src/features/master-data/locations/`, `cost-centers/`, `departments/`, `reason-codes/`; wizard nhiều bước + date picker: `src/features/employees/new/`.
 
 ## Tài liệu thiết kế và triển khai (`business/product-docs/`)
 

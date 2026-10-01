@@ -4,8 +4,8 @@ import { Pencil } from 'lucide-react'
 import { type DepartmentDto } from '@/lib/api/master-data.api'
 import { Button } from '@/components/ui/button'
 import { CodeText } from '@/components/code-text'
-import { StatusBadge, type StatusTone } from '@/components/status-badge'
 import { DataTableColumnHeader } from '@/components/data-table'
+import { StatusBadge, type StatusTone } from '@/components/status-badge'
 
 function statusTone(status: string): StatusTone {
   return status === 'ACTIVE' ? 'success' : 'neutral'

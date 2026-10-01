@@ -97,3 +97,22 @@
 ## 7. Skill dùng cho màn này
 
 `frontend-design` (bố cục hero-less cho màn dữ liệu, thang chữ, kỷ luật token) + `ui-ux-pro-max` (mẫu bảng + form + trạng thái rỗng/lỗi) + `taste-skill` (rà lại tổng thể). Không dùng `gsap-skills`/`hyperframes`/`impeccable` cho màn dữ liệu nội bộ này.
+
+## 8. Wireframe sửa lỗi địa chỉ và cost center (2026-10-01)
+
+```text
+┌──────────────────────────────────────────────┐
+│ Địa chỉ *                                    │
+│ [ Tỉnh/Thành *             ▾ ] [ Phường/Xã * ▾ ] │
+│ [ Số nhà, tên đường *                         ] │
+│   Thiếu một lựa chọn → lỗi ngay dưới control,  │
+│   nút Lưu không phát sinh request API.          │
+└──────────────────────────────────────────────┘
+
+Danh sách:  COST CENTER
+            [ CC-STORE-01 ]  ← hover/focus: “Vận hành cửa hàng”
+```
+
+- Hai dropdown dùng vùng chạm tối thiểu 44px trên mobile; khi đổi tỉnh phải xoá lựa chọn phường cũ.
+- Tooltip mở bằng hover và keyboard focus, nội dung là tên cost center; mã vẫn dùng `CodeText`.
+- Không thêm animation; ưu tiên tính rõ ràng của form dữ liệu và hỗ trợ `prefers-reduced-motion` sẵn có.

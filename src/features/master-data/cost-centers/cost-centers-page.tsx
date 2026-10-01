@@ -1,4 +1,5 @@
 import { useMemo, useState } from 'react'
+import { useQuery } from '@tanstack/react-query'
 import {
   flexRender,
   getCoreRowModel,
@@ -9,15 +10,15 @@ import {
   getSortedRowModel,
   useReactTable,
 } from '@tanstack/react-table'
-import { useQuery } from '@tanstack/react-query'
 import { Coins, Plus } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
-import { costCentersQueryOptions } from '@/lib/api/master-data.queries'
 import {
   deactivateCostCenter,
   type CostCenterDto,
 } from '@/lib/api/master-data.api'
+import { costCentersQueryOptions } from '@/lib/api/master-data.queries'
 import { Button } from '@/components/ui/button'
+import { Skeleton } from '@/components/ui/skeleton'
 import {
   Table,
   TableBody,
@@ -27,13 +28,12 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table'
-import { Skeleton } from '@/components/ui/skeleton'
-import { PageHeader } from '@/components/page-header'
-import { EmptyState } from '@/components/empty-state'
+import { ConfigDrawer } from '@/components/config-drawer'
 import { DataTablePagination, DataTableToolbar } from '@/components/data-table'
+import { EmptyState } from '@/components/empty-state'
 import { Header } from '@/components/layout/header'
 import { Main } from '@/components/layout/main'
-import { ConfigDrawer } from '@/components/config-drawer'
+import { PageHeader } from '@/components/page-header'
 import { ProfileDropdown } from '@/components/profile-dropdown'
 import { Search } from '@/components/search'
 import { ThemeSwitch } from '@/components/theme-switch'
@@ -41,8 +41,8 @@ import {
   DeactivateCatalogDialog,
   type DeactivateTarget,
 } from '../deactivate-catalog-dialog'
-import { getCostCenterColumns } from './cost-centers-columns'
 import { CostCenterFormDialog } from './cost-center-form-dialog'
+import { getCostCenterColumns } from './cost-centers-columns'
 
 export function CostCentersPage() {
   const { t } = useTranslation()
@@ -50,7 +50,9 @@ export function CostCentersPage() {
   const [dialogOpen, setDialogOpen] = useState(false)
   const [editing, setEditing] = useState<CostCenterDto | null>(null)
   const [deactivateOpen, setDeactivateOpen] = useState(false)
-  const [deactivating, setDeactivating] = useState<DeactivateTarget | null>(null)
+  const [deactivating, setDeactivating] = useState<DeactivateTarget | null>(
+    null
+  )
 
   const data = useMemo(() => query.data?.items ?? [], [query.data])
 

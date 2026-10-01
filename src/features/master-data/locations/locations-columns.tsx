@@ -3,9 +3,13 @@ import { type TFunction } from 'i18next'
 import { Pencil } from 'lucide-react'
 import { type LocationDto } from '@/lib/api/master-data.api'
 import { Button } from '@/components/ui/button'
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from '@/components/ui/tooltip'
 import { CodeText } from '@/components/code-text'
 import { StatusBadge, type StatusTone } from '@/components/status-badge'
-import { DataTableColumnHeader } from '@/components/data-table'
 
 /** ACTIVE → xanh; còn lại (INACTIVE) → xám trung tính. */
 function statusTone(status: string): StatusTone {
@@ -26,22 +30,12 @@ export function getLocationColumns(
   return [
     {
       accessorKey: 'code',
-      header: ({ column }) => (
-        <DataTableColumnHeader
-          column={column}
-          title={t('masterData.locations.columns.code')}
-        />
-      ),
+      header: t('masterData.locations.columns.code'),
       cell: ({ row }) => <CodeText value={row.original.code} />,
     },
     {
       accessorKey: 'name',
-      header: ({ column }) => (
-        <DataTableColumnHeader
-          column={column}
-          title={t('masterData.locations.columns.name')}
-        />
-      ),
+      header: t('masterData.locations.columns.name'),
     },
     {
       accessorKey: 'type',
@@ -53,8 +47,21 @@ export function getLocationColumns(
       accessorKey: 'defaultCostCenterId',
       header: t('masterData.locations.columns.costCenter'),
       cell: ({ row }) =>
-        row.original.defaultCostCenterId ? (
-          <CodeText value={row.original.defaultCostCenterId} />
+        row.original.defaultCostCenterCode ? (
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <span
+                tabIndex={0}
+                className='inline-flex min-h-11 cursor-help items-center rounded-sm focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none sm:min-h-0'
+              >
+                <CodeText value={row.original.defaultCostCenterCode} />
+              </span>
+            </TooltipTrigger>
+            <TooltipContent sideOffset={6}>
+              {row.original.defaultCostCenterName ??
+                row.original.defaultCostCenterCode}
+            </TooltipContent>
+          </Tooltip>
         ) : (
           <span className='text-muted-foreground'>—</span>
         ),

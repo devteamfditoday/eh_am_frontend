@@ -13,7 +13,7 @@ const CODE_RE = /^[A-Za-z0-9][A-Za-z0-9_-]*$/
 
 const codeField = z.string().trim().min(2).max(20).regex(CODE_RE)
 const nameField = z.string().trim().min(1).max(150)
-const addressField = z.string().trim().max(300).optional().or(z.literal(''))
+const requiredAddressField = (max: number) => z.string().trim().min(1).max(max)
 const costCenterField = z.string().uuid()
 
 /** Form tạo mới: đủ 5 trường. */
@@ -21,14 +21,20 @@ export const createLocationSchema = z.object({
   code: codeField,
   name: nameField,
   type: z.enum(LOCATION_TYPES),
-  address: addressField,
+  provinceCode: requiredAddressField(20),
+  provinceName: requiredAddressField(120),
+  wardName: requiredAddressField(120),
+  addressDetail: requiredAddressField(200),
   defaultCostCenterId: costCenterField,
 })
 
 /** Form sửa: mã và loại chỉ đọc (không sửa được — BR-MDM-17), nên không nằm trong schema sửa. */
 export const updateLocationSchema = z.object({
   name: nameField,
-  address: addressField,
+  provinceCode: requiredAddressField(20),
+  provinceName: requiredAddressField(120),
+  wardName: requiredAddressField(120),
+  addressDetail: requiredAddressField(200),
   defaultCostCenterId: costCenterField,
 })
 

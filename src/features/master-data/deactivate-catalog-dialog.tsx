@@ -1,18 +1,19 @@
 import { useMemo, useState } from 'react'
+import { z } from 'zod'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { Loader2 } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
-import { z } from 'zod'
+import { ApiError, ErrorCode } from '@/lib/api/error-code'
+import { handleApiError } from '@/lib/api/handle-api-error'
 import { type DeactivateInput } from '@/lib/api/master-data.api'
 import {
   masterDataKeys,
   reasonCodesQueryOptions,
 } from '@/lib/api/master-data.queries'
-import { ApiError, ErrorCode } from '@/lib/api/error-code'
-import { handleApiError } from '@/lib/api/handle-api-error'
+import { createIdempotencyKey } from '@/lib/idempotency-key'
 import { Button } from '@/components/ui/button'
 import {
   Dialog,
@@ -39,7 +40,12 @@ import { SelectDropdown } from '@/components/select-dropdown'
  * và lý do vì hai luồng giống hệt: chọn lý do ngừng từ nhóm CATALOG_DEACTIVATE, nhập ô ghi thêm
  * khi lý do là "Khác", rồi gọi endpoint `:id/deactivate`. Backend kiểm "còn dùng" + đúng nhóm.
  */
-export type DeactivateTarget = { id: string; code: string; version: number }
+export type DeactivateTarget = {
+  id: string
+  code?: string
+  label?: string
+  version: number
+}
 
 const deactivateSchema = z.object({
   // Bắt buộc kiểm ở onSubmit để câu lỗi theo i18n (Zod min mặc định trả tiếng Anh).
@@ -54,7 +60,12 @@ type DeactivateCatalogDialogProps = {
   target: DeactivateTarget | null
   /** Loại một lý do khỏi danh sách chọn — dùng khi ngừng chính một lý do (UC-MDM-07.EX.1). */
   excludeReasonId?: string
-  deactivateFn: (id: string, input: DeactivateInput) => Promise<unknown>
+  deactivateFn: (
+    id: string,
+    input: DeactivateInput,
+    commandKey?: string
+  ) => Promise<unknown>
+  description?: string
 }
 
 export function DeactivateCatalogDialog({
@@ -63,6 +74,7 @@ export function DeactivateCatalogDialog({
   target,
   excludeReasonId,
   deactivateFn,
+  description,
 }: DeactivateCatalogDialogProps) {
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -73,6 +85,7 @@ export function DeactivateCatalogDialog({
             target={target}
             excludeReasonId={excludeReasonId}
             deactivateFn={deactivateFn}
+            description={description}
             onClose={() => onOpenChange(false)}
           />
         ) : null}
@@ -85,16 +98,24 @@ function DeactivateBody({
   target,
   excludeReasonId,
   deactivateFn,
+  description,
   onClose,
 }: {
   target: DeactivateTarget
   excludeReasonId?: string
-  deactivateFn: (id: string, input: DeactivateInput) => Promise<unknown>
+  deactivateFn: (
+    id: string,
+    input: DeactivateInput,
+    commandKey?: string
+  ) => Promise<unknown>
+  description?: string
   onClose: () => void
 }) {
   const { t } = useTranslation()
   const queryClient = useQueryClient()
   const [conflict, setConflict] = useState(false)
+  const [commandKey] = useState(createIdempotencyKey)
+  const targetLabel = target.label ?? target.code ?? ''
 
   // Chỉ lấy lý do Đang hoạt động của nhóm 'Ngừng mục danh mục' (QĐ-06).
   const reasonsQuery = useQuery(
@@ -123,13 +144,17 @@ function DeactivateBody({
 
   const mutation = useMutation({
     mutationFn: (values: DeactivateValues) =>
-      deactivateFn(target.id, {
-        reasonCodeId: values.reasonCodeId,
-        note: values.note?.trim() || undefined,
-        version: target.version,
-      }),
+      deactivateFn(
+        target.id,
+        {
+          reasonCodeId: values.reasonCodeId,
+          note: values.note?.trim() || undefined,
+          version: target.version,
+        },
+        commandKey
+      ),
     onSuccess: () => {
-      toast.success(t('masterData.deactivate.success', { code: target.code }))
+      toast.success(t('masterData.deactivate.success', { code: targetLabel }))
       void queryClient.invalidateQueries({ queryKey: masterDataKeys.all })
       onClose()
     },
@@ -189,7 +214,7 @@ function DeactivateBody({
       <>
         <DialogHeader>
           <DialogTitle>
-            {t('masterData.deactivate.title', { code: target.code })}
+            {t('masterData.deactivate.title', { code: targetLabel })}
           </DialogTitle>
           <DialogDescription>
             {t('masterData.deactivate.versionConflict')}
@@ -211,10 +236,10 @@ function DeactivateBody({
     <>
       <DialogHeader>
         <DialogTitle>
-          {t('masterData.deactivate.title', { code: target.code })}
+          {t('masterData.deactivate.title', { code: targetLabel })}
         </DialogTitle>
         <DialogDescription>
-          {t('masterData.deactivate.description')}
+          {description ?? t('masterData.deactivate.description')}
         </DialogDescription>
       </DialogHeader>
 
@@ -234,6 +259,7 @@ function DeactivateBody({
                   <RequiredMark />
                 </FormLabel>
                 <SelectDropdown
+                  required
                   isControlled
                   defaultValue={field.value}
                   onValueChange={field.onChange}
@@ -258,6 +284,8 @@ function DeactivateBody({
                   </FormLabel>
                   <FormControl>
                     <Textarea
+                      required
+                      aria-required='true'
                       maxLength={500}
                       placeholder={t('masterData.deactivate.notePlaceholder')}
                       {...field}
