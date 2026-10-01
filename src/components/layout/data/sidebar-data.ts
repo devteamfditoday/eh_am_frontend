@@ -9,6 +9,7 @@ import {
   Settings,
   Wrench,
   UserPlus,
+  Users,
 } from 'lucide-react'
 import { Role } from '@/stores/auth-store'
 import { type SidebarData } from '../types'
@@ -97,6 +98,12 @@ export const sidebarData: SidebarData = {
     {
       title: 'nav.groupPeople',
       items: [
+        {
+          title: 'nav.employees',
+          url: '/employees',
+          icon: Users,
+          roles: [Role.SYSTEM_ADMIN],
+        },
         {
           title: 'nav.addEmployee',
           url: '/employees/new',

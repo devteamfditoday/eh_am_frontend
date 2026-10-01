@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from 'react'
 import { useForm, useWatch } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useMutation, useQuery } from '@tanstack/react-query'
-import { CheckCircle2, Loader2, UserPlus } from 'lucide-react'
+import { Check, CheckCircle2, Copy, Loader2, UserPlus } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import {
   createEmployee,
@@ -266,7 +266,7 @@ export function EmployeeCreatePage() {
                     {t('employees.create.success.temporaryPasswordHint')}
                   </p>
                   <div className='mt-3 flex flex-wrap items-center gap-2'>
-                    <code className='rounded bg-background px-3 py-2 font-mono text-foreground'>
+                    <code className='min-w-0 flex-1 truncate rounded bg-background px-3 py-2 font-mono text-sm text-foreground'>
                       {form.getValues('temporaryPassword')}
                     </code>
                     <Button
@@ -278,6 +278,11 @@ export function EmployeeCreatePage() {
                           .then(() => setPasswordCopied(true))
                       }}
                     >
+                      {passwordCopied ? (
+                        <Check aria-hidden='true' />
+                      ) : (
+                        <Copy aria-hidden='true' />
+                      )}
                       {passwordCopied ? t('common.copied') : t('common.copy')}
                     </Button>
                     <span className='sr-only' aria-live='polite'>

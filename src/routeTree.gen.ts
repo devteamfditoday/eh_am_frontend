@@ -21,6 +21,7 @@ import { Route as errors500RouteImport } from './routes/(errors)/500'
 import { Route as errors503RouteImport } from './routes/(errors)/503'
 import { Route as AuthenticatedIndexRouteImport } from './routes/_authenticated/index'
 import { Route as AuthenticatedSettingsRouteRouteImport } from './routes/_authenticated/settings/route'
+import { Route as AuthenticatedEmployeesIndexRouteImport } from './routes/_authenticated/employees/index'
 import { Route as AuthenticatedEmployeesNewRouteImport } from './routes/_authenticated/employees/new'
 import { Route as AuthenticatedErrorsErrorRouteImport } from './routes/_authenticated/errors/$error'
 import { Route as AuthenticatedMasterDataAssetTypesRouteImport } from './routes/_authenticated/master-data/asset-types'
@@ -91,6 +92,12 @@ const AuthenticatedSettingsRouteRoute =
   AuthenticatedSettingsRouteRouteImport.update({
     id: '/settings',
     path: '/settings',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const AuthenticatedEmployeesIndexRoute =
+  AuthenticatedEmployeesIndexRouteImport.update({
+    id: '/employees/',
+    path: '/employees/',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
 const AuthenticatedEmployeesNewRoute =
@@ -182,6 +189,7 @@ export interface FileRoutesByFullPath {
   '/master-data/repair-vendors': typeof AuthenticatedMasterDataRepairVendorsRoute
   '/master-data/suppliers': typeof AuthenticatedMasterDataSuppliersRoute
   '/settings/appearance': typeof AuthenticatedSettingsAppearanceRoute
+  '/employees/': typeof AuthenticatedEmployeesIndexRoute
   '/settings/': typeof AuthenticatedSettingsIndexRoute
 }
 export interface FileRoutesByTo {
@@ -205,6 +213,7 @@ export interface FileRoutesByTo {
   '/master-data/repair-vendors': typeof AuthenticatedMasterDataRepairVendorsRoute
   '/master-data/suppliers': typeof AuthenticatedMasterDataSuppliersRoute
   '/settings/appearance': typeof AuthenticatedSettingsAppearanceRoute
+  '/employees': typeof AuthenticatedEmployeesIndexRoute
   '/settings': typeof AuthenticatedSettingsIndexRoute
 }
 export interface FileRoutesById {
@@ -231,6 +240,7 @@ export interface FileRoutesById {
   '/_authenticated/master-data/repair-vendors': typeof AuthenticatedMasterDataRepairVendorsRoute
   '/_authenticated/master-data/suppliers': typeof AuthenticatedMasterDataSuppliersRoute
   '/_authenticated/settings/appearance': typeof AuthenticatedSettingsAppearanceRoute
+  '/_authenticated/employees/': typeof AuthenticatedEmployeesIndexRoute
   '/_authenticated/settings/': typeof AuthenticatedSettingsIndexRoute
 }
 export interface FileRouteTypes {
@@ -257,6 +267,7 @@ export interface FileRouteTypes {
     | '/master-data/repair-vendors'
     | '/master-data/suppliers'
     | '/settings/appearance'
+    | '/employees/'
     | '/settings/'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -280,6 +291,7 @@ export interface FileRouteTypes {
     | '/master-data/repair-vendors'
     | '/master-data/suppliers'
     | '/settings/appearance'
+    | '/employees'
     | '/settings'
   id:
     | '__root__'
@@ -305,6 +317,7 @@ export interface FileRouteTypes {
     | '/_authenticated/master-data/repair-vendors'
     | '/_authenticated/master-data/suppliers'
     | '/_authenticated/settings/appearance'
+    | '/_authenticated/employees/'
     | '/_authenticated/settings/'
   fileRoutesById: FileRoutesById
 }
@@ -405,6 +418,13 @@ declare module '@tanstack/react-router' {
       path: '/settings'
       fullPath: '/settings'
       preLoaderRoute: typeof AuthenticatedSettingsRouteRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/employees/': {
+      id: '/_authenticated/employees/'
+      path: '/employees'
+      fullPath: '/employees/'
+      preLoaderRoute: typeof AuthenticatedEmployeesIndexRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
     '/_authenticated/employees/new': {
@@ -515,6 +535,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedMasterDataReasonCodesRoute: typeof AuthenticatedMasterDataReasonCodesRoute
   AuthenticatedMasterDataRepairVendorsRoute: typeof AuthenticatedMasterDataRepairVendorsRoute
   AuthenticatedMasterDataSuppliersRoute: typeof AuthenticatedMasterDataSuppliersRoute
+  AuthenticatedEmployeesIndexRoute: typeof AuthenticatedEmployeesIndexRoute
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
@@ -534,6 +555,7 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedMasterDataRepairVendorsRoute:
     AuthenticatedMasterDataRepairVendorsRoute,
   AuthenticatedMasterDataSuppliersRoute: AuthenticatedMasterDataSuppliersRoute,
+  AuthenticatedEmployeesIndexRoute: AuthenticatedEmployeesIndexRoute,
 }
 
 const AuthenticatedRouteRouteWithChildren =
