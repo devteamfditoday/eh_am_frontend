@@ -28,17 +28,17 @@ Thương hiệu, token màu/chữ, design system và component dùng chung nằm
 
 ## Skill / plugin dùng cho phần frontend
 
-| Bước | Skill / agent (plugin) | Để làm gì |
-| --- | --- | --- |
-| Nhận diện thương hiệu | `chrome-devtools` (MCP của `ecc`) + `WebFetch` | Trích màu, font, phong cách thật từ trang Every Half; chụp màn hình tham chiếu |
-| Thiết kế giao diện | `frontend-design` (example-skills) | Trục chính về token, component, phong cách; tránh mẫu generic |
-| Hệ thống thiết kế | `ui-ux-pro-max:design-system`, `ui-ux-pro-max:ui-styling` | Khung design system và quy ước style |
-| Thẩm mỹ / thương hiệu | `taste-skill` (taste, brandkit) | Giữ gu biên tập, đơn sắc ấm |
-| Kế hoạch kỹ thuật FE | `ecc:plan` | Mô tả tính năng FE, luồng màn hình, component, API cho từng UC |
-| Viết code theo TDD | dev flow `ecc` + `superpowers:test-driven-development` | Vitest chạy trong trình duyệt thật (Chromium); RED → GREEN |
-| Review | `ecc:react-reviewer`, `ecc:typescript-reviewer` | Rà hook, render, ranh giới component, kiểu, bảo mật phía client |
-| Kiểm hình ảnh | `chrome-devtools` (screenshot ở cổng 5175) | Soát render thật ở light / dark / mobile trước khi bàn giao test |
-| Soát văn chữ hiển thị | `humanizer:humanizer` | Nhãn, thông báo, câu lỗi, trạng thái rỗng viết ở góc độ người dùng, không văn máy |
+| Bước                  | Skill / agent (plugin)                                    | Để làm gì                                                                         |
+| --------------------- | --------------------------------------------------------- | --------------------------------------------------------------------------------- |
+| Nhận diện thương hiệu | `chrome-devtools` (MCP của `ecc`) + `WebFetch`            | Trích màu, font, phong cách thật từ trang Every Half; chụp màn hình tham chiếu    |
+| Thiết kế giao diện    | `frontend-design` (example-skills)                        | Trục chính về token, component, phong cách; tránh mẫu generic                     |
+| Hệ thống thiết kế     | `ui-ux-pro-max:design-system`, `ui-ux-pro-max:ui-styling` | Khung design system và quy ước style                                              |
+| Thẩm mỹ / thương hiệu | `taste-skill` (taste, brandkit)                           | Giữ gu biên tập, đơn sắc ấm                                                       |
+| Kế hoạch kỹ thuật FE  | `ecc:plan`                                                | Mô tả tính năng FE, luồng màn hình, component, API cho từng UC                    |
+| Viết code theo TDD    | dev flow `ecc` + `superpowers:test-driven-development`    | Vitest chạy trong trình duyệt thật (Chromium); RED → GREEN                        |
+| Review                | `ecc:react-reviewer`, `ecc:typescript-reviewer`           | Rà hook, render, ranh giới component, kiểu, bảo mật phía client                   |
+| Kiểm hình ảnh         | `chrome-devtools` (screenshot ở cổng 5175)                | Soát render thật ở light / dark / mobile trước khi bàn giao test                  |
+| Soát văn chữ hiển thị | `humanizer:humanizer`                                     | Nhãn, thông báo, câu lỗi, trạng thái rỗng viết ở góc độ người dùng, không văn máy |
 
 Màn đăng nhập là "khoảnh khắc thương hiệu" nên có dùng `gsap-skills` (GSAP + @gsap/react) cho animation hai cột; các màn làm việc dày dữ liệu thì tiết chế chuyển động (`tw-animate-css`), và luôn tôn trọng `prefers-reduced-motion`.
 
@@ -46,13 +46,13 @@ Màn đăng nhập là "khoảnh khắc thương hiệu" nên có dùng `gsap-sk
 
 ## Tài liệu ở đâu
 
-| Nội dung | Vị trí |
-| --- | --- |
-| Use case (nguồn yêu cầu) | [`../eh_am_backend/business/product-docs/product-usecase/`](../eh_am_backend/business/product-docs/product-usecase/) |
-| Thương hiệu, token, design system, component | [`business/product-docs/product-design/`](business/product-docs/product-design/) |
-| Kế hoạch FE + wireframe từng UC | [`business/product-docs/product-implementation/<UC>/`](business/product-docs/product-implementation/) — `README.md` + `DESIGN-README.md` |
-| Master Blueprint, use case, kế hoạch BE | repo backend [`../eh_am_backend`](../eh_am_backend) (xem README của nó) |
-| Chuẩn UI bắt buộc, kiến trúc, bảo mật, lệnh | [`CLAUDE.md`](CLAUDE.md) và [`DEVELOPMENT.md`](DEVELOPMENT.md) |
+| Nội dung                                     | Vị trí                                                                                                                                   |
+| -------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------- |
+| Use case (nguồn yêu cầu)                     | [`../eh_am_backend/business/product-docs/product-usecase/`](../eh_am_backend/business/product-docs/product-usecase/)                     |
+| Thương hiệu, token, design system, component | [`business/product-docs/product-design/`](business/product-docs/product-design/)                                                         |
+| Kế hoạch FE + wireframe từng UC              | [`business/product-docs/product-implementation/<UC>/`](business/product-docs/product-implementation/) — `README.md` + `DESIGN-README.md` |
+| Master Blueprint, use case, kế hoạch BE      | repo backend [`../eh_am_backend`](../eh_am_backend) (xem README của nó)                                                                  |
+| Chuẩn UI bắt buộc, kiến trúc, bảo mật, lệnh  | [`CLAUDE.md`](CLAUDE.md) và [`DEVELOPMENT.md`](DEVELOPMENT.md)                                                                           |
 
 Tài liệu viết tiếng Việt (thuật ngữ kỹ thuật thông dụng như API, QR, URL giữ tiếng Anh); code viết tiếng Anh, comment tiếng Việt.
 
@@ -60,13 +60,13 @@ Tài liệu viết tiếng Việt (thuật ngữ kỹ thuật thông dụng như
 
 ## Trạng thái bản demo
 
-| Việc | Trạng thái |
-| --- | --- |
-| Khung ứng dụng: router file-based, React Query, layout, sidebar, bảng lệnh, theme sáng/tối | ✅ Dựng xong |
-| Gọi API + làm mới phiên (một lời gọi refresh duy nhất) + chuẩn hoá lỗi `ApiError` | ✅ Dựng xong |
-| Auth: đăng nhập · quên / đặt lại / đổi mật khẩu · đăng xuất một nơi / mọi thiết bị · `/me` | ✅ Dựng xong |
-| Đa ngôn ngữ vi/en · trang lỗi 401/403/404/500/503 · CSP · chống open redirect | ✅ Dựng xong |
-| Màn hình M03 — Hồ sơ tài sản: danh sách · chi tiết · tạo · sửa · đổi người giữ · đổi vòng đời · chứng từ · đề nghị + duyệt huỷ | ✅ Dựng xong (bản demo) |
-| Các module nghiệp vụ còn lại | ⏸️ Ngoài phạm vi bản demo |
+| Việc                                                                                                                           | Trạng thái                |
+| ------------------------------------------------------------------------------------------------------------------------------ | ------------------------- |
+| Khung ứng dụng: router file-based, React Query, layout, sidebar, bảng lệnh, theme sáng/tối                                     | ✅ Dựng xong              |
+| Gọi API + làm mới phiên (một lời gọi refresh duy nhất) + chuẩn hoá lỗi `ApiError`                                              | ✅ Dựng xong              |
+| Auth: đăng nhập · quên / đặt lại / đổi mật khẩu · đăng xuất một nơi / mọi thiết bị · `/me`                                     | ✅ Dựng xong              |
+| Đa ngôn ngữ vi/en · trang lỗi 401/403/404/500/503 · CSP · chống open redirect                                                  | ✅ Dựng xong              |
+| Màn hình M03 — Hồ sơ tài sản: danh sách · chi tiết · tạo · sửa · đổi người giữ · đổi vòng đời · chứng từ · đề nghị + duyệt huỷ | ✅ Dựng xong (bản demo)   |
+| Các module nghiệp vụ còn lại                                                                                                   | ⏸️ Ngoài phạm vi bản demo |
 
 Founder đã nói rõ: chỉ cần demo để thấy logic và cách làm, chưa cần xây đủ tính năng thực tế. Phần hướng dẫn chạy máy và chi tiết kỹ thuật ở [`DEVELOPMENT.md`](DEVELOPMENT.md).
