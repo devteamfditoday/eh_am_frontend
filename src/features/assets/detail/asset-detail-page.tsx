@@ -1,13 +1,7 @@
 import { type ReactNode, useState } from 'react'
 import { useQuery } from '@tanstack/react-query'
 import { Link } from '@tanstack/react-router'
-import {
-  ArrowLeft,
-  ChevronDown,
-  FileText,
-  History,
-  Package,
-} from 'lucide-react'
+import { ArrowLeft, ChevronDown, History, Package } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { Role, hasAnyRole, useAuthStore } from '@/stores/auth-store'
 import { assetDetailQueryOptions } from '@/lib/api/assets.queries'
@@ -37,6 +31,7 @@ import { ProfileDropdown } from '@/components/profile-dropdown'
 import { StatusBadge } from '@/components/status-badge'
 import { ThemeSwitch } from '@/components/theme-switch'
 import { AssetCancellationRequestDialog } from '../cancellation/asset-cancellation-request-dialog'
+import { AssetDocumentsCard } from '../documents/asset-documents-card'
 import { conditionTone, lifecycleTone } from '../list/assets-columns'
 import { AssetDescriptionFormDialog } from './asset-description-form-dialog'
 import { presentAuditValue } from './asset-detail-presentation'
@@ -331,15 +326,10 @@ export function AssetDetailPage({ assetId }: Props) {
               ) : null}
             </div>
 
-            <DetailCard
-              title={t('assets.detail.sections.documents')}
-              description={t('assets.detail.documentsDescription')}
-            >
-              <div className='flex items-center gap-3 rounded-lg border border-dashed p-6 text-sm text-muted-foreground'>
-                <FileText className='size-5 shrink-0' aria-hidden='true' />
-                {t('assets.detail.noDocuments')}
-              </div>
-            </DetailCard>
+            <AssetDocumentsCard
+              asset={asset}
+              formatDate={(value) => formatDate(value)}
+            />
 
             <DetailCard title={t('assets.detail.sections.timeline')}>
               {asset.timeline.length === 0 ? (

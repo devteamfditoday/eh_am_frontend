@@ -160,7 +160,7 @@ export interface AssetDetail {
     employeeCode: string | null
   } | null
   financial: { invoiceNo: string | null } | null
-  documents: Array<never>
+  documents: AssetDocument[]
   timeline: Array<{
     id: number
     eventCode: string
@@ -382,5 +382,107 @@ export async function decideAssetCancellation(
   }>(`/asset-cancellations/${id}/decision`, payload, {
     headers: { 'Idempotency-Key': commandKey },
   })
+  return data
+}
+
+// ===== UC-AST-06: chứng từ tài sản =====
+
+export const ASSET_DOCUMENT_TYPES = [
+  'INVOICE',
+  'PO',
+  'HANDOVER',
+  'WARRANTY',
+  'PHOTO',
+] as const
+export type AssetDocumentType = (typeof ASSET_DOCUMENT_TYPES)[number]
+
+export const ALLOWED_DOCUMENT_CONTENT_TYPES = [
+  'application/pdf',
+  'image/jpeg',
+  'image/png',
+  'image/webp',
+] as const
+export const MAX_DOCUMENT_SIZE_BYTES = 10 * 1024 * 1024
+
+export interface AssetDocument {
+  id: string
+  docType: string
+  fileName: string
+  contentType: string
+  sizeBytes: number
+  uploadedByName: string | null
+  uploadedAt: string
+}
+
+export async function requestDocumentUploadUrl(
+  assetId: string,
+  meta: {
+    docType: AssetDocumentType
+    fileName: string
+    contentType: string
+    sizeBytes: number
+  }
+) {
+  const { data } = await api.post<{
+    uploadUrl: string
+    token: string
+    path: string
+  }>(`/assets/${assetId}/documents/upload-url`, meta)
+  return data
+}
+
+/**
+ * PUT tệp THẲNG lên Storage qua signed URL — không đi qua server BE. Dùng XHR để có tiến trình upload
+ * (fetch không báo % upload). `onProgress(loaded, total)` chạy theo từng chunk.
+ */
+export function uploadFileToSignedUrl(
+  uploadUrl: string,
+  file: File,
+  onProgress?: (loaded: number, total: number) => void
+): Promise<void> {
+  return new Promise((resolve, reject) => {
+    const xhr = new XMLHttpRequest()
+    xhr.open('PUT', uploadUrl)
+    xhr.setRequestHeader(
+      'content-type',
+      file.type || 'application/octet-stream'
+    )
+    xhr.upload.onprogress = (event) => {
+      if (event.lengthComputable && onProgress) {
+        onProgress(event.loaded, event.total)
+      }
+    }
+    xhr.onload = () => {
+      if (xhr.status >= 200 && xhr.status < 300) resolve()
+      else reject(new Error(`Upload failed with status ${xhr.status}`))
+    }
+    xhr.onerror = () => reject(new Error('Upload network error'))
+    xhr.send(file)
+  })
+}
+
+export async function confirmAssetDocument(
+  assetId: string,
+  payload: {
+    docType: AssetDocumentType
+    storagePath: string
+    fileName: string
+    contentType: string
+    sizeBytes: number
+  }
+) {
+  const { data } = await api.post<{
+    id: string
+    docType: string
+    fileName: string
+    uploadedAt: string
+  }>(`/assets/${assetId}/documents`, payload)
+  return data
+}
+
+export async function getAssetDocumentUrl(assetId: string, documentId: string) {
+  const { data } = await api.get<{ url: string }>(
+    `/assets/${assetId}/documents/${documentId}/url`
+  )
   return data
 }
