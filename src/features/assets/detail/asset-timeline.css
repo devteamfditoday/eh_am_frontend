@@ -1,0 +1,41 @@
+/* ⚠️ Override react-vertical-timeline-component cho khớp token Every Half + dark mode + tiết chế
+   động. Mặc định của thư viện có bóng dày, màu ngày xám nhạt và animation "bounce" hơi điệu — không
+   hợp màn dữ liệu nội bộ. Mọi màu lấy từ CSS var token nên tự đổi theo light/dark.
+   Class `eh-timeline` gắn ở <VerticalTimeline> để các override chỉ áp cho timeline này. */
+
+.eh-timeline.vertical-timeline::before {
+  width: 2px;
+  background: var(--border);
+}
+
+.eh-timeline .vertical-timeline-element-content {
+  box-shadow: none;
+  border: 1px solid var(--border);
+  border-radius: 0.75rem;
+  padding: 1rem 1.25rem;
+}
+
+.eh-timeline
+  .vertical-timeline-element-content
+  .vertical-timeline-element-date {
+  color: var(--muted-foreground);
+  opacity: 1;
+  font-size: 0.8rem;
+  padding: 0.25rem 0;
+}
+
+/* Vòng nền quanh icon dùng màu nền hiện tại để ăn khớp cả light lẫn dark. */
+.eh-timeline .vertical-timeline-element-icon {
+  box-shadow: 0 0 0 3px var(--background);
+}
+
+/* Enterprise: không nhảy "bounce"; tôn trọng người tắt hiệu ứng. */
+@media (prefers-reduced-motion: reduce) {
+  .eh-timeline .vertical-timeline-element-content,
+  .eh-timeline
+    .vertical-timeline-element-content
+    .vertical-timeline-element-content-arrow,
+  .eh-timeline .vertical-timeline-element-icon {
+    animation: none !important;
+  }
+}
