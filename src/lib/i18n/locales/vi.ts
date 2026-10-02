@@ -623,8 +623,15 @@ export const vi = {
       systemActor: 'Hệ thống',
       events: {
         'asset.asset.created': 'Tạo hồ sơ tài sản',
+        'asset.asset.updated': 'Cập nhật hồ sơ tài sản',
         'asset.description.updated': 'Cập nhật thông tin mô tả',
         'asset.responsible.changed': 'Đổi người chịu trách nhiệm',
+        'asset.asset.status_changed': 'Đổi trạng thái vòng đời',
+        'asset.lifecycle.changed': 'Đổi trạng thái vòng đời',
+        'asset.document.attached': 'Đính kèm chứng từ',
+        'asset.cancellation.requested': 'Đề nghị huỷ hồ sơ',
+        'asset.cancellation.approved': 'Duyệt huỷ hồ sơ',
+        'asset.cancellation.rejected': 'Từ chối huỷ hồ sơ',
       },
       changeFields: {
         name: 'Tên tài sản',
@@ -640,6 +647,7 @@ export const vi = {
         purchase_date: 'Ngày mua',
         invoice_no: 'Số hoá đơn/PO',
         original_cost: 'Nguyên giá',
+        document: 'Chứng từ',
       },
     },
     edit: {

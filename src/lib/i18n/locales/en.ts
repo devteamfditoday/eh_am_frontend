@@ -615,8 +615,15 @@ export const en: TranslationKeys = {
       systemActor: 'System',
       events: {
         'asset.asset.created': 'Asset profile created',
+        'asset.asset.updated': 'Asset profile updated',
         'asset.description.updated': 'Asset description updated',
         'asset.responsible.changed': 'Responsible person changed',
+        'asset.asset.status_changed': 'Lifecycle status changed',
+        'asset.lifecycle.changed': 'Lifecycle status changed',
+        'asset.document.attached': 'Document attached',
+        'asset.cancellation.requested': 'Cancellation requested',
+        'asset.cancellation.approved': 'Cancellation approved',
+        'asset.cancellation.rejected': 'Cancellation rejected',
       },
       changeFields: {
         name: 'Asset name',
@@ -632,6 +639,7 @@ export const en: TranslationKeys = {
         purchase_date: 'Purchase date',
         invoice_no: 'Invoice / PO number',
         original_cost: 'Original cost',
+        document: 'Document',
       },
     },
     edit: {

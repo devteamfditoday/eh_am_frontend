@@ -456,6 +456,11 @@ function TimelineEvent({
                     return t(`assets.condition.${value}`, {
                       defaultValue: value,
                     })
+                  // Sự kiện đính kèm chứng từ: giá trị là loại chứng từ (PHOTO/INVOICE…) → nhãn i18n.
+                  if (field === 'document')
+                    return t(`assets.documents.types.${value}`, {
+                      defaultValue: value,
+                    })
                 }
                 return presentAuditValue(value)
               }
